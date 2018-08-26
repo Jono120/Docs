@@ -2,13 +2,9 @@
 title: Work with SQL Server LocalDB and ASP.NET Core
 author: rick-anderson
 description: Explains working with SQL Server LocalDB and ASP.NET Core.
-manager: wpickett
 monikerRange: '>= aspnetcore-2.0'
 ms.author: riande
 ms.date: 08/07/2017
-ms.prod: aspnet-core
-ms.technology: aspnet
-ms.topic: get-started-article
 uid: tutorials/razor-pages/sql
 ---
 # Work with SQL Server LocalDB and ASP.NET Core
@@ -28,7 +24,7 @@ The `MovieContext` object handles the task of connecting to the database and map
 For more information on the methods used in `ConfigureServices`, see:
 
 * [EU General Data Protection Regulation (GDPR) support in ASP.NET Core](xref:security/gdpr) for `CookiePolicyOptions`.
-* [SetCompatibilityVersion](xref:fundamentals/startup#setcompatibilityversion-for-aspnet-core-mvc)
+* [SetCompatibilityVersion](xref:mvc/compatibility-version)
 
 ::: moniker-end
 
@@ -106,7 +102,7 @@ The following code shows the updated *Program.cs* file.
 
 ::: moniker-end
 
-A production app would not call `Database.Migrate`. It's added to the preceeding code to prevent the following exception when `Update-Database` has not been run:
+A production app would not call `Database.Migrate`. It's added to the preceding code to prevent the following exception when `Update-Database` has not been run:
 
 SqlException: Cannot open database "RazorPagesMovieContext-21" requested by the login. The login failed.
 Login failed for user 'user name'.
