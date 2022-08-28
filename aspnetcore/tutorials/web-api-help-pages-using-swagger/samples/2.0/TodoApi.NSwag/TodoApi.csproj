@@ -5,6 +5,12 @@
     <ProjectUISubcaption>NSwag - ASP.NET Core 2.0</ProjectUISubcaption>
   </PropertyGroup>
 
+  <!-- <snippet_NoDocumentGeneration> -->
+  <PropertyGroup>
+    <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+  </PropertyGroup>
+  <!-- </snippet_NoDocumentGeneration> -->
+
   <!-- <snippet_DocumentationFileElement> -->
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -13,8 +19,8 @@
   <!-- </snippet_DocumentationFileElement> -->
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
-    <PackageReference Include="NSwag.AspNetCore" Version="11.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

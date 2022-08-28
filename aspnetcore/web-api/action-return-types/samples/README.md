@@ -1,11 +1,8 @@
-# ASP.NET Core Web API sample
+# ASP.NET Core web API samples
 
-The following table provides a description of the various folders making up the sample solution:
+The following table provides a description of the various directories comprising the sample solution.
 
-
-|              Folder              |                                        Purpose                                        |
-|----------------------------------|---------------------------------------------------------------------------------------|
-|   <em>WebApiSample.Api.21</em>   |                         An ASP.NET Core 2.1 Web API project.                          |
-| <em>WebApiSample.Api.Pre21</em>  |                         An ASP.NET Core 2.0 Web API project.                          |
-| <em>WebApiSample.DataAccess</em> | A .NET Standard 2.0 data access layer project which is used by both Web API projects. |
-
+| Directory                     | Purpose |
+| ----------------------------- | ------- |
+| *3.x/WebApiSample.Api.31*     | An ASP.NET Core 3.1 web API project. |
+| *3.x/WebApiSample.DataAccess* | A .NET Standard 2.1 data access layer project which is used by the ASP.NET Core 3.1 web API project. |

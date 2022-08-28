@@ -1,14 +1,14 @@
 ---
-title: Introduction to ASP.NET Core SignalR
-author: tdykstra
+title: Overview of ASP.NET Core SignalR
+author: bradygaster
 description: Learn how the ASP.NET Core SignalR library simplifies adding real-time functionality to apps.
 monikerRange: '>= aspnetcore-2.1'
-ms.author: tdykstra
+ms.author: bradyg
 ms.custom: mvc
-ms.date: 04/25/2018
+ms.date: 03/07/2022
 uid: signalr/introduction
 ---
-# Introduction to ASP.NET Core SignalR
+# Overview of ASP.NET Core SignalR
 
 ## What is SignalR?
 
@@ -21,7 +21,7 @@ Good candidates for SignalR:
 * Collaborative apps. Whiteboard apps and team meeting software are examples of collaborative apps.
 * Apps that require notifications. Social networks, email, chat, games, travel alerts, and many other apps use notifications.
 
-SignalR provides an API for creating server-to-client [remote procedure calls (RPC)](https://wikipedia.org/wiki/Remote_procedure_call). The RPCs call JavaScript functions on clients from server-side .NET Core code.
+SignalR provides an API for creating server-to-client [remote procedure calls (RPC)](https://wikipedia.org/wiki/Remote_procedure_call). The RPCs invoke functions on clients from server-side .NET Core code. There are several [supported platforms](xref:signalr/supported-platforms), each with their respective client SDK. Because of this, the programming language being invoked by the RPC call varies.
 
 Here are some features of SignalR for ASP.NET Core:
 
@@ -30,13 +30,13 @@ Here are some features of SignalR for ASP.NET Core:
 * Sends messages to specific clients or groups of clients.
 * Scales to handle increasing traffic.
 
-The source is hosted in a [SignalR repository on GitHub](https://github.com/aspnet/signalr).
+The source is hosted in a [SignalR repository on GitHub](https://github.com/dotnet/AspNetCore/tree/main/src/SignalR).
 
 ## Transports
 
-SignalR supports several techniques for handling real-time communications:
+SignalR supports the following techniques for handling real-time communication (in order of graceful fallback):
 
-* [WebSockets](https://tools.ietf.org/html/rfc7118)
+* [WebSockets](xref:fundamentals/websockets)
 * Server-Sent Events
 * Long Polling
 
@@ -52,6 +52,7 @@ Hubs call client-side code by sending messages that contain the name and paramet
 
 ## Additional resources
 
+* [Microsoft Learn: Introduction to ASP.NET Core SignalR](/learn/modules/aspnet-core-signalr)
 * [Get started with SignalR for ASP.NET Core](xref:tutorials/signalr)
 * [Supported Platforms](xref:signalr/supported-platforms)
 * [Hubs](xref:signalr/hubs)

@@ -1,205 +1,446 @@
 ---
-title: "Tutorial: Get started with SignalR on ASP.NET Core"
-author: tdykstra
-description: In this tutorial, you create a chat app that uses SignalR for ASP.NET Core.
-monikerRange: '>= aspnetcore-2.1'
-ms.author: tdykstra
+title: Get started with ASP.NET Core SignalR
+author: bradygaster
+description: In this tutorial, you create a chat app that uses ASP.NET Core SignalR.
+ms.author: bradyg
+monikerRange: '>= aspnetcore-3.1'
 ms.custom: mvc
-ms.date: 08/20/2018
+ms.date: 11/21/2021
 uid: tutorials/signalr
+
+# Customer intent: As a developer, I want to get a quick proof-of-concept app running, so I can get a practical introduction to ASP.NET Core SignalR.
 ---
 
-# Tutorial: Get started with SignalR on ASP.NET Core
+# Tutorial: Get started with ASP.NET Core SignalR
+
+:::moniker range=">= aspnetcore-6.0"
 
 This tutorial teaches the basics of building a real-time app using SignalR. You learn how to:
 
 > [!div class="checklist"]
-> * Create a web app that uses SignalR on ASP.NET Core.
-> * Create a SignalR hub on the server.
-> * Connect to the SignalR hub from JavaScript clients.
-> * Use the hub to send messages from any client to all connected clients.
+> * Create a web project.
+> * Add the SignalR client library.
+> * Create a SignalR hub.
+> * Configure the project to use SignalR.
+> * Add code that sends messages from any client to all connected clients.
 
 At the end, you'll have a working chat app:
 
-![SignalR sample app](signalr/_static/signalr-get-started-finished.png)
-
-[View or download sample code](https://github.com/aspnet/Docs/tree/master/aspnetcore/tutorials/signalr/sample) ([how to download](xref:tutorials/index#how-to-download-a-sample)).
+![SignalR sample app](signalr/_static/3.x/signalr-get-started-finished.png)
 
 ## Prerequisites
 
 # [Visual Studio](#tab/visual-studio)
 
-* [Visual Studio 2017 version 15.7.3 or later](https://www.visualstudio.com/downloads/) with the **ASP.NET and web development** workload
-* [.NET Core SDK 2.1 or later](https://www.microsoft.com/net/download/all)
-* [npm](https://www.npmjs.com/get-npm) (Package manager for Node.js, used for the SignalR JavaScript client library.)
+[!INCLUDE[](~/includes/net-prereqs-vs-6.0.md)]
 
 # [Visual Studio Code](#tab/visual-studio-code)
 
-* [Visual Studio Code](https://code.visualstudio.com/download)
-* [.NET Core SDK 2.1 or later](https://www.microsoft.com/net/download/all)
-* [C# for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp)
-* [npm](https://www.npmjs.com/get-npm) (Package manager for Node.js, used for the SignalR JavaScript client library.)
+[!INCLUDE[](~/includes/net-prereqs-vsc-6.0.md)]
 
 # [Visual Studio for Mac](#tab/visual-studio-mac)
 
-* [Visual Studio for Mac version 7.5.4 or later](https://www.visualstudio.com/downloads/)
-* [.NET Core SDK 2.1 or later](https://www.microsoft.com/net/download/all) (included in the Visual Studio install)
-* [npm](https://www.npmjs.com/get-npm) (Package manager for Node.js, used for the SignalR JavaScript client library.)
+[!INCLUDE[](~/includes/net-prereqs-mac-6.0.md)]
 
 ---
 
-## Create the project
+## Create a web app project
 
-# [Visual Studio](#tab/visual-studio/)
+# [Visual Studio](#tab/visual-studio)
 
-* From the menu, select **File > New Project**.
+1. Start Visual Studio 2022 and select **Create a new project**.
 
-* In the **New Project** dialog, select **Installed > Visual C# > Web > ASP.NET Core Web Application**. Name the project *SignalRChat*.
+   ![Create a new project from the start window](~/tutorials/razor-pages/razor-pages-start/_static/6/start-window-create-new-project.png)
 
-  ![New Project dialog in Visual Studio](signalr/_static/signalr-new-project-dialog.png)
+1. In the **Create a new project** dialog, select **ASP.NET Core Web App**, and then select **Next**.
 
-* Select **Web Application** to create a project that uses Razor Pages.
+	![Create an ASP.NET Core Web App](~/tutorials/razor-pages/razor-pages-start/_static/6/np.png)
+	
+1. In the **Configure your new project** dialog, enter `SignalRChat` for **Project name**. It's important to name the project *SignalRChat*, including matching the capitalization, so the namespaces will match when you copy and paste example code.
 
-* Select a target framework of **.NET Core**, select **ASP.NET Core 2.1**, and click **OK**.
+1. Select **Next**.
 
-  ![New Project dialog in Visual Studio](signalr/_static/signalr-new-project-choose-type.png)
+1. In the **Additional information** dialog, select **.NET 6.0 (Long-term support)** and then select **Create**.
 
-# [Visual Studio Code](#tab/visual-studio-code/)
+	 ![Additional information](~/tutorials/razor-pages/razor-pages-start/_static/6/additional-info.png)
 
-* Open a folder that you can use for a new project.
+# [Visual Studio Code](#tab/visual-studio-code)
 
-* In the **Integrated Terminal**, run the following command:
+1. Open the [integrated terminal](https://code.visualstudio.com/docs/editor/integrated-terminal).
 
-   ```console
+1. Change to the directory (`cd`) that will contain the project.
+1. Run the following commands:
+
+   ```dotnetcli
    dotnet new webapp -o SignalRChat
+   code -r SignalRChat
    ```
+   Visual Studio Code displays a dialog box that asks **Do you trust the authors of the files in this folder**.  Select:
+    * The checkbox **trust the authors of all files in the parent folder**
+   * **Yes, I trust the authors** (because dotnet generated the files).
 
-   [!INCLUDE[](~/includes/webapp-alias-notice.md)]
+   The `dotnet new` command creates a new Razor Pages project in the *SignalRChat* folder.
+
+   The `code` command opens the *SignalRChat* folder in the current instance of Visual Studio Code.
 
 # [Visual Studio for Mac](#tab/visual-studio-mac)
 
-* From the menu, select **File > New Solution**.
+1. Select **File** > **New Solution**.
 
-* Select **.NET Core > App > ASP.NET Core Web App** (Don't select **ASP.NET Core Web App (MVC)**).
+	![macOS New solution](~/tutorials/razor-pages/razor-pages-start/_static/6/new_project_vsmac6.png)
 
-* Select **Next**.
+1. In Visual Studio 2022 for Mac select **Web and Console** > **App** > **Web Application** > **Continue**.
 
-* Name the project *SignalRChat*, and then select **Create**.
+	![macOS web app template selection](~/tutorials/razor-pages/razor-pages-start/_static/6/web_app_template_vsmac6.png)
+
+1. In the **Configure your new Web Application** dialog:
+
+	1. Confirm that **Authentication** is set to **No Authentication**.
+	1. Confirm that **Target framework** is set to the latest .NET 6.x version.
+  1. Select **Continue**.
+
+1. Name the project *SignalRChat* and select **Continue**.
 
 ---
 
 ## Add the SignalR client library
 
-The SignalR server library is included in the [Microsoft.AspNetCore.App metapackage](xref:fundamentals/metapackage-app). But you have to get the JavaScript client library from [npm, the Node.js package manager](https://www.npmjs.com/get-npm).
+The SignalR server library is included in the ASP.NET Core shared framework. The JavaScript client library isn't automatically included in the project. For this tutorial, use Library Manager (LibMan) to get the client library from [unpkg](https://unpkg.com/). `unpkg`is a fast, global content delivery network for everything on [npm](https://unpkg.com/). 
 
 # [Visual Studio](#tab/visual-studio/)
 
-* In **Package Manager Console** (PMC), change to the project folder (the one that contains the *SignalRChat.csproj* file).
+  * In **Solution Explorer**, right-click the project, and select **Add** > **Client-Side Library**.
+  * In the **Add Client-Side Library** dialog:
+    * Select **unpkg** for **Provider**
+    * Enter `@microsoft/signalr@latest` for **Library**
+    * Select **Choose specific files**, expand the *dist/browser* folder, and select `signalr.js` and `signalr.min.js`.
+    * Set **Target Location** to *wwwroot/js/signalr/*
+    * Select **Install**
 
-  ```console
-  cd SignalRChat
-  ```
+  ![Add Client-Side Library dialog - select library](signalr/_static/3.x/find-signalr-client-libs-select-files.png)
+
+  LibMan creates a *wwwroot/js/signalr* folder and copies the selected files to it.
 
 # [Visual Studio Code](#tab/visual-studio-code/)
 
-2. Change to the new project folder.
+  * In the integrated terminal, run the following command to install LibMan.
+
+  ```dotnetcli
+  dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+  ```
+
+  * Run the following command to get the SignalR client library by using LibMan. You might have to wait a few seconds before seeing output.
 
   ```console
-  cd SignalRChat
-  ``` 
+  libman install @microsoft/signalr@latest -p unpkg -d wwwroot/js/signalr --files dist/browser/signalr.js --files dist/browser/signalr.js
+  ```
+
+  The parameters specify the following options:
+  * Use the unpkg provider.
+  * Copy files to the *wwwroot/js/signalr* destination.
+  * Copy only the specified files.
+
+  The output looks like the following example:
+
+  ```console
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  Installed library "@microsoft/signalr@latest" to "wwwroot/js/signalr"
+  ```
 
 # [Visual Studio for Mac](#tab/visual-studio-mac)
 
-* In the **Terminal**, navigate to the project folder (the one that contains the *SignalRChat.csproj* file).
+  * In the **Terminal**, run the following command to install LibMan.
+
+  ```dotnetcli
+  dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+  ```
+
+  * Navigate to the project folder (the one that contains the `SignalRChat.csproj` file).
+
+  * Run the following command to get the SignalR client library by using LibMan.
+
+  ```console
+  libman install @microsoft/signalr@latest -p unpkg -d wwwroot/js/signalr --files dist/browser/signalr.js --files dist/browser/signalr.js
+  ```
+
+  The parameters specify the following options:
+  * Use the unpkg provider.
+  * Copy files to the *wwwroot/js/signalr* destination.
+  * Copy only the specified files.
+
+  The output looks like the following example:
+
+  ```console
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  Installed library "@microsoft/signalr@latest" to "wwwroot/js/signalr"
+  ```
 
 ---
 
-* Run the npm initializer to create a *package.json* file:
+## Create a SignalR hub
+
+A *hub* is a class that serves as a high-level pipeline that handles client-server communication.
+
+  * In the SignalRChat project folder, create a *Hubs* folder.
+  * In the *Hubs* folder, create the `ChatHub` class with the following code:
+
+  [!code-csharp[ChatHub](signalr/samples/SignalRChat/Hubs/ChatHub.cs)]
+
+  The `ChatHub` class inherits from the SignalR <xref:Microsoft.AspNetCore.SignalR.Hub> class. The `Hub` class manages connections, groups, and messaging.
+
+  The `SendMessage` method can be called by a connected client to send a message to all clients. JavaScript client code that calls the method is shown later in the tutorial. SignalR code is asynchronous to provide maximum scalability.
+
+## Configure SignalR
+
+The SignalR server must be configured to pass SignalR requests to SignalR. Add the following highlighted code to the `Program.cs` file.
+
+[!code-csharp[Startup](signalr/samples/SignalRChat/Program.cs?highlight=1,6,24)]
+
+The preceding highlighted code adds SignalR to the ASP.NET Core dependency injection and routing systems.
+
+## Add SignalR client code
+
+* Replace the content in `Pages/Index.cshtml` with the following code:
+
+  [!code-cshtml[Index](signalr/samples/SignalRChat/Pages/Index.cshtml)]
+
+  The preceding markup:
+
+  * Creates text boxes and a submit button.
+  * Creates a list with `id="messagesList"` for displaying messages that are received from the SignalR hub.
+  * Includes script references to SignalR and the `chat.js` app code is created in the next step.
+
+* In the *wwwroot/js* folder, create a `chat.js` file with the following code:
+
+  [!code-javascript[chat](signalr/samples/SignalRChat/wwwroot/js/chat.js)]
+
+  The preceding JavaScript:
+
+  * Creates and starts a connection.
+  * Adds to the submit button a handler that sends messages to the hub.
+  * Adds to the connection object a handler that receives messages from the hub and adds them to the list.
+
+## Run the app
+
+# [Visual Studio](#tab/visual-studio)
+
+* Press **CTRL+F5** to run the app without debugging.
+
+# [Visual Studio Code](#tab/visual-studio-code)
+
+* In the integrated terminal, run the following command:
+
+  ```dotnetcli
+  dotnet watch run --project SignalRChat.csproj
+  ```
+
+# [Visual Studio for Mac](#tab/visual-studio-mac)
+
+  * From the menu, select **Run > Start Without Debugging**.
+
+---
+
+  * Copy the URL from the address bar, open another browser instance or tab, and paste the URL in the address bar.
+  * Choose either browser, enter a name and message, and select the **Send Message** button.
+  The name and message are displayed on both pages instantly.
+
+  ![SignalR sample app](signalr/_static/3.x/signalr-get-started-finished.png)
+
+> [!TIP]
+> * If the app doesn't work, open your browser developer tools (F12) and go to the console. You might see errors related to your HTML and JavaScript code. For example, suppose you put `signalr.js` in a different folder than directed. In that case the reference to that file won't work and you'll see a 404 error in the console.
+>   ![signalr.js not found error](signalr/_static/3.x/f12-console.png)
+> * If you get the error ERR_SPDY_INADEQUATE_TRANSPORT_SECURITY in Chrome, run these commands to update your development certificate:
+>
+>   ```dotnetcli
+>   dotnet dev-certs https --clean
+>   dotnet dev-certs https --trust
+>   ```
+
+## Publish to Azure
+
+For information on deploying to Azure, see [Quickstart: Deploy an ASP.NET web app](/azure/app-service/quickstart-dotnetcore).
+
+:::moniker-end
+
+:::moniker range="< aspnetcore-6.0"
+
+This tutorial teaches the basics of building a real-time app using SignalR. You learn how to:
+
+> [!div class="checklist"]
+> * Create a web project.
+> * Add the SignalR client library.
+> * Create a SignalR hub.
+> * Configure the project to use SignalR.
+> * Add code that sends messages from any client to all connected clients.
+
+At the end, you'll have a working chat app:
+
+![SignalR sample app](signalr/_static/3.x/signalr-get-started-finished.png)
+
+## Prerequisites
+
+# [Visual Studio](#tab/visual-studio)
+
+[!INCLUDE[](~/includes/net-core-prereqs-vs-3.1.md)]
+
+# [Visual Studio Code](#tab/visual-studio-code)
+
+[!INCLUDE[](~/includes/net-core-prereqs-vsc-3.1.md)]
+
+# [Visual Studio for Mac](#tab/visual-studio-mac)
+
+[!INCLUDE[](~/includes/net-core-prereqs-mac-3.1.md)]
+
+---
+
+## Create a web app project
+
+# [Visual Studio](#tab/visual-studio/)
+
+  * From the menu, select **File > New Project**.
+  * In the **Create a new project** dialog, select **ASP.NET Core Web Application**, and then select **Next**.
+  * In the **Configure your new project** dialog, name the project *SignalRChat*, and then select **Create**.
+  * In the **Create a new ASP.NET Core web Application** dialog, select **.NET Core** and **ASP.NET Core 3.1**.
+  * Select **Web Application** to create a project that uses Razor Pages, and then select **Create**.
+
+  ![New Project dialog in Visual Studio](signalr/_static/3.x/signalr-new-project-dialog.png)
+
+# [Visual Studio Code](#tab/visual-studio-code/)
+
+  * Open the [integrated terminal](https://code.visualstudio.com/docs/editor/integrated-terminal) to the folder in which the new project folder will be created.
+  * Run the following commands:
+
+   ```dotnetcli
+   dotnet new webapp -o SignalRChat
+   cd SignalRChat
+   code -r .
+   ```
+
+# [Visual Studio for Mac](#tab/visual-studio-mac)
+
+  * From the menu, select **File > New Solution**.
+  * Select **.NET Core > App > Web Application** (Don't select **Web Application (Model-View-Controller)**), and then select **Next**.
+  * Make sure the **Target Framework** is set to **.NET Core 3.1**, and then select **Next**.
+  * Name the project *SignalRChat*, and then select **Create**.
+
+---
+
+## Add the SignalR client library
+
+The SignalR server library is included in the ASP.NET Core 3.1 shared framework. The JavaScript client library isn't automatically included in the project. For this tutorial, you use Library Manager (LibMan) to get the client library from *unpkg*. unpkg is a content delivery network (CDN) that can deliver anything found in npm, the Node.js package manager.
+
+# [Visual Studio](#tab/visual-studio/)
+
+  * In **Solution Explorer**, right-click the project, and select **Add** > **Client-Side Library**.
+  * In the **Add Client-Side Library** dialog, for **Provider** select **unpkg**.
+  * For **Library**, enter `@microsoft/signalr@latest`.
+  * Select **Choose specific files**, expand the *dist/browser* folder, and select `signalr.js` and `signalr.js`.
+  * Set **Target Location** to *wwwroot/js/signalr/*
+  * Select **Install**
+
+  ![Add Client-Side Library dialog - select library](signalr/_static/3.x/find-signalr-client-libs-select-files.png)
+
+  LibMan creates a *wwwroot/js/signalr* folder and copies the selected files to it.
+
+# [Visual Studio Code](#tab/visual-studio-code/)
+
+  * In the integrated terminal, run the following command to install LibMan.
+
+  ```dotnetcli
+  dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+  ```
+
+  * Run the following command to get the SignalR client library by using LibMan. You might have to wait a few seconds before seeing output.
 
   ```console
-  npm init -y
+  libman install @microsoft/signalr@latest -p unpkg -d wwwroot/js/signalr --files dist/browser/signalr.js --files dist/browser/signalr.js
   ```
 
-  The command creates output similar to the following example:
+  The parameters specify the following options:
+  * Use the unpkg provider.
+  * Copy files to the *wwwroot/js/signalr* destination.
+  * Copy only the specified files.
+
+  The output looks like the following example:
 
   ```console
-  Wrote to C:\tmp\SignalRChat\package.json:
-  {
-    "name": "SignalRChat",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC"0
-  }
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  Installed library "@microsoft/signalr@latest" to "wwwroot/js/signalr"
   ```
 
-* Install the client library package:
+# [Visual Studio for Mac](#tab/visual-studio-mac)
+
+
+  * In the **Terminal**, run the following command to install LibMan.
+
+  ```dotnetcli
+  dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+  ```
+
+  * Navigate to the project folder (the one that contains the `SignalRChat.csproj` file).
+
+  * Run the following command to get the SignalR client library by using LibMan.
 
   ```console
-  npm install @aspnet/signalr
+  libman install @microsoft/signalr@latest -p unpkg -d wwwroot/js/signalr --files dist/browser/signalr.js --files dist/browser/signalr.js
   ```
 
-  The command creates output similar to the following example:
+  The parameters specify the following options:
+  * Use the unpkg provider.
+  * Copy files to the *wwwroot/js/signalr* destination.
+  * Copy only the specified files.
 
+  The output looks like the following example:
+
+  ```console
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  wwwroot/js/signalr/dist/browser/signalr.js written to disk
+  Installed library "@microsoft/signalr@latest" to "wwwroot/js/signalr"
   ```
-  npm notice created a lockfile as package-lock.json. You should commit this file.
-  npm WARN signalrchat@1.0.0 No description
-  npm WARN signalrchat@1.0.0 No repository field.
 
-  + @aspnet/signalr@1.0.2
-  added 1 package in 0.98s
-  ```
+---
 
-The `npm install` command downloaded the JavaScript client library to a subfolder under *node_modules*. Copy it from there to a folder under *wwwroot* that you can reference from the chat app web page.
+## Create a SignalR hub
 
-* Create a *signalr* folder in *wwwroot/lib*.
+A *hub* is a class that serves as a high-level pipeline that handles client-server communication.
 
-* Copy the *signalr.js* file from *node_modules/@aspnet/signalr/dist/browser* to the new *wwwroot/lib/signalr* folder.
+  * In the SignalRChat project folder, create a *Hubs* folder.
+  * In the *Hubs* folder, create a `ChatHub.cs` file with the following code:
 
-## Create the SignalR hub
+  [!code-csharp[ChatHub](signalr/sample-snapshot/3.x/ChatHub.cs)]
 
-A [hub](xref:signalr/hubs) is a class that serves as a high-level pipeline that handles client-server communication.
+  The `ChatHub` class inherits from the SignalR `Hub` class. The `Hub` class manages connections, groups, and messaging.
 
-* In the SignalRChat project folder, create a *Hubs* folder.
+  The `SendMessage` method can be called by a connected client to send a message to all clients. JavaScript client code that calls the method is shown later in the tutorial. SignalR code is asynchronous to provide maximum scalability.
 
-* In the *Hubs* folder, create a *ChatHub.cs* file with the following code:
-
-  [!code-csharp[Startup](signalr/sample/Hubs/ChatHub.cs)]
-
-  The `ChatHub` class inherits from the SignalR [Hub](/dotnet/api/microsoft.aspnetcore.signalr.hub) class. The `Hub` class manages connections, groups, and messaging.
-
-  The `SendMessage` method can be called by any connected client. It sends the received message to all clients. SignalR code is asynchronous to provide maximum scalability.
-
-## Configure the project to use SignalR
+## Configure SignalR
 
 The SignalR server must be configured to pass SignalR requests to SignalR.
 
-* Add the following highlighted code to the *Startup.cs* file.
+* Add the following highlighted code to the `Startup.cs` file.
 
-  [!code-csharp[Startup](signalr/sample/Startup.cs?highlight=7,33,52-55)]
+  [!code-csharp[Startup](signalr/sample-snapshot/3.x/Startup.cs?highlight=11,28,55)]
 
-  These changes add SignalR to the [dependency injection](xref:fundamentals/dependency-injection) system and the [middleware](xref:fundamentals/middleware/index) pipeline.
+  These changes add SignalR to the ASP.NET Core dependency injection and routing systems.
 
-## Create the SignalR client code
+## Add SignalR client code
 
-* Replace the content in *Pages\Index.cshtml* with the following:
+* Replace the content in `Pages/Index.cshtml` with the following code:
 
-  [!code-cshtml[Index](signalr/sample/Pages/Index.cshtml)]
+  [!code-cshtml[Index](signalr/sample-snapshot/3.x/Index.cshtml)]
 
   The preceding code:
 
   * Creates text boxes for name and message text, and a submit button.
   * Creates a list with `id="messagesList"` for displaying messages that are received from the SignalR hub.
-  * Includes script references to SignalR and the *chat.js* application code that you create in the next step.
+  * Includes script references to SignalR and the `chat.js` application code that you create in the next step.
 
-* In the *wwwroot/js* folder, create a *chat.js* file with the following code:
+* In the *wwwroot/js* folder, create a `chat.js` file with the following code:
 
-  [!code-javascript[Index](signalr/sample/wwwroot/js/chat.js)]
+  [!code-javascript[chat](signalr/sample-snapshot/3.x/chat.js)]
 
   The preceding code:
 
@@ -215,32 +456,36 @@ The SignalR server must be configured to pass SignalR requests to SignalR.
 
 # [Visual Studio Code](#tab/visual-studio-code)
 
-* Press **CTRL+F5** to run the app without debugging.
+* In the integrated terminal, run the following command:
+
+  ```dotnetcli
+  dotnet watch run -p SignalRChat.csproj
+  ```
 
 # [Visual Studio for Mac](#tab/visual-studio-mac)
 
-* From the menu, select **Run > Start Without Debugging**.
+  * From the menu, select **Run > Start Without Debugging**.
 
 ---
 
-* Copy the URL from the address bar, open another browser instance or tab, and paste the URL in the address bar.
-
-* Choose either browser, enter a name and message, and select the **Send** button.
-
+  * Copy the URL from the address bar, open another browser instance or tab, and paste the URL in the address bar.
+  * Choose either browser, enter a name and message, and select the **Send Message** button.
   The name and message are displayed on both pages instantly.
 
-  ![SignalR sample app](signalr/_static/signalr-get-started-finished.png)
+  ![SignalR sample app](signalr/_static/3.x/signalr-get-started-finished.png)
 
 > [!TIP]
-> If the app doesn't work, open your browser developer tools (F12) and go to the console. You might see errors related to your HTML and JavaScript code. For example, suppose you put *signalr.js* in a different folder than directed. In that case the reference to that file won't work and you'll see a 404 error in the console.
-> ![signalr.js not found error](signalr/_static/f12-console.png)
+> * If the app doesn't work, open your browser developer tools (F12) and go to the console. You might see errors related to your HTML and JavaScript code. For example, suppose you put `signalr.js` in a different folder than directed. In that case the reference to that file won't work and you'll see a 404 error in the console.
+>   ![signalr.js not found error](signalr/_static/3.x/f12-console.png)
+> * If you get the error ERR_SPDY_INADEQUATE_TRANSPORT_SECURITY in Chrome, run these commands to update your development certificate:
+>
+>   ```dotnetcli
+>   dotnet dev-certs https --clean
+>   dotnet dev-certs https --trust
+>   ```
 
-## Next steps
+## Publish to Azure
 
-If you want clients to connect to a SignalR app from different domains, you have to enable Cross-Origin Resource Sharing (CORS). For more information, see [Cross-origin resource sharing](xref:signalr/security?view=aspnetcore-2.1#cross-origin-resource-sharing).
+For information on deploying to Azure, see [Quickstart: Deploy an ASP.NET web app](/azure/app-service/quickstart-dotnetcore).
 
-To learn more about SignalR, hubs, and JavaScript clients, see these resources:
-
-* [Introduction to SignalR for ASP.NET Core](xref:signalr/introduction)
-* [Use hubs in SignalR for ASP.NET Core](xref:signalr/hubs)
-* [ASP.NET Core SignalR JavaScript client](xref:signalr/javascript-client)
+:::moniker-end

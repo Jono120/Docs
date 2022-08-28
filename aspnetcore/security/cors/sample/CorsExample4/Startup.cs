@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -17,82 +18,92 @@ namespace CorsExample4
             {
                 // BEGIN01
                 options.AddPolicy("AllowSpecificOrigins",
-                builder =>
-                {
-                    builder.WithOrigins("http://example.com", "http://www.contoso.com");
-                });
+                    policy =>
+                    {
+                        policy.WithOrigins("http://example.com", 
+                            "http://www.contoso.com");
+                    });
                 // END01
 
                 // BEGIN02
                 options.AddPolicy("AllowAllOrigins",
-                    builder =>
+                    policy =>
                     {
-                        builder.AllowAnyOrigin();
+                        policy.AllowAnyOrigin();
                     });
                 // END02
 
                 // BEGIN03
                 options.AddPolicy("AllowSpecificMethods",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .WithMethods("GET", "POST", "HEAD");
                     });
                 // END03
 
                 // BEGIN04
                 options.AddPolicy("AllowAllMethods",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .AllowAnyMethod();
                     });
                 // END04
 
                 // BEGIN05
                 options.AddPolicy("AllowHeaders",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
-                               .WithHeaders("accept", "content-type", "origin", "x-custom-header");
+                        policy.WithOrigins("http://example.com")
+                               .WithHeaders(HeaderNames.ContentType, "x-custom-header");
                     });
                 // END05
 
                 // BEGIN06
                 options.AddPolicy("AllowAllHeaders",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .AllowAnyHeader();
                     });
                 // END06
 
                 // BEGIN07
                 options.AddPolicy("ExposeResponseHeaders",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .WithExposedHeaders("x-custom-header");
                     });
                 // END07
 
                 // BEGIN08
                 options.AddPolicy("AllowCredentials",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .AllowCredentials();
                     });
                 // END08
 
                 // BEGIN09
                 options.AddPolicy("SetPreflightExpiration",
-                    builder =>
+                    policy =>
                     {
-                        builder.WithOrigins("http://example.com")
+                        policy.WithOrigins("http://example.com")
                                .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
                     });
                 // END09
+
+                // BEGIN10
+                options.AddPolicy("AllowSubdomain",
+                    policy =>
+                    {
+                        policy.WithOrigins("https://*.example.com")
+                            .SetIsOriginAllowedToAllowWildcardSubdomains();
+                    });
+                // END11
             });
         }
 

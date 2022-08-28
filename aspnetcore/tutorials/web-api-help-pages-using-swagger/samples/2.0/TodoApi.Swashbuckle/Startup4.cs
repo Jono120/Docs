@@ -1,48 +1,49 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using TodoApi.Models;
 
 namespace TodoApi
 {
     public class Startup4
     {
-        #region snippet_ConfigureServices
+        // <snippet_ConfigureServices>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TodoContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
 
-            #region snippet_AddSwaggerGen
+            // <snippet_AddSwaggerGen>
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "ToDo API",
                     Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = "None",
-                    Contact = new Contact
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
                     {
                         Name = "Shayne Boyer",
                         Email = string.Empty,
-                        Url = "https://twitter.com/spboyer"
+                        Url = new Uri("https://twitter.com/spboyer"),
                     },
-                    License = new License
+                    License = new OpenApiLicense
                     {
                         Name = "Use under LICX",
-                        Url = "https://example.com/license"
+                        Url = new Uri("https://example.com/license"),
                     }
                 });
             });
-            #endregion
+            // </snippet_AddSwaggerGen>
         }
-        #endregion
+        // </snippet_ConfigureServices>
 
-        #region snippet_Configure
+        // <snippet_Configure>
         public void Configure(IApplicationBuilder app)
         {
             app.UseStaticFiles();
@@ -50,7 +51,7 @@ namespace TodoApi
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
@@ -59,6 +60,6 @@ namespace TodoApi
 
             app.UseMvc();
         }
-        #endregion
+        // </snippet_Configure>
     }
 }

@@ -4,18 +4,19 @@ The generated Identity database code requires [Entity Framework Core Migrations]
 
 In the Visual Studio **Package Manager Console**:
 
-```PMC
+```powershell
+Install-Package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 Add-Migration CreateIdentitySchema
 Update-Database
 ```
 
 # [.NET Core CLI](#tab/netcore-cli)
 
-```cli
+```dotnetcli
 dotnet ef migrations add CreateIdentitySchema
 dotnet ef database update
 ```
 
-------
+---
 
 The "CreateIdentitySchema" name parameter for the `Add-Migration` command is arbitrary. `"CreateIdentitySchema"` describes the migration.

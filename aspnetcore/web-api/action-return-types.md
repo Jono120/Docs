@@ -1,34 +1,22 @@
 ---
-title: Controller action return types in ASP.NET Core Web API
-author: scottaddie
-description: Learn about using the various controller action method return types in an ASP.NET Core Web API.
+title: Controller action return types in ASP.NET Core web API
+author: rick-anderson
+description: ActionResult vs IActionResult
+monikerRange: '>= aspnetcore-3.1'
 ms.author: scaddie
 ms.custom: mvc
-ms.date: 07/23/2018
+ms.date: 02/03/2020
 uid: web-api/action-return-types
 ---
-# Controller action return types in ASP.NET Core Web API
+# Controller action return types in ASP.NET Core web API
 
-By [Scott Addie](https://github.com/scottaddie)
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/web-api/action-return-types/samples) ([how to download](xref:index#how-to-download-a-sample))
 
-[View or download sample code](https://github.com/aspnet/Docs/tree/master/aspnetcore/web-api/action-return-types/samples) ([how to download](xref:tutorials/index#how-to-download-a-sample))
-
-ASP.NET Core offers the following options for Web API controller action return types:
-
-::: moniker range=">= aspnetcore-2.1"
+ASP.NET Core offers the following options for web API controller action return types:
 
 * [Specific type](#specific-type)
 * [IActionResult](#iactionresult-type)
 * [ActionResult\<T>](#actionresultt-type)
-
-::: moniker-end
-
-::: moniker range="<= aspnetcore-2.0"
-
-* [Specific type](#specific-type)
-* [IActionResult](#iactionresult-type)
-
-::: moniker-end
 
 This document explains when it's most appropriate to use each return type.
 
@@ -36,56 +24,76 @@ This document explains when it's most appropriate to use each return type.
 
 The simplest action returns a primitive or complex data type (for example, `string` or a custom object type). Consider the following action, which returns a collection of custom `Product` objects:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.Api.21/Controllers/ProductsController.cs?name=snippet_Get)]
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_Get":::
 
 Without known conditions to safeguard against during action execution, returning a specific type could suffice. The preceding action accepts no parameters, so parameter constraints validation isn't needed.
 
-When known conditions need to be accounted for in an action, multiple return paths are introduced. In such a case, it's common to mix an [ActionResult](/dotnet/api/microsoft.aspnetcore.mvc.actionresult) return type with the primitive or complex return type. Either [IActionResult](#iactionresult-type) or [ActionResult\<T>](#actionresultt-type) are necessary to accommodate this type of action.
+When multiple return types are possible, it's common to mix an <xref:Microsoft.AspNetCore.Mvc.ActionResult> return type with the primitive or complex return type. Either [IActionResult](#iactionresult-type) or [ActionResult\<T>](#actionresultt-type) are necessary to accommodate this type of action. Several samples of multiple return types are provided in this document.
+
+### Return IEnumerable\<T> or IAsyncEnumerable\<T>
+
+ASP.NET Core buffers the result of actions that return <xref:System.Collections.Generic.IEnumerable%601> before writing them to the response. Consider declaring the action signature's return type as <xref:System.Collections.Generic.IAsyncEnumerable%601> to guarantee asynchronous iteration. Ultimately, the iteration mode is based on the underlying concrete type being returned. MVC automatically buffers any concrete type that implements `IAsyncEnumerable<T>`.
+
+Consider the following action, which returns sale-priced product records as `IEnumerable<Product>`:
+
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_GetOnSaleProducts":::
+
+The `IAsyncEnumerable<Product>` equivalent of the preceding action is:
+
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_GetOnSaleProductsAsync":::
 
 ## IActionResult type
 
-The [IActionResult](/dotnet/api/microsoft.aspnetcore.mvc.iactionresult) return type is appropriate when multiple [ActionResult](/dotnet/api/microsoft.aspnetcore.mvc.actionresult) return types are possible in an action. The `ActionResult` types represent various HTTP status codes. Some common return types falling into this category are [BadRequestResult](/dotnet/api/microsoft.aspnetcore.mvc.badrequestresult) (400), [NotFoundResult](/dotnet/api/microsoft.aspnetcore.mvc.notfoundresult) (404), and [OkObjectResult](/dotnet/api/microsoft.aspnetcore.mvc.okobjectresult) (200).
+The <xref:Microsoft.AspNetCore.Mvc.IActionResult> return type is appropriate when multiple `ActionResult` return types are possible in an action. The `ActionResult` types represent various HTTP status codes. Any non-abstract class deriving from `ActionResult` qualifies as a valid return type. Some common return types in this category are <xref:Microsoft.AspNetCore.Mvc.BadRequestResult> (400), <xref:Microsoft.AspNetCore.Mvc.NotFoundResult> (404), and <xref:Microsoft.AspNetCore.Mvc.OkObjectResult> (200). Alternatively, convenience methods in the <xref:Microsoft.AspNetCore.Mvc.ControllerBase> class can be used to return `ActionResult` types from an action. For example, `return BadRequest();` is a shorthand form of `return new BadRequestResult();`.
 
-Because there are multiple return types and paths in the action, liberal use of the [[ProducesResponseType]](/dotnet/api/microsoft.aspnetcore.mvc.producesresponsetypeattribute.-ctor) attribute is necessary. This attribute produces more descriptive response details for API help pages generated by tools like [Swagger](/aspnet/core/tutorials/web-api-help-pages-using-swagger). `[ProducesResponseType]` indicates the known types and HTTP status codes to be returned by the action.
+Because there are multiple return types and paths in this type of action, liberal use of the [`[ProducesResponseType]`](xref:Microsoft.AspNetCore.Mvc.ProducesResponseTypeAttribute) attribute is necessary. This attribute produces more descriptive response details for web API help pages generated by tools like [Swagger](xref:tutorials/web-api-help-pages-using-swagger). `[ProducesResponseType]` indicates the known types and HTTP status codes to be returned by the action.
 
 ### Synchronous action
 
 Consider the following synchronous action in which there are two possible return types:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.Api.Pre21/Controllers/ProductsController.cs?name=snippet_GetById&highlight=8,11)]
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_GetByIdIActionResult" highlight="8,11":::
 
-In the preceding action, a 404 status code is returned when the product represented by `id` doesn't exist in the underlying data store. The [NotFound](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.notfound) helper method is invoked as a shortcut to `return new NotFoundResult();`. If the product does exist, a `Product` object representing the payload is returned with a 200 status code. The [Ok](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.ok) helper method is invoked as the shorthand form of `return new OkObjectResult(product);`.
+In the preceding action:
+
+* A 404 status code is returned when the product represented by `id` doesn't exist in the underlying data store. The <xref:Microsoft.AspNetCore.Mvc.ControllerBase.NotFound%2A> convenience method is invoked as shorthand for `return new NotFoundResult();`.
+* A 200 status code is returned with the `Product` object when the product does exist. The <xref:Microsoft.AspNetCore.Mvc.ControllerBase.Ok%2A> convenience method is invoked as shorthand for `return new OkObjectResult(product);`.
 
 ### Asynchronous action
 
 Consider the following asynchronous action in which there are two possible return types:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.Api.Pre21/Controllers/ProductsController.cs?name=snippet_CreateAsync&highlight=8,13)]
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_CreateAsyncIActionResult" highlight="9,14":::
 
-In the preceding action, a 400 status code is returned when model validation fails and the [BadRequest](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.badrequest) helper method is invoked. For example, the following model indicates that requests must provide the `Name` property and a value. Therefore, failure to provide a proper `Name` in the request causes model validation to fail.
+In the preceding action:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.DataAccess/Models/Product.cs?name=snippet_ProductClass&highlight=5-6)]
+* A 400 status code is returned when the product description contains "XYZ Widget". The <xref:Microsoft.AspNetCore.Mvc.ControllerBase.BadRequest%2A> convenience method is invoked as shorthand for `return new BadRequestResult();`.
+* A 201 status code is generated by the <xref:Microsoft.AspNetCore.Mvc.ControllerBase.CreatedAtAction%2A> convenience method when a product is created. An alternative to calling `CreatedAtAction` is `return new CreatedAtActionResult(nameof(GetById), "Products", new { id = product.Id }, product);`. In this code path, the `Product` object is provided in the response body. A `Location` response header containing the newly created product's URL is provided.
 
-The preceding action's other known return code is a 201, which is generated by the [CreatedAtAction](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.createdataction) helper method. In this path, the `Product` object is returned.
+For example, the following model indicates that requests must include the `Name` and `Description` properties. Failure to provide `Name` and `Description` in the request causes model validation to fail.
 
-::: moniker range=">= aspnetcore-2.1"
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.DataAccess/Models/Product.cs" id="snippet_ProductClass" highlight="5-6,8-9":::
 
-## ActionResult\<T> type
+If the [`[ApiController]`](xref:Microsoft.AspNetCore.Mvc.ApiControllerAttribute) attribute is applied, model validation errors result in a 400 status code. For more information, see [Automatic HTTP 400 responses](xref:web-api/index#automatic-http-400-responses).
 
-ASP.NET Core 2.1 introduces the [ActionResult\<T>](/dotnet/api/microsoft.aspnetcore.mvc.actionresult-1) return type for Web API controller actions. It enables you to return a type deriving from [ActionResult](/dotnet/api/microsoft.aspnetcore.mvc.actionresult) or return a [specific type](#specific-type). `ActionResult<T>` offers the following benefits over the [IActionResult type](#iactionresult-type):
+## ActionResult vs IActionResult
 
-* The [[ProducesResponseType]](/dotnet/api/microsoft.aspnetcore.mvc.producesresponsetypeattribute) attribute's `Type` property can be excluded. For example, `[ProducesResponseType(200, Type = typeof(Product))]` is simplified to `[ProducesResponseType(200)]`. The action's expected return type is instead inferred from the `T` in `ActionResult<T>`.
-* [Implicit cast operators](/dotnet/csharp/language-reference/keywords/implicit) support the conversion of both `T` and `ActionResult` to `ActionResult<T>`. `T` converts to [ObjectResult](/dotnet/api/microsoft.aspnetcore.mvc.objectresult), which means `return new ObjectResult(T);` is simplified to `return T;`.
+The following section compares `ActionResult` to  `IActionResult`
+
+### ActionResult\<T> type
+
+ASP.NET Core includes the [ActionResult\<T>](xref:Microsoft.AspNetCore.Mvc.ActionResult%601) return type for web API controller actions. It enables you to return a type deriving from <xref:Microsoft.AspNetCore.Mvc.ActionResult> or return a [specific type](#specific-type). `ActionResult<T>` offers the following benefits over the [IActionResult type](#iactionresult-type):
+
+* The [`[ProducesResponseType]`](xref:Microsoft.AspNetCore.Mvc.ProducesResponseTypeAttribute) attribute's `Type` property can be excluded. For example, `[ProducesResponseType(200, Type = typeof(Product))]` is simplified to `[ProducesResponseType(200)]`. The action's expected return type is instead inferred from the `T` in `ActionResult<T>`.
+* [Implicit cast operators](/dotnet/csharp/language-reference/keywords/implicit) support the conversion of both `T` and `ActionResult` to `ActionResult<T>`. `T` converts to <xref:Microsoft.AspNetCore.Mvc.ObjectResult>, which means `return new ObjectResult(T);` is simplified to `return T;`.
 
 C# doesn't support implicit cast operators on interfaces. Consequently, conversion of the interface to a concrete type is necessary to use `ActionResult<T>`. For example, use of `IEnumerable` in the following example doesn't work:
 
-    ```csharp
-    [HttpGet]
-    public ActionResult<IEnumerable<Product>> Get()
-    {
-        return _repository.GetProducts();
-    }
-    ```
+```csharp
+[HttpGet]
+public ActionResult<IEnumerable<Product>> Get() =>
+    _repository.GetProducts();
+```
 
 One option to fix the preceding code is to return `_repository.GetProducts().ToList();`.
 
@@ -95,25 +103,25 @@ Most actions have a specific return type. Unexpected conditions can occur during
 
 Consider a synchronous action in which there are two possible return types:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.Api.21/Controllers/ProductsController.cs?name=snippet_GetById&highlight=8,11)]
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_GetByIdActionResultOfT" highlight="8,11":::
 
-In the preceding code, a 404 status code is returned when the product doesn't exist in the database. If the product does exist, the corresponding `Product` object is returned. Before ASP.NET Core 2.1, the `return product;` line would have been `return Ok(product);`.
+In the preceding action:
 
-> [!TIP]
-> As of ASP.NET Core 2.1, action parameter binding source inference is enabled when a controller class is decorated with the `[ApiController]` attribute. A parameter name matching a name in the route template is automatically bound using the request route data. Consequently, the preceding action's `id` parameter isn't explicitly annotated with the [[FromRoute]](/dotnet/api/microsoft.aspnetcore.mvc.fromrouteattribute) attribute.
+* A 404 status code is returned when the product doesn't exist in the database.
+* A 200 status code is returned with the corresponding `Product` object when the product does exist.
 
 ### Asynchronous action
 
 Consider an asynchronous action in which there are two possible return types:
 
-[!code-csharp[](../web-api/action-return-types/samples/WebApiSample.Api.21/Controllers/ProductsController.cs?name=snippet_CreateAsync&highlight=8,13)]
+:::code language="csharp" source="action-return-types/samples/3.x/WebApiSample.Api.31/Controllers/ProductsController.cs" id="snippet_CreateAsyncActionResultOfT" highlight="9,14":::
 
-If model validation fails, the [BadRequest](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.badrequest#Microsoft_AspNetCore_Mvc_ControllerBase_BadRequest_Microsoft_AspNetCore_Mvc_ModelBinding_ModelStateDictionary_) method is invoked to return a 400 status code. The [ModelState](/dotnet/api/microsoft.aspnetcore.mvc.controllerbase.modelstate) property containing the specific validation errors is passed to it. If model validation succeeds, the product is created in the database. A 201 status code is returned.
+In the preceding action:
 
-> [!TIP]
-> As of ASP.NET Core 2.1, action parameter binding source inference is enabled when a controller class is decorated with the `[ApiController]` attribute. Complex type parameters are automatically bound using the request body. Consequently, the preceding action's `product` parameter isn't explicitly annotated with the [[FromBody]](/dotnet/api/microsoft.aspnetcore.mvc.frombodyattribute) attribute.
-
-::: moniker-end
+* A 400 status code (<xref:Microsoft.AspNetCore.Mvc.ControllerBase.BadRequest%2A>) is returned by the ASP.NET Core runtime when:
+  * The [`[ApiController]`](xref:Microsoft.AspNetCore.Mvc.ApiControllerAttribute) attribute has been applied and model validation fails.
+  * The product description contains "XYZ Widget".
+* A 201 status code is generated by the <xref:Microsoft.AspNetCore.Mvc.ControllerBase.CreatedAtAction%2A> method when a product is created. In this code path, the `Product` object is provided in the response body. A `Location` response header containing the newly created product's URL is provided.
 
 ## Additional resources
 

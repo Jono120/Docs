@@ -3,16 +3,15 @@ title: Key management extensibility in ASP.NET Core
 author: rick-anderson
 description: Learn about ASP.NET Core Data Protection key management extensibility.
 ms.author: riande
-ms.date: 11/22/2017
+ms.custom: "mvc, seodec18"
+ms.date: 10/24/2018
 uid: security/data-protection/extensibility/key-management
 ---
 # Key management extensibility in ASP.NET Core
 
-> [!TIP]
-> Read the [key management](xref:security/data-protection/implementation/key-management#data-protection-implementation-key-management) section before reading this section, as it explains some of the fundamental concepts behind these APIs.
+Read the [key management](xref:security/data-protection/implementation/key-management#data-protection-implementation-key-management) section before reading this section, as it explains some of the fundamental concepts behind these APIs.
 
-> [!WARNING]
-> Types that implement any of the following interfaces should be thread-safe for multiple callers.
+**Warning**: Types that implement any of the following interfaces should be thread-safe for multiple callers.
 
 ## Key
 
@@ -24,17 +23,17 @@ The `IKey` interface is the basic representation of a key in cryptosystem. The t
 
 * Key identifier (a GUID)
 
-::: moniker range=">= aspnetcore-2.0"
+:::moniker range=">= aspnetcore-2.0"
 
 Additionally, `IKey` exposes a `CreateEncryptor` method which can be used to create an [IAuthenticatedEncryptor](xref:security/data-protection/extensibility/core-crypto#data-protection-extensibility-core-crypto-iauthenticatedencryptor) instance tied to this key.
 
-::: moniker-end
+:::moniker-end
 
-::: moniker range="< aspnetcore-2.0"
+:::moniker range="< aspnetcore-2.0"
 
 Additionally, `IKey` exposes a `CreateEncryptorInstance` method which can be used to create an [IAuthenticatedEncryptor](xref:security/data-protection/extensibility/core-crypto#data-protection-extensibility-core-crypto-iauthenticatedencryptor) instance tied to this key.
 
-::: moniker-end
+:::moniker-end
 
 > [!NOTE]
 > There's no API to retrieve the raw cryptographic material from an `IKey` instance.
@@ -54,11 +53,11 @@ The `IKeyManager` interface represents an object responsible for general key sto
 
 ## XmlKeyManager
 
-The `XmlKeyManager` type is the in-box concrete implementation of `IKeyManager`. It provides several useful facilities, including key escrow and encryption of keys at rest. Keys in this system are represented as XML elements (specifically, [XElement](https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/xelement-class-overview)).
+The `XmlKeyManager` type is the in-box concrete implementation of `IKeyManager`. It provides several useful facilities, including key escrow and encryption of keys at rest. Keys in this system are represented as XML elements (specifically, [XElement](/dotnet/csharp/programming-guide/concepts/linq/xelement-class-overview)).
 
 `XmlKeyManager` depends on several other components in the course of fulfilling its tasks:
 
-::: moniker range=">= aspnetcore-2.0"
+:::moniker range=">= aspnetcore-2.0"
 
 * `AlgorithmConfiguration`, which dictates the algorithms used by new keys.
 
@@ -68,9 +67,9 @@ The `XmlKeyManager` type is the in-box concrete implementation of `IKeyManager`.
 
 * `IKeyEscrowSink` [optional], which provides key escrow services.
 
-::: moniker-end
+:::moniker-end
 
-::: moniker range="< aspnetcore-2.0"
+:::moniker range="< aspnetcore-2.0"
 
 * `IXmlRepository`, which controls where keys are persisted in storage.
 
@@ -78,11 +77,11 @@ The `XmlKeyManager` type is the in-box concrete implementation of `IKeyManager`.
 
 * `IKeyEscrowSink` [optional], which provides key escrow services.
 
-::: moniker-end
+:::moniker-end
 
 Below are high-level diagrams which indicate how these components are wired together within `XmlKeyManager`.
 
-::: moniker range=">= aspnetcore-2.0"
+:::moniker range=">= aspnetcore-2.0"
 
 ![Key Creation](key-management/_static/keycreation2.png)
 
@@ -92,9 +91,9 @@ In the implementation of `CreateNewKey`, the `AlgorithmConfiguration` component 
 
 ![Key Retrieval](key-management/_static/keyretrieval2.png)
 
-::: moniker-end
+:::moniker-end
 
-::: moniker range="< aspnetcore-2.0"
+:::moniker range="< aspnetcore-2.0"
 
 ![Key Creation](key-management/_static/keycreation1.png)
 
@@ -104,7 +103,7 @@ In the implementation of `CreateNewKey`, the `IAuthenticatedEncryptorConfigurati
 
 ![Key Retrieval](key-management/_static/keyretrieval1.png)
 
-::: moniker-end
+:::moniker-end
 
 *Key Retrieval / GetAllKeys*
 
@@ -124,10 +123,23 @@ Implementations of `IXmlRepository` don't need to parse the XML passing through 
 
 There are four built-in concrete types which implement `IXmlRepository`:
 
-* [FileSystemXmlRepository](/dotnet/api/microsoft.aspnetcore.dataprotection.repositories.filesystemxmlrepository)
-* [RegistryXmlRepository](/dotnet/api/microsoft.aspnetcore.dataprotection.repositories.registryxmlrepository)
-* [AzureStorage.AzureBlobXmlRepository](/dotnet/api/microsoft.aspnetcore.dataprotection.azurestorage.azureblobxmlrepository)
-* [RedisXmlRepository](/dotnet/api/microsoft.aspnetcore.dataprotection.redisxmlrepository)
+:::moniker range=">= aspnetcore-2.2"
+
+* <xref:Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository>
+* <xref:Microsoft.AspNetCore.DataProtection.Repositories.RegistryXmlRepository>
+* [AzureStorage.AzureBlobXmlRepository](xref:Microsoft.AspNetCore.DataProtection.AzureStorage.AzureBlobXmlRepository)
+* <xref:Microsoft.AspNetCore.DataProtection.StackExchangeRedis.RedisXmlRepository>
+
+:::moniker-end
+
+:::moniker range="< aspnetcore-2.2"
+
+* <xref:Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository>
+* <xref:Microsoft.AspNetCore.DataProtection.Repositories.RegistryXmlRepository>
+* [AzureStorage.AzureBlobXmlRepository](xref:Microsoft.AspNetCore.DataProtection.AzureStorage.AzureBlobXmlRepository)
+* <xref:Microsoft.AspNetCore.DataProtection.RedisXmlRepository>
+
+:::moniker-end
 
 See the [key storage providers document](xref:security/data-protection/implementation/key-storage-providers) for more information.
 
@@ -135,21 +147,21 @@ Registering a custom `IXmlRepository` is appropriate when using a different back
 
 To change the default repository application-wide, register a custom `IXmlRepository` instance:
 
-::: moniker range=">= aspnetcore-2.0"
+:::moniker range=">= aspnetcore-2.0"
 
 ```csharp
 services.Configure<KeyManagementOptions>(options => options.XmlRepository = new MyCustomXmlRepository());
 ```
 
-::: moniker-end
+:::moniker-end
 
-::: moniker range="< aspnetcore-2.0"
+:::moniker range="< aspnetcore-2.0"
 
 ```csharp
 services.AddSingleton<IXmlRepository>(new MyCustomXmlRepository());
 ```
 
-::: moniker-end
+:::moniker-end
 
 ## IXmlEncryptor
 
@@ -161,30 +173,30 @@ If a serialized `IAuthenticatedEncryptorDescriptor` contains any elements marked
 
 There are four built-in concrete types which implement `IXmlEncryptor`:
 
-* [CertificateXmlEncryptor](/dotnet/api/microsoft.aspnetcore.dataprotection.xmlencryption.certificatexmlencryptor)
-* [DpapiNGXmlEncryptor](/dotnet/api/microsoft.aspnetcore.dataprotection.xmlencryption.dpapingxmlencryptor)
-* [DpapiXmlEncryptor](/dotnet/api/microsoft.aspnetcore.dataprotection.xmlencryption.dpapixmlencryptor)
-* [NullXmlEncryptor](/dotnet/api/microsoft.aspnetcore.dataprotection.xmlencryption.nullxmlencryptor)
+* <xref:Microsoft.AspNetCore.DataProtection.XmlEncryption.CertificateXmlEncryptor>
+* <xref:Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiNGXmlEncryptor>
+* <xref:Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlEncryptor>
+* <xref:Microsoft.AspNetCore.DataProtection.XmlEncryption.NullXmlEncryptor>
 
 See the [key encryption at rest document](xref:security/data-protection/implementation/key-encryption-at-rest) for more information.
 
 To change the default key-encryption-at-rest mechanism application-wide, register a custom `IXmlEncryptor` instance:
 
-::: moniker range=">= aspnetcore-2.0"
+:::moniker range=">= aspnetcore-2.0"
 
 ```csharp
 services.Configure<KeyManagementOptions>(options => options.XmlEncryptor = new MyCustomXmlEncryptor());
 ```
 
-::: moniker-end
+:::moniker-end
 
-::: moniker range="< aspnetcore-2.0"
+:::moniker range="< aspnetcore-2.0"
 
 ```csharp
 services.AddSingleton<IXmlEncryptor>(new MyCustomXmlEncryptor());
 ```
 
-::: moniker-end
+:::moniker-end
 
 ## IXmlDecryptor
 

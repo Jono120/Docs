@@ -42,14 +42,14 @@ namespace Web6990
             #region snippet2
             services.AddIdentity<IdentityUser, IdentityRole>()
                 // services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             #endregion
 
             #region snippet3
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.AllowAreas = true;
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 });
