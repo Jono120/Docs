@@ -11,6 +11,10 @@ uid: aspnetcore-7
 
 This article highlights the most significant changes in ASP.NET Core 7.0 with links to relevant documentation.
 
+## Rate limiting middleware in ASP.NET Core
+
+The `Microsoft.AspNetCore.RateLimiting` middleware provides rate limiting middleware. Apps configure rate limiting policies and then attach the policies to endpoints. For more information, see <xref:performance/rate-limit?view=aspnetcore-7.0&preserve-view=true>.
+
 ## MVC and Razor pages
 
 ### Support for nullable models in MVC views and Razor Pages
@@ -251,7 +255,7 @@ dotnet new web --use-program-main
 
 With Visual Studio, select the new **Do not use top-level statements** checkbox during project creation:
 
-![checkbox ](https://user-images.githubusercontent.com/3605364/180587645-90f7cce5-d9f8-49d2-88cf-2258960394e1.png)
+![checkbox](https://user-images.githubusercontent.com/3605364/180587645-90f7cce5-d9f8-49d2-88cf-2258960394e1.png)
 
 ### Updated Angular and React templates
 
