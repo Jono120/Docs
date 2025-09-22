@@ -643,7 +643,7 @@ var app = builder.Build();
 var proxyClient = new HttpClient();
 app.MapGet("/pokemon", async () => 
 {
-    var stream = await proxyClient.GetStreamAsync("http://consoto/pokedex.json");
+    var stream = await proxyClient.GetStreamAsync("http://contoso/pokedex.json");
     // Proxy the response as JSON
     return Results.Stream(stream, "application/json");
 });
@@ -766,7 +766,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger(); // UseSwaggerUI Protected by if (env.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
                                     $"{builder.Environment.ApplicationName} v1"));
 }
@@ -787,7 +787,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(); // UseSwaggerUI Protected by if (env.IsDevelopment())
 }
 
 app.MapGet("/swag", () => "Hello Swagger!");

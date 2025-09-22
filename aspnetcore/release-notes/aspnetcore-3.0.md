@@ -1,8 +1,8 @@
 ---
 title: What's new in ASP.NET Core 3.0
-author: rick-anderson
+author: wadepickett
 description: Learn about the new features in ASP.NET Core 3.0.
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 12/05/2019
 uid: aspnetcore-3.0
@@ -15,7 +15,7 @@ This article highlights the most significant changes in ASP.NET Core 3.0 with li
 
 Blazor is a new framework in ASP.NET Core for building interactive client-side web UI with .NET:
 
-* Create rich interactive UIs using C# instead of JavaScript.
+* Create rich interactive UIs using C#.
 * Share server-side and client-side app logic written in .NET.
 * Render the UI as HTML and CSS for wide browser support, including mobile browsers.
 
@@ -126,7 +126,7 @@ connection.onreconnected((connectionId) => {
 });
 ```
 
-SignalR 3.0 and later provides a custom resource to authorization handlers when a hub method requires authorization. The resource is an instance of `HubInvocationContext`. The `HubInvocationContext` includes the:
+SignalR 3.0 or later provides a custom resource to authorization handlers when a hub method requires authorization. The resource is an instance of `HubInvocationContext`. The `HubInvocationContext` includes the:
 
 * `HubCallerContext`
 * Name of the hub method being invoked.
@@ -324,7 +324,7 @@ IdentityServer4 is an OpenID Connect and OAuth 2.0 framework for ASP.NET Core 3.
 * Access control for APIs
 * Federation Gateway
 
-For more information, see [the IdentityServer4 documentation](http://docs.identityserver.io/en/latest/index.html) or [Authentication and authorization for SPAs](xref:security/authentication/identity/spa).
+For more information, see [the IdentityServer4 documentation](https://identityserver4.readthedocs.io/en/latest/) or [Authentication and authorization for SPAs](xref:security/authentication/identity/spa).
 
 ## Certificate and Kerberos authentication
 
@@ -529,7 +529,6 @@ The most notable assemblies removed from the ASP.NET Core 3.0 shared framework a
 
 For a complete list of assemblies removed from the shared framework, see [Assemblies being removed from Microsoft.AspNetCore.App 3.0](https://github.com/dotnet/AspNetCore/issues/3755). For more information on the motivation for this change, see [Breaking changes to Microsoft.AspNetCore.App in 3.0](https://github.com/aspnet/Announcements/issues/325) and [A first look at changes coming in ASP.NET Core 3.0](https://devblogs.microsoft.com/aspnet/a-first-look-at-changes-coming-in-asp-net-core-3-0/).
 
-<!-- 
-## Additional information
-For the complete list of changes, see the [ASP.NET Core 3.0 Release Notes](WHERE IS THIS????).
--->
+## Breaking changes
+
+Use the articles in [Breaking changes in .NET](/dotnet/core/compatibility/breaking-changes) to find breaking changes that might apply when upgrading an app to a newer version of .NET.

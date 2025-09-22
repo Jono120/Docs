@@ -1,24 +1,23 @@
 ---
 title: Code samples migrated to the new minimal hosting model in 6.0
-author: rick-anderson
+author: wadepickett
 description: Learn how to migrate ASP.NET Core samples to the new minimal hosting model in 6.0.
 monikerRange: '>= aspnetcore-5.0'
-ms.author: riande
+ms.author: wpickett
 ms.date: 10/22/2021
 uid: migration/50-to-60-samples
 ---
-
-# Code samples migrated to the new minimal hosting model in ASP.NET Core 6.0
+# Code samples migrated to the new minimal hosting model in ASP.NET Core in .NET 6
 
 <!-- 
 This content from https://gist.github.com/davidfowl/0e0372c3c1d895c3ce195ba983b1e03d#differences-in-the-hosting-model
  -->
 
-This article provides samples of code migrated to ASP.NET Core 6.0. ASP.NET Core 6.0 uses a new minimal hosting model. For more information, see [New hosting model](xref:migration/50-to-60#nhm).
+This article provides samples of code migrated to ASP.NET Core in .NET 6. ASP.NET Core in .NET 6 uses a new minimal hosting model. For more information, see [New hosting model](xref:migration/50-to-60#nhm).
 
 ## Middleware
 
-The following code adds the Static File Middleware to an ASP.NET Core 5 app:
+The following code adds the Static File Middleware to a .NET 5 app:
 
 ```csharp
 public class Startup
@@ -30,7 +29,7 @@ public class Startup
 }
 ```
 
-The following code adds the Static File Middleware to an ASP.NET Core 6 app:
+The following code adds the Static File Middleware to an ASP.NET Core in .NET 6 app:
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_mid)]
 
@@ -38,7 +37,7 @@ The following code adds the Static File Middleware to an ASP.NET Core 6 app:
 
 ## Routing
 
-The following code adds an endpoint to an ASP.NET Core 5 app:
+The following code adds an endpoint to an .NET 5 app:
 
 ```csharp
 public class Startup
@@ -54,7 +53,7 @@ public class Startup
 }
 ```
 
-In .NET 6, routes can be added directly to the <xref:Microsoft.AspNetCore.Builder.WebApplication> without an explicit call to <xref:Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseEndpoints%2A> or <xref:Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseRouting%2A>. The following code adds an endpoint to an ASP.NET Core 6 app:
+In .NET 6, routes can be added directly to the <xref:Microsoft.AspNetCore.Builder.WebApplication> without an explicit call to <xref:Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseEndpoints%2A> or <xref:Microsoft.AspNetCore.Builder.EndpointRoutingApplicationBuilderExtensions.UseRouting%2A>. The following code adds an endpoint to an ASP.NET Core in .NET 6 app:
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_rt)]
 
@@ -68,7 +67,7 @@ For more information, see <xref:fundamentals/routing?view=aspnetcore-6.0>
 
 ## Change the content root, app name, and environment
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -83,7 +82,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_root)]
 
@@ -101,7 +100,7 @@ The following table shows the environment variable and command-line argument use
 
 ## Add configuration providers
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -116,7 +115,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_conf)]
 
@@ -124,7 +123,7 @@ For detailed information, see [File configuration providers](xref:fundamentals/c
 
 ## Add logging providers
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -139,7 +138,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_log)]
 
@@ -147,7 +146,7 @@ For more information, see  <xref:fundamentals/logging/index?view=aspnetcore-6.0#
 
 ## Add services
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public class Startup
@@ -163,7 +162,7 @@ public class Startup
 }
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_svc)]
 
@@ -175,7 +174,7 @@ For more information, see  <xref:fundamentals/dependency-injection?view=aspnetco
 
 ### Customize IHostBuilder
 
-#### ASP.NET Core 5
+#### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -187,13 +186,13 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-#### ASP.NET Core 6
+#### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_hb)]
 
 ### Customize IWebHostBuilder
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -206,15 +205,15 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_whb)]
 
 ## Change the web root
 
-By default, the web root is relative to the content root in the `wwwroot` folder. Web root is where the static files middleware looks for static files. Web root can be changed by setting the <xref:Microsoft.AspNetCore.Builder.WebApplicationOptions.WebRootPath> property on <xref:Microsoft.AspNetCore.Builder.WebApplicationOptions>:
+By default, the web root is relative to the content root in the `wwwroot` folder. Web root is where the Static File Middleware looks for static files. Web root can be changed by setting the <xref:Microsoft.AspNetCore.Builder.WebApplicationOptions.WebRootPath> property on <xref:Microsoft.AspNetCore.Builder.WebApplicationOptions>:
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -227,7 +226,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         });
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_wr)]
 
@@ -237,7 +236,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
 
 The following .NET 5 and .NET 6 samples use [Autofac](https://docs.autofac.org/en/latest/integration/aspnetcore.html)
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 **Program class**
 
@@ -262,7 +261,7 @@ public class Startup
 }
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -280,7 +279,7 @@ var app = builder.Build();
 
 `Startup.Configure`  can inject any service added via the <xref:Microsoft.Extensions.DependencyInjection.IServiceCollection>.
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 ```csharp
 public class Startup
@@ -300,15 +299,16 @@ public class Startup
                           ILogger<Startup> logger)
     {
         lifetime.ApplicationStarted.Register(() =>
-            logger.LogInformation($"The application {env.ApplicationName} started" +
-                                  $" in the injected {service}"));
+            logger.LogInformation(
+                "The application {Name} started in the injected {Service}",
+                env.ApplicationName, service));
     }
 }
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
-In ASP.NET Core 6:
+In ASP.NET Core in .NET 6:
 
 * There are a few common services available as top level properties on <xref:Microsoft.AspNetCore.Builder.WebApplication>.
 * Additional services need to be manually resolved from the `IServiceProvider` via [WebApplication.Services](xref:Microsoft.AspNetCore.Builder.WebApplication.Services).
@@ -319,7 +319,7 @@ In ASP.NET Core 6:
 
 ## Test with WebApplicationFactory or TestServer
 
-### ASP.NET Core 5
+### ASP.NET Core in .NET 5
 
 In the following samples, the test project uses `TestServer` and <xref:Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory%601>. These ship as separate packages that require explicit reference:
 
@@ -339,7 +339,7 @@ In the following samples, the test project uses `TestServer` and <xref:Microsoft
 </ItemGroup>
 ```
 
-#### ASP.NET Core 5 code
+#### ASP.NET Core in .NET 5 code
 
 ```csharp
 public class Startup
@@ -432,7 +432,7 @@ class MockHelloService : IHelloService
 }
 ```
 
-### ASP.NET Core 6
+### ASP.NET Core in .NET 6
 
 [!code-csharp[](50-to-60-samples/samples/Web6Samples/Program.cs?name=snippet_test)]
 

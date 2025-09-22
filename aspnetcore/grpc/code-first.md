@@ -3,11 +3,13 @@ title: Code-first gRPC services and clients with .NET
 author: jamesnk
 description: Learn the basic concepts when writing code-first gRPC with .NET.
 monikerRange: '>= aspnetcore-3.0'
-ms.author: jamesnk
+ms.author: wpickett
 ms.date: 02/23/2022
 uid: grpc/code-first
 ---
 # Code-first gRPC services and clients with .NET
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 By [James Newton-King](https://twitter.com/jamesnk) and [Marc Gravell](https://twitter.com/marcgravell)
 
@@ -87,9 +89,7 @@ A code-first gRPC client uses the service contract to call gRPC services.
   * Add a [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client) package reference.
   * Add a reference to the shared code-contract project.
 
-  [!code-csharp[](code-first/samples/6.x/GrpcGreeterClient/GrpcGreeterClient.csproj?highlight=10-13,15-17)]
-
-[!code-xml[](code-first/samples/6.x/GrpcGreeterClient/GrpcGreeterClient.csproj?highlight=10-13,15-17)]
+  [!code-xml[](code-first/samples/6.x/GrpcGreeterClient/GrpcGreeterClient.csproj?highlight=10-13,15-17)]
 
 * Update the client `program.cs`
 
@@ -103,7 +103,7 @@ The preceding gRPC client `Program.cs` code:
 
 A code-first gRPC client is created from a channel. Just like a regular client, a code-first client uses its [channel configuration](xref:grpc/configuration#configure-client-options).
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/grpc/code-first/samples/6.x) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/grpc/code-first/samples/6.x) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Additional resources
 
@@ -187,7 +187,7 @@ The preceding code:
 
 A code-first gRPC client is created from a channel. Just like a regular client, a code-first client uses its [channel configuration](xref:grpc/configuration#configure-client-options).
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/grpc/code-first/samples/5.x) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/grpc/code-first/samples/5.x) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Additional resources
 

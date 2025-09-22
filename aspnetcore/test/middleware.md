@@ -3,7 +3,7 @@ title: Test ASP.NET Core middleware
 author: tratcher
 description: Learn how to test ASP.NET Core middleware with TestServer.
 monikerRange: '>= aspnetcore-3.1'
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 05/18/2022
 uid: test/middleware
@@ -107,6 +107,48 @@ public async Task TestMiddleware_ExpectedResponse()
 <xref:Microsoft.AspNetCore.TestHost.TestServer.SendAsync%2A> permits direct configuration of an <xref:Microsoft.AspNetCore.Http.HttpContext> object rather than using the <xref:System.Net.Http.HttpClient> abstractions. Use <xref:Microsoft.AspNetCore.TestHost.TestServer.SendAsync%2A> to manipulate structures only available on the server, such as [HttpContext.Items](xref:Microsoft.AspNetCore.Http.HttpContext.Items) or [HttpContext.Features](xref:Microsoft.AspNetCore.Http.HttpContext.Features).
 
 As with the earlier example that tested for a *404 - Not Found* response, check the opposite for each `Assert` statement in the preceding test. The check confirms that the test fails correctly when the middleware is operating normally. After you've confirmed that the false positive test works, set the final `Assert` statements for the expected conditions and values of the test. Run it again to confirm that the test passes.
+
+## Add request routes
+
+Additional routes can be added by configuration using the test `HttpClient`:
+
+
+```csharp
+	[Fact]
+	public async Task TestWithEndpoint_ExpectedResponse ()
+	{
+		using var host = await new HostBuilder()
+			.ConfigureWebHost(webBuilder =>
+			{
+				webBuilder
+					.UseTestServer()
+					.ConfigureServices(services =>
+					{
+						services.AddRouting();
+					})
+					.Configure(app =>
+					{
+						app.UseRouting();
+						app.UseMiddleware<MyMiddleware>();
+						app.UseEndpoints(endpoints =>
+						{
+							endpoints.MapGet("/hello", () =>
+								TypedResults.Text("Hello Tests"));
+						});
+					});
+			})
+			.StartAsync();
+
+		var client = host.GetTestClient();
+
+		var response = await client.GetAsync("/hello");
+
+		Assert.True(response.IsSuccessStatusCode);
+		var responseBody = await response.Content.ReadAsStringAsync();
+		Assert.Equal("Hello Tests", responseBody);
+```
+
+Additional routes can also be added using the approach `server.SendAsync`.
 
 ## TestServer limitations
 

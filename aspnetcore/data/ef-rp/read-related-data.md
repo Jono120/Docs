@@ -1,8 +1,8 @@
 ---
 title: Part 6, Razor Pages with EF Core in ASP.NET Core - Read Related Data
-author: rick-anderson
+author: tdykstra
 description: Part 6 of Razor Pages and Entity Framework tutorial series.
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 09/28/2019
 uid: data/ef-rp/read-related-data
@@ -102,7 +102,12 @@ Update Pages/Courses/Index.cshtml.cs with the following code:
 
 [!code-csharp[](intro/samples/cu30/Pages/Courses/Index.cshtml.cs?highlight=18,22,24)]
 
-The preceding code changes the `Course` property to `Courses` and adds `AsNoTracking`. `AsNoTracking` improves performance because the entities returned are not tracked. The entities don't need to be tracked because they're not updated in the current context.
+The preceding code changes the `Course` property to `Courses` and adds `AsNoTracking`. 
+
+No-tracking queries are useful when the results are used in a read-only scenario. They're generally quicker to execute because there's no need to set up the change tracking information. If the entities retrieved from the database don't need to be updated, then a no-tracking query is likely to perform better than a tracking query.
+
+In some cases a tracking query is more efficient than a no-tracking query. For more information, see [Tracking vs. No-Tracking Queries](/ef/core/querying/tracking).
+In the preceding code, `AsNoTracking` is called because the entities aren't updated in the current context.
 
 Update `Pages/Courses/Index.cshtml` with the following code.
 
@@ -601,7 +606,7 @@ The next tutorial shows how to update related data.
 
 In this tutorial, related data is read and displayed. Related data is data that EF Core loads into navigation properties.
 
-If you run into problems you can't solve, [download or view the completed app.](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/data/ef-rp/intro/samples) [Download instructions](xref:index#how-to-download-a-sample).
+If you run into problems you can't solve, [download or view the completed app.](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/data/ef-rp/intro/samples) [Download instructions](xref:fundamentals/index#how-to-download-a-sample).
 
 The following illustrations show the completed pages for this tutorial:
 
@@ -798,13 +803,13 @@ The preceding markup makes the following changes:
 
 * Added a **Courses** column that displays courses taught by each instructor. See [Explicit line transition](xref:mvc/views/razor#explicit-line-transition) for more about this razor syntax.
 
-* Added code that dynamically adds `class="success"` to the `tr` element of the selected instructor. This sets a background color for the selected row using a Bootstrap class.
+* Added code that dynamically adds `class="table-success"` to the `tr` element of the selected instructor. This sets a background color for the selected row using a Bootstrap class.
 
   ```html
   string selectedRow = "";
   if (item.CourseID == Model.CourseID)
   {
-      selectedRow = "success";
+      selectedRow = "table-success";
   }
   <tr class="@selectedRow">
   ```

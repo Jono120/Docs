@@ -1,7 +1,7 @@
 ---
 title: Using DisplayTemplates and EditorTemplates
-author: Ducki
-ms.author: riande
+author: tdykstra
+ms.author: tdykstra
 description: How to use DisplayTemplates and EditorTemplates in ASP.NET Core.
 monikerRange: '>= aspnetcore-2.1'
 ms.date: 05/22/2022
@@ -24,7 +24,7 @@ A web site could use a Display Template to show the `Address` in standard format
 
 ![view of default scaffolding layout using Address template](display-templates/_static/addr2.png)
 
-Display and Editor templates can also reduce code duplication and maintenance costs. Consider a web site that displays the `Address` model on 20 different pages. If the `Address` model changes, the 20 pages will all need to be updated. If a Display Template is used for the `Address` model, only the Display Template needs to be updated. For example, the `Address` model might be updated to include the country.
+Display and Editor templates can also reduce code duplication and maintenance costs. Consider a web site that displays the `Address` model on 20 different pages. If the `Address` model changes, the 20 pages will all need to be updated. If a Display Template is used for the `Address` model, only the Display Template needs to be updated. For example, the `Address` model might be updated to include the country or region.
 
 [Tag Helpers](xref:mvc/views/tag-helpers/intro) provide an alternative way that enables server-side code to participate in creating and rendering HTML elements in Razor files. For more information, see [Tag Helpers compared to HTML Helpers](xref:mvc/views/tag-helpers/intro#tag-helpers-compared-to-html-helpers).
 
@@ -76,6 +76,6 @@ The following markup shows the *Edit.cshtml* page which uses the `Pages/Shared/E
 
 ## Additional resources
 
-* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/display-templates/sample) ([how to download](xref:index#how-to-download-a-sample))
+* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/display-templates/sample) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 * [Tag Helpers](xref:mvc/views/tag-helpers/intro)
 * [Tag Helpers compared to HTML Helpers](xref:mvc/views/tag-helpers/intro#tag-helpers-compared-to-html-helpers)

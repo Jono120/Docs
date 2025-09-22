@@ -1,9 +1,9 @@
 ---
 title: Custom Model Binding in ASP.NET Core
-author: ardalis
+author: tdykstra
 description: Learn how model binding allows controller actions to work directly with model types in ASP.NET Core.
-ms.author: riande
-ms.date: 01/06/2020
+ms.author: tdykstra
+ms.date: 04/03/2024
 uid: mvc/advanced/custom-model-binding
 ---
 # Custom Model Binding in ASP.NET Core
@@ -14,7 +14,7 @@ By [Kirk Larkin](https://twitter.com/serpent5)
 
 Model binding allows controller actions to work directly with model types (passed in as method arguments), rather than HTTP requests. Mapping between incoming request data and application models is handled by model binders. Developers can extend the built-in model binding functionality by implementing custom model binders (though typically, you don't need to write your own provider).
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/advanced/custom-model-binding/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/advanced/custom-model-binding/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Default model binder limitations
 
@@ -60,9 +60,7 @@ The following example shows how to use `ByteArrayModelBinder` to convert a base6
 [!code-csharp[](custom-model-binding/samples/3.x/CustomModelBindingSample/Controllers/ImageController.cs?name=snippet_Post)]
 [!INCLUDE[about the series](~/includes/code-comments-loc.md)]
 
-You can POST a base64-encoded string to this api method using a tool like [Postman](https://www.getpostman.com/):
-
-![Postman tool](custom-model-binding/images/postman.png "postman")
+You can POST a base64-encoded string to the previous api method using a tool like [curl](https://curl.haxx.se/).
 
 As long as the binder can bind request data to appropriately named properties or arguments, model binding will succeed. The following example shows how to use `ByteArrayModelBinder` with a view model:
 
@@ -72,9 +70,9 @@ As long as the binder can bind request data to appropriately named properties or
 
 In this section we'll implement a custom model binder that:
 
-- Converts incoming request data into strongly typed key arguments.
-- Uses Entity Framework Core to fetch the associated entity.
-- Passes the associated entity as an argument to the action method.
+* Converts incoming request data into strongly typed key arguments.
+* Uses Entity Framework Core to fetch the associated entity.
+* Passes the associated entity as an argument to the action method.
 
 The following sample uses the `ModelBinder` attribute on the `Author` model:
 
@@ -131,9 +129,9 @@ However, if an app requires polymorphic model binding, an implementation might l
 
 Custom model binders:
 
-- Shouldn't attempt to set status codes or return results (for example, 404 Not Found). If model binding fails, an [action filter](xref:mvc/controllers/filters) or logic within the action method itself should handle the failure.
-- Are most useful for eliminating repetitive code and cross-cutting concerns from action methods.
-- Typically shouldn't be used to convert a string into a custom type, a <xref:System.ComponentModel.TypeConverter> is usually a better option.
+* Shouldn't attempt to set status codes or return results (for example, 404 Not Found). If model binding fails, an [action filter](xref:mvc/controllers/filters) or logic within the action method itself should handle the failure.
+* Are most useful for eliminating repetitive code and cross-cutting concerns from action methods.
+* Typically shouldn't be used to convert a string into a custom type, a <xref:System.ComponentModel.TypeConverter> is usually a better option.
 
 :::moniker-end
 :::moniker range="< aspnetcore-3.0"
@@ -142,7 +140,7 @@ By [Steve Smith](https://ardalis.com/)
 
 Model binding allows controller actions to work directly with model types (passed in as method arguments), rather than HTTP requests. Mapping between incoming request data and application models is handled by model binders. Developers can extend the built-in model binding functionality by implementing custom model binders (though typically, you don't need to write your own provider).
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/advanced/custom-model-binding/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/advanced/custom-model-binding/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Default model binder limitations
 
@@ -183,9 +181,7 @@ The following example shows how to use `ByteArrayModelBinder` to convert a base6
 
 [!code-csharp[](custom-model-binding/samples/2.x/CustomModelBindingSample/Controllers/ImageController.cs?name=post1)]
 
-You can POST a base64-encoded string to this api method using a tool like [Postman](https://www.getpostman.com/):
-
-![Postman tool output](custom-model-binding/images/postman.png "postman")
+You can POST a base64-encoded string to the previous api method using a tool like [curl](https://curl.haxx.se/).
 
 As long as the binder can bind request data to appropriately named properties or arguments, model binding will succeed. The following example shows how to use `ByteArrayModelBinder` with a view model:
 
@@ -195,9 +191,9 @@ As long as the binder can bind request data to appropriately named properties or
 
 In this section we'll implement a custom model binder that:
 
-- Converts incoming request data into strongly typed key arguments.
-- Uses Entity Framework Core to fetch the associated entity.
-- Passes the associated entity as an argument to the action method.
+* Converts incoming request data into strongly typed key arguments.
+* Uses Entity Framework Core to fetch the associated entity.
+* Passes the associated entity as an argument to the action method.
 
 The following sample uses the `ModelBinder` attribute on the `Author` model:
 
@@ -254,8 +250,8 @@ However, if an app requires polymorphic model binding, an implementation might l
 
 Custom model binders:
 
-- Shouldn't attempt to set status codes or return results (for example, 404 Not Found). If model binding fails, an [action filter](xref:mvc/controllers/filters) or logic within the action method itself should handle the failure.
-- Are most useful for eliminating repetitive code and cross-cutting concerns from action methods.
-- Typically shouldn't be used to convert a string into a custom type, a <xref:System.ComponentModel.TypeConverter> is usually a better option.
+* Shouldn't attempt to set status codes or return results (for example, 404 Not Found). If model binding fails, an [action filter](xref:mvc/controllers/filters) or logic within the action method itself should handle the failure.
+* Are most useful for eliminating repetitive code and cross-cutting concerns from action methods.
+* Typically shouldn't be used to convert a string into a custom type, a <xref:System.ComponentModel.TypeConverter> is usually a better option.
 
 :::moniker-end

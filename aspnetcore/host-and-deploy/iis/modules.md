@@ -1,14 +1,16 @@
 ---
 title: IIS modules with ASP.NET Core
-author: rick-anderson
+author: wadepickett
 description: Discover active and inactive IIS modules for ASP.NET Core apps and how to manage IIS modules.
 monikerRange: '>= aspnetcore-2.1'
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 01/13/2020
 uid: host-and-deploy/iis/modules
 ---
 # IIS modules with ASP.NET Core
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 Some of the native IIS modules and all of the IIS managed modules aren't able to process requests for ASP.NET Core apps. In many cases, ASP.NET Core offers an alternative to the scenarios addressed by IIS native and managed modules.
 

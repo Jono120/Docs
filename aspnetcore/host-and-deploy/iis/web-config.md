@@ -1,14 +1,16 @@
 ---
 title: web.config file
-author: rick-anderson
+author: tdykstra
 description: Discover what is inside of the web.config file and how to configure different ASP.NET Core Module options.
 monikerRange: '>= aspnetcore-5.0'
-ms.author: riande
-ms.custom: mvc
+ms.author: tdykstra
+ms.custom: mvc, sfi-ropc-nochange
 ms.date: 02/07/2020
 uid: host-and-deploy/iis/web-config
 ---
 # `web.config` file
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 The `web.config` is a file that is read by IIS and the [ASP.NET Core Module](xref:host-and-deploy/aspnet-core-module) to configure an app hosted with IIS.
 

@@ -1,8 +1,8 @@
 ---
 title: Key management in ASP.NET Core
-author: rick-anderson
+author: tdykstra
 description: Learn implementation details of the ASP.NET Core Data Protection key management APIs.
-ms.author: riande
+ms.author: tdykstra
 ms.date: 10/14/2016
 uid: security/data-protection/implementation/key-management
 ---
@@ -23,7 +23,7 @@ The data protection system automatically manages the lifetime of master keys use
 Created, active, and expired keys may all be used to unprotect incoming payloads. Revoked keys by default may not be used to unprotect payloads, but the application developer can [override this behavior](xref:security/data-protection/consumer-apis/dangerous-unprotect#data-protection-consumer-apis-dangerous-unprotect) if necessary.
 
 >[!WARNING]
-> The developer might be tempted to delete a key from the key ring (e.g., by deleting the corresponding file from the file system). At that point, all data protected by the key is permanently undecipherable, and there's no emergency override like there's with revoked keys. Deleting a key is truly destructive behavior, and consequently the data protection system exposes no first-class API for performing this operation.
+> The developer might be tempted to delete a key from the key ring (for example by deleting the corresponding file from the file system). At that point, all data protected by the key is permanently undecipherable, and there's no emergency override like there's with revoked keys. Deleting a key is truly destructive behavior.
 
 ## Default key selection
 

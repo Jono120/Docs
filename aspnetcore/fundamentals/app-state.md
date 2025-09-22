@@ -1,10 +1,10 @@
 ---
 title: Session in ASP.NET Core
-author: rick-anderson
+author: tdykstra
 description: Discover approaches to preserve session between requests.
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
-ms.date: 03/22/2022
+ms.date: 04/24/2025
 uid: fundamentals/app-state
 ---
 # Session and state management in ASP.NET Core
@@ -15,9 +15,11 @@ By [Rick Anderson](https://twitter.com/RickAndMSFT), [Kirk Larkin](https://twitt
 
 HTTP is a stateless protocol. By default, HTTP requests are independent messages that don't retain user values. This article describes several approaches to preserve user data between requests.
 
+For Blazor state management guidance, which adds to or supersedes the guidance in this article, see <xref:blazor/state-management/index>.
+
 ## State management
 
-State can be stored using several approaches. Each approach is described later in this topic.
+State can be stored using several approaches. Each approach is described later in this article.
 
 | Storage approach | Storage mechanism |
 | ---------------- | ----------------- |
@@ -28,6 +30,20 @@ State can be stored using several approaches. Each approach is described later i
 | [Hidden fields](#hidden-fields) | HTTP form fields |
 | [HttpContext.Items](#httpcontextitems) | Server-side app code |
 | [Cache](#cache) | Server-side app code |
+
+## SignalR/Blazor Server and HTTP context-based state management
+
+[SignalR](xref:signalr/introduction) apps shouldn't use session state and other state management approaches that rely upon a stable HTTP context to store information. SignalR apps can store per-connection state in [`Context.Items` in the hub](xref:signalr/hubs). For more information and alternative state management approaches for Blazor Server apps, see <xref:blazor/state-management/index> and <xref:blazor/state-management/server>.
+
+<!-- UPDATE 10.0 - These links were left here for some reason. 
+                   I'll investigate and see why they're here
+                   before 10.0 GA.
+
+https://github.com/aspnet/SignalR/issues/2139
+https://github.com/dotnet/AspNetCore.Docs/issues/27956
+https://github.com/dotnet/AspNetCore.Docs/issues/14974
+
+-->
 
 ## Cookies
 
@@ -69,17 +85,12 @@ Session state exhibits the following behaviors:
 
 The in-memory cache provider stores session data in the memory of the server where the app resides. In a server farm scenario:
 
-* Use *sticky sessions* to tie each session to a specific app instance on an individual server. [Azure App Service](https://azure.microsoft.com/services/app-service/) uses [Application Request Routing (ARR)](/iis/extensions/planning-for-arr/using-the-application-request-routing-module) to enforce sticky sessions by default. However, sticky sessions can affect scalability and complicate web app updates. A better approach is to use a Redis or SQL Server distributed cache, which doesn't require sticky sessions. For more information, see <xref:performance/caching/distributed>.
+* Use *sticky sessions* to tie each session to a specific app instance on an individual server. [Azure App Service](https://azure.microsoft.com/services/app-service/) uses [Application Request Routing (ARR)](/iis/extensions/planning-for-arr/using-the-application-request-routing-module) to enforce sticky sessions by default. However, sticky sessions can affect scalability and complicate web app updates. A better approach is to use a Redis, SQL Server, or Azure Postgres distributed cache, which doesn't require sticky sessions. For more information, see <xref:performance/caching/distributed>.
 * The session cookie is encrypted via <xref:Microsoft.AspNetCore.DataProtection.IDataProtector>. Data Protection must be properly configured to read session cookies on each machine. For more information, see <xref:security/data-protection/introduction> and [Key storage providers](xref:security/data-protection/implementation/key-storage-providers).
 
 ### Configure session state
 
-The [Microsoft.AspNetCore.Session](https://www.nuget.org/packages/Microsoft.AspNetCore.Session/) package:
-
-* Is included implicitly by the framework.
-* Provides middleware for managing session state.
-
-To enable the session middleware, `Program.cs` must contain:
+Middleware for managing session state is included in the framework. To enable the session middleware, `Program.cs` must contain:
 
 * Any of the <xref:Microsoft.Extensions.Caching.Distributed.IDistributedCache> memory caches. The `IDistributedCache` implementation is used as a backing store for session. For more information, see <xref:performance/caching/distributed>.
 * A call to <xref:Microsoft.Extensions.DependencyInjection.SessionServiceCollectionExtensions.AddSession%2A>
@@ -169,6 +180,9 @@ The following example shows how to set and get a serializable object with the `S
 
 [!code-csharp[](app-state/6.0samples/SessionSample/Pages/Index6.cshtml.cs)]
 
+> [!WARNING]
+> Storing a live object in the session should be used with caution, as there are many problems that can occur with serialized objects. For more information, see [Sessions should be allowed to store objects (dotnet/aspnetcore #18159)](https://github.com/dotnet/aspnetcore/issues/18159).
+
 ## TempData
 
 ASP.NET Core exposes the Razor Pages [TempData](xref:Microsoft.AspNetCore.Mvc.RazorPages.PageModel.TempData) or Controller <xref:Microsoft.AspNetCore.Mvc.Controller.TempData>. This property stores data until it's read in another request. The [Keep(String)](xref:Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataDictionary.Keep*) and [Peek(string)](xref:Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataDictionary.Peek*) methods can be used to examine the data without deletion at the end of the request. [Keep](xref:Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataDictionary.Keep*) marks all items in the dictionary for retention. `TempData` is:
@@ -226,7 +240,7 @@ To enable the session-based TempData provider, use the <xref:Microsoft.Extension
 
 A limited amount of data can be passed from one request to another by adding it to the new request's query string. This is useful for capturing state in a persistent manner that allows links with embedded state to be shared through email or social networks. Because URL query strings are public, never use query strings for sensitive data.
 
-In addition to unintended sharing, including data in query strings can expose the app to [Cross-Site Request Forgery (CSRF)](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) attacks. Any preserved session state must protect against CSRF attacks. For more information, see <xref:security/anti-request-forgery>.
+In addition to unintended sharing, including data in query strings can expose the app to [Cross-Site Request Forgery (CSRF)](https://owasp.org/www-community/attacks/csrf) attacks. Any preserved session state must protect against CSRF attacks. For more information, see <xref:security/anti-request-forgery>.
 
 ## Hidden fields
 
@@ -256,6 +270,12 @@ Cached data isn't associated with a specific request, user, or session. **Do not
 
 To cache application wide data, see <xref:performance/caching/memory>.
 
+## Checking session state
+
+[ISession.IsAvailable](xref:Microsoft.AspNetCore.Http.ISession.IsAvailable) is intended to check for transient failures. Calling `IsAvailable` before the session middleware runs throws an `InvalidOperationException`.
+
+Libraries that need to test session availability can use `HttpContext.Features.Get<ISessionFeature>()?.Session != null`.
+
 ## Common errors
 
 * "Unable to resolve service for type 'Microsoft.Extensions.Caching.Distributed.IDistributedCache' while attempting to activate 'Microsoft.AspNetCore.Session.DistributedSessionStore'."
@@ -270,14 +290,10 @@ If the session middleware fails to persist a session:
 The session middleware can fail to persist a session if the backing store isn't available. For example, a user stores a shopping cart in session. The user adds an item to the cart but the commit fails. The app doesn't know about the failure so it reports to the user that the item was added to their cart, which isn't true.
 
 The recommended approach to check for errors is to call `await feature.Session.CommitAsync` when the app is done writing to the session. <xref:Microsoft.AspNetCore.Http.ISession.CommitAsync*> throws an exception if the backing store is unavailable. If `CommitAsync` fails, the app can process the exception. <xref:Microsoft.AspNetCore.Http.ISession.LoadAsync*> throws under the same conditions when the data store is unavailable.
-  
-## SignalR and session state
-
-SignalR apps should not use session state to store information. SignalR apps can store per connection state in `Context.Items` in the hub. <!-- https://github.com/aspnet/SignalR/issues/2139 -->
 
 ## Additional resources
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/app-state/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/app-state/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 <xref:host-and-deploy/web-farm>
 
@@ -289,11 +305,11 @@ By [Rick Anderson](https://twitter.com/RickAndMSFT), [Kirk Larkin](https://twitt
 
 HTTP is a stateless protocol. By default, HTTP requests are independent messages that don't retain user values. This article describes several approaches to preserve user data between requests.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/app-state/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/app-state/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## State management
 
-State can be stored using several approaches. Each approach is described later in this topic.
+State can be stored using several approaches. Each approach is described later in this article.
 
 | Storage approach | Storage mechanism |
 | ---------------- | ----------------- |
@@ -304,6 +320,18 @@ State can be stored using several approaches. Each approach is described later i
 | [Hidden fields](#hidden-fields) | HTTP form fields |
 | [HttpContext.Items](#httpcontextitems) | Server-side app code |
 | [Cache](#cache) | Server-side app code |
+
+## SignalR/Blazor Server and HTTP context-based state management
+
+[SignalR](xref:signalr/introduction) apps shouldn't use session state and other state management approaches that rely upon a stable HTTP context to store information. SignalR apps can store per-connection state in [`Context.Items` in the hub](xref:signalr/hubs). For more information and alternative state management approaches for Blazor Server apps, see <xref:blazor/state-management/index> and <xref:blazor/state-management/server>.
+
+<!-- UPDATE 10.0 - These links were left here. See why they're here.
+
+https://github.com/aspnet/SignalR/issues/2139
+https://github.com/dotnet/AspNetCore.Docs/issues/27956
+https://github.com/dotnet/AspNetCore.Docs/issues/14974
+
+-->
 
 ## Cookies
 
@@ -344,7 +372,7 @@ Session state exhibits the following behaviors:
 
 The in-memory cache provider stores session data in the memory of the server where the app resides. In a server farm scenario:
 
-* Use *sticky sessions* to tie each session to a specific app instance on an individual server. [Azure App Service](https://azure.microsoft.com/services/app-service/) uses [Application Request Routing (ARR)](/iis/extensions/planning-for-arr/using-the-application-request-routing-module) to enforce sticky sessions by default. However, sticky sessions can affect scalability and complicate web app updates. A better approach is to use a Redis or SQL Server distributed cache, which doesn't require sticky sessions. For more information, see <xref:performance/caching/distributed>.
+* Use *sticky sessions* to tie each session to a specific app instance on an individual server. [Azure App Service](https://azure.microsoft.com/services/app-service/) uses [Application Request Routing (ARR)](/iis/extensions/planning-for-arr/using-the-application-request-routing-module) to enforce sticky sessions by default. However, sticky sessions can affect scalability and complicate web app updates. A better approach is to use a Redis, SQL Server, or Azure Postgres distributed cache, which doesn't require sticky sessions. For more information, see <xref:performance/caching/distributed>.
 * The session cookie is encrypted via <xref:Microsoft.AspNetCore.DataProtection.IDataProtector>. Data Protection must be properly configured to read session cookies on each machine. For more information, see <xref:security/data-protection/introduction> and [Key storage providers](xref:security/data-protection/implementation/key-storage-providers).
 
 ### Configure session state
@@ -497,7 +525,7 @@ To enable the session-based TempData provider, use the <xref:Microsoft.Extension
 
 A limited amount of data can be passed from one request to another by adding it to the new request's query string. This is useful for capturing state in a persistent manner that allows links with embedded state to be shared through email or social networks. Because URL query strings are public, never use query strings for sensitive data.
 
-In addition to unintended sharing, including data in query strings can expose the app to [Cross-Site Request Forgery (CSRF)](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) attacks. Any preserved session state must protect against CSRF attacks. For more information, see <xref:security/anti-request-forgery>.
+In addition to unintended sharing, including data in query strings can expose the app to [Cross-Site Request Forgery (CSRF)](https://owasp.org/www-community/attacks/csrf) attacks. Any preserved session state must protect against CSRF attacks. For more information, see <xref:security/anti-request-forgery>.
 
 ## Hidden fields
 
@@ -543,10 +571,6 @@ If the session middleware fails to persist a session:
 The session middleware can fail to persist a session if the backing store isn't available. For example, a user stores a shopping cart in session. The user adds an item to the cart but the commit fails. The app doesn't know about the failure so it reports to the user that the item was added to their cart, which isn't true.
 
 The recommended approach to check for errors is to call `await feature.Session.CommitAsync` when the app is done writing to the session. <xref:Microsoft.AspNetCore.Http.ISession.CommitAsync*> throws an exception if the backing store is unavailable. If `CommitAsync` fails, the app can process the exception. <xref:Microsoft.AspNetCore.Http.ISession.LoadAsync*> throws under the same conditions when the data store is unavailable.
-  
-## SignalR and session state
-
-SignalR apps should not use session state to store information. SignalR apps can store per connection state in `Context.Items` in the hub. <!-- https://github.com/aspnet/SignalR/issues/2139 -->
 
 ## Additional resources
 

@@ -1,13 +1,19 @@
 ---
 title: Parameter binding in Minimal API applications
-author: rick-anderson
+author: wadepickett
 description: Learn how parameters are populated before invoking minimal route handlers.
-ms.author: riande
+ms.author: wpickett
 monikerRange: '>= aspnetcore-7.0'
-ms.date: 10/31/2022
+ms.date: 07/09/2025
 uid: fundamentals/minimal-apis/parameter-binding
 ---
 
 # Parameter Binding in Minimal API apps
 
-[!INCLUDE [parameter-binding](includes/parameter-binding.md)]
+[!INCLUDE[](~/includes/not-latest-version.md)]
+
+[!INCLUDE [parameter-binding](~/fundamentals/minimal-apis/includes/parameter-binding10.md)]
+[!INCLUDE [parameter-binding](~/fundamentals/minimal-apis/includes/parameter-binding9.md)]
+[!INCLUDE [parameter-binding](~/fundamentals/minimal-apis/includes/parameter-binding8.md)]
+[!INCLUDE [parameter-binding](~/fundamentals/minimal-apis/includes/parameter-binding7.md)]
+<!-- Need to list where else this include is used -->

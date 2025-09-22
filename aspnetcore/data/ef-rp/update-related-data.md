@@ -1,8 +1,8 @@
 ---
 title: Part 7, Razor Pages with EF Core in ASP.NET Core - Update Related Data
-author: rick-anderson
+author: tdykstra
 description: Part 7 of Razor Pages and Entity Framework tutorial series.
-ms.author: riande
+ms.author: tdykstra
 ms.date: 07/22/2019
 uid: data/ef-rp/update-related-data
 ---
@@ -455,7 +455,7 @@ Run the app and test the Delete page.
 
 :::moniker range="< aspnetcore-3.0"
 
-This tutorial demonstrates updating related data. If you run into problems you can't solve, [download or view the completed app.](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/data/ef-rp/intro/samples) [Download instructions](xref:index#how-to-download-a-sample).
+This tutorial demonstrates updating related data. If you run into problems you can't solve, [download or view the completed app.](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/data/ef-rp/intro/samples) [Download instructions](xref:fundamentals/index#how-to-download-a-sample).
 
 The following illustrations shows some of the completed pages.
 

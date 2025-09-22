@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ErrorHandlingSample.Snippets;
@@ -129,6 +129,7 @@ public static class Program
     public static void UseStatusCodePagesReExecuteQueryString(WebApplicationBuilder builder)
     {
         // <snippet_UseStatusCodePagesReExecuteQueryString>
+        var app = builder.Build();  
         app.UseStatusCodePagesWithReExecute("/StatusCode", "?statusCode={0}");
         // </snippet_UseStatusCodePagesReExecuteQueryString>
     }
@@ -137,9 +138,9 @@ public static class Program
     public static void AddProblemDetails(WebApplicationBuilder builder)
     {
         // <snippet_AddProblemDetails>
-        var app = builder.Build();        
-
         builder.Services.AddProblemDetails();
+
+        var app = builder.Build();        
 
         if (!app.Environment.IsDevelopment())
         {
@@ -154,11 +155,11 @@ public static class Program
     public static void AddProblemDetails_Custom(WebApplicationBuilder builder)
     {
         // <snippet_CustomizeProblemDetails>
-        var app = builder.Build();        
-
         builder.Services.AddProblemDetails(options =>
             options.CustomizeProblemDetails = ctx =>
                     ctx.ProblemDetails.Extensions.Add("nodeId", Environment.MachineName));
+
+        var app = builder.Build();        
 
         if (!app.Environment.IsDevelopment())
         {

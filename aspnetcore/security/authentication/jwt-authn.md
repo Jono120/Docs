@@ -1,11 +1,11 @@
 ---
 title: Generate tokens with dotnet user-jwts
-author: rick-anderson
+author: tdykstra
 description: Learn how to set up manage JSON Web Tokens in development with dotnet user-jwts
 monikerRange: '>= aspnetcore-7.0'
-ms.author: riande
+ms.author: tdykstra
 ms.date: 09/22/2018
-ms.custom: "mvc, seodec18"
+ms.custom: mvc
 uid: security/authentication/jwt
 ---
 
@@ -14,10 +14,6 @@ uid: security/authentication/jwt
 By [Rick Anderson](https://twitter.com/RickAndMSFT)
 
 The `dotnet user-jwts` command line tool can create and manage app specific local [JSON Web Tokens](https://jwt.io/introduction) (JWTs).
-
-## Name
-
-`dotnet user-jwts` - Cleans the output of a project.
 
 ## Synopsis
 
@@ -61,7 +57,7 @@ The MSBuild project or solution to apply a command on. If a project or solution 
 | ------------- | ------------- |
 | clear  |  Delete all issued JWTs for a project. |
 | create | Issue a new JSON Web Token.   |
-| delete | Delete a given JWT. |
+| remove | Delete a given JWT. |
 | key | Display or reset the signing key used to issue JWTs. |
 | list | Lists the JWTs issued for the project. |
 | print | Display the details of a given JWT. |
@@ -82,7 +78,7 @@ Usage: `dotnet user-jwts create [options]`
 | --claim | Claims to add to the JWT. Specify once for each claim in the format "name=value". |
 | --not-before | The UTC date & time the JWT should not be valid before in the format 'yyyy-MM-dd [[HH:mm[[:ss]]]]'. Defaults to the date & time the JWT is created. |
 | --expires-on | The UTC date & time the JWT should expire in the format 'yyyy-MM-dd [[[ [HH:mm]]:ss]]'. Defaults to 6 months after the --not-before date. Do not use this option in conjunction with the --valid-for option. |
-| --valid-for | The period the JWT should expire after. Specify using a number followed by duration type like 'd' for days, 'h' for hours, 'm' for minutes, and 's' for seconds, e.g. 365d'. Do not use this option in conjunction with the --expires-on option. |
+| --valid-for | The period the JWT should expire after. Specify using a number followed by duration type like 'd' for days, 'h' for hours, 'm' for minutes, and 's' for seconds, for example 365d'. Do not use this option in conjunction with the --expires-on option. |
 | -o \| --output | The format to use for displaying output from the command. Can be one of 'default', 'token', or 'json'. |
 | -h \| --help | Show help information |
 

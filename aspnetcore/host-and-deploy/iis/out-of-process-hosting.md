@@ -1,14 +1,16 @@
 ---
 title: Out-of-process hosting with IIS and ASP.NET Core
-author: rick-anderson
+author: tdykstra
 description: Learn about out-of-process Hosting with IIS and the ASP.NET Core Module.
 monikerRange: '>= aspnetcore-5.0'
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 02/07/2020
 uid: host-and-deploy/iis/out-of-process-hosting
 ---
 # Out-of-process hosting with IIS and ASP.NET Core 
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 Because ASP.NET Core apps run in a process separate from the IIS worker process, the ASP.NET Core Module handles process management. The module starts the process for the ASP.NET Core app when the first request arrives and restarts the app if it shuts down or crashes. This is essentially the same behavior as seen with apps that run in-process that are managed by the [Windows Process Activation Service (WAS)](/iis/manage/provisioning-and-managing-iis/features-of-the-windows-process-activation-service-was).
 

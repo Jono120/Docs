@@ -1,9 +1,9 @@
 ---
 title: Tag Helper Components in ASP.NET Core
-author: rick-anderson
+author: wadepickett
 description: Learn what Tag Helper Components are and how to use them in ASP.NET Core.
 monikerRange: '>= aspnetcore-2.0'
-ms.author: scaddie
+ms.author: wpickett
 ms.date: 06/12/2019
 uid: mvc/views/tag-helpers/th-components
 ---
@@ -15,7 +15,7 @@ A Tag Helper Component is a Tag Helper that allows you to conditionally modify o
 
 ASP.NET Core includes two built-in Tag Helper Components: `head` and `body`. They're located in the <xref:Microsoft.AspNetCore.Mvc.Razor.TagHelpers> namespace and can be used in both MVC and Razor Pages. Tag Helper Components don't require registration with the app in `_ViewImports.cshtml`.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/tag-helpers/th-components/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/tag-helpers/th-components/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Use cases
 

@@ -1,4 +1,4 @@
-#define Version4
+#define Version1 // Version1 / Version2 / Version3 / Version 3b / Version 3c / Version4
 using Microsoft.AspNetCore.OutputCaching;
 using System.Globalization;
 
@@ -16,9 +16,12 @@ public class Program
         //<policies1>
         builder.Services.AddOutputCache(options =>
         {
-            options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromSeconds(10)));
-            options.AddPolicy("Expire20", builder => builder.Expire(TimeSpan.FromSeconds(20)));
-            options.AddPolicy("Expire30", builder => builder.Expire(TimeSpan.FromSeconds(30)));
+            options.AddBasePolicy(builder => 
+                builder.Expire(TimeSpan.FromSeconds(10)));
+            options.AddPolicy("Expire20", builder => 
+                builder.Expire(TimeSpan.FromSeconds(20)));
+            options.AddPolicy("Expire30", builder => 
+                builder.Expire(TimeSpan.FromSeconds(30)));
         });
         //</policies1>
 #endif
@@ -44,28 +47,50 @@ public class Program
         });
         //</policies3>
 #endif
+#if Version3b
+        //<policies3b>
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddPolicy("CachePost", MyCustomPolicy.Instance);
+        });
+        //</policies3b>
+#endif
+#if Version3c
+        //<policies3c>
+        builder.Services.AddOutputCache(options =>
+        {
+            options.AddPolicy("CachePost", builder => 
+                builder.AddPolicy<MyCustomPolicy2>(), true);
+        });
+        //</policies3c>
+#endif
 #if Version4
         //<policies4>
         builder.Services.AddOutputCache();
         //</policies4>
 #endif
+        //<snippet_use>
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         app.UseHttpsRedirection();
         app.UseOutputCache();
         app.UseAuthorization();
+        //</snippet_use>
+
 
         app.MapGet("/", Gravatar.WriteGravatar);
 
         //<oneendpoint>
         app.MapGet("/cached", Gravatar.WriteGravatar).CacheOutput();
-        app.MapGet("/attribute", [OutputCache] (context) => Gravatar.WriteGravatar(context));
+        app.MapGet("/attribute", [OutputCache] (context) => 
+            Gravatar.WriteGravatar(context));
         //</oneendpoint>
 
         //<selectpolicy>
         app.MapGet("/20", Gravatar.WriteGravatar).CacheOutput("Expire20");
-        app.MapGet("/30", [OutputCache(PolicyName = "Expire30")] (context) => Gravatar.WriteGravatar(context));
+        app.MapGet("/30", [OutputCache(PolicyName = "Expire30")] (context) => 
+            Gravatar.WriteGravatar(context));
         //</selectpolicy>
 
         //<selectquery>
@@ -90,12 +115,11 @@ public class Program
         }).CacheOutput();
         //</etag>
 
-
         // <tagendpoint>
         app.MapGet("/blog", Gravatar.WriteGravatar)
-            .CacheOutput(builder => builder.Tag("tag-blog")); ;
+            .CacheOutput(builder => builder.Tag("tag-blog"));
         app.MapGet("/blog/post/{id}", Gravatar.WriteGravatar)
-            .CacheOutput(builder => builder.Tag("tag-blog")); ;
+            .CacheOutput(builder => builder.Tag("tag-blog"));
         // </tagendpoint>
 
         // <taggroup>
@@ -117,8 +141,18 @@ public class Program
         });
         // </evictbytag>
 
+        // <post>
+        app.MapPost("/cachedpost", Gravatar.WriteGravatar)
+            .CacheOutput("CachePost");
+        // </post>
+
+        // <postalt>
+        app.MapPost("/cachedpost2", Gravatar.WriteGravatar);
+        // </postalt>
+        
         // <selectnolock>
-        app.MapGet("/nolock", Gravatar.WriteGravatar).CacheOutput("NoLock");
+        app.MapGet("/nolock", Gravatar.WriteGravatar)
+            .CacheOutput("NoLock");
         // </selectnolock>
 
         app.Run();

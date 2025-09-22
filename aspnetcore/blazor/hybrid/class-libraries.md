@@ -3,12 +3,14 @@ title: Share assets across web and native clients using a Razor class library (R
 author: guardrex
 description: Learn how to share Razor components, C# code, and static assets across web and native clients using a Razor class library (RCL).
 monikerRange: '>= aspnetcore-6.0'
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
-ms.date: 11/08/2022
+ms.date: 11/12/2024
 uid: blazor/hybrid/class-libraries
 ---
 # Share assets across web and native clients using a Razor class library (RCL)
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 Use a Razor class library (RCL) to share Razor components, C# code, and static assets across web and native client projects.
 
@@ -17,9 +19,9 @@ This article builds on the general concepts found in the following articles:
 * <xref:blazor/components/class-libraries>
 * <xref:razor-pages/ui-class>
 
-The examples in this article share assets between a Blazor Server app and a .NET MAUI Blazor app in the same solution:
+The examples in this article share assets between a server-side Blazor app and a .NET MAUI Blazor Hybrid app in the same solution:
 
-* Although a Blazor Server app is used, the guidance applies equally to Blazor WebAssembly apps sharing assets with a Blazor Hybrid app.
+* Although a server-side Blazor app is used, the guidance applies equally to Blazor WebAssembly apps sharing assets with a Blazor Hybrid app.
 * Projects are in the same [solution](/visualstudio/ide/solutions-and-projects-in-visual-studio#solutions), but an RCL can supply shared assets to projects outside of a solution.
 * The RCL is added as a project to the solution, but any RCL can be published as a NuGet package. A NuGet package can supply shared assets to web and native client projects.
 * The order that the projects are created isn't important. However, projects that rely on an RCL for assets must create a project reference to the RCL *after* the RCL is created.
@@ -48,25 +50,24 @@ For more information, see the following articles:
 
 ## Sample app
 
-For an example of the scenarios described in this article, see the .NET Podcasts sample app:
+For an example of the scenarios described in this article, see the [eShop Reference Application (AdventureWorks) (`dotnet/eShop` GitHub repository)](https://github.com/dotnet/eShop). The .NET MAUI Blazor Hybrid app is in the `src/HybridApp` folder.
 
-* [GitHub repository (`microsoft/dotnet-podcasts`)](https://github.com/microsoft/dotnet-podcasts)
-* [Running sample app (Azure Container Apps Service)](https://dotnetpodcasts.azurewebsites.net/)
+For a version of the sample app tailored for Azure hosting, see the [`Azure-Samples/eShopOnAzure` GitHub repository](https://github.com/Azure-Samples/eShopOnAzure).
 
-The .NET Podcasts app showcases the following technologies:
+The sample app showcases the following technologies:
 
 * [.NET](https://dotnet.microsoft.com/download/dotnet)
 * [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet)
 * [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 * [.NET MAUI](https://dotnet.microsoft.com/apps/maui)
-* [Azure Container Apps](https://azure.microsoft.com/services/container-apps/)
-* [Orleans](/dotnet/orleans/overview)
+* [.NET Aspire](/dotnet/aspire/get-started/aspire-overview)
+* [Docker](https://docs.docker.com/get-started/docker-overview/)
 
 ## Share web UI Razor components, code, and static assets
 
 Components from an RCL can be simultaneously shared by web and native client apps built using Blazor. The guidance in <xref:blazor/components/class-libraries> explains how to share Razor components using a Razor class library (RCL). The same guidance applies to reusing Razor components from an RCL in a Blazor Hybrid app.
 
-Component namespaces are derived from the RCL's package ID or assembly name and the component's folder path within the RCL. For more information, see <xref:blazor/components/index#namespaces>. [`@using`](xref:mvc/views/razor#using) directives can be placed in `_Imports.razor` files for components and code, as the following example demonstrates for an RCL named `SharedLibrary` with a `Shared` folder of shared Razor components and a `Data` folder of shared data classes:
+Component namespaces are derived from the RCL's package ID or assembly name and the component's folder path within the RCL. For more information, see <xref:blazor/components/index#class-name-and-namespace>. [`@using`](xref:mvc/views/razor#using) directives can be placed in `_Imports.razor` files for components and code, as the following example demonstrates for an RCL named `SharedLibrary` with a `Shared` folder of shared Razor components and a `Data` folder of shared data classes:
 
 ```razor
 @using SharedLibrary
@@ -76,13 +77,13 @@ Component namespaces are derived from the RCL's package ID or assembly name and 
 
 Place shared static assets in the RCL's `wwwroot` folder and update static asset paths in the app to use the following path format:
 
-> :::no-loc text="_content/{PACKAGE ID/ASSEMBLY}/{PATH}/{FILENAME}":::
+> :::no-loc text="_content/{PACKAGE ID/ASSEMBLY NAME}/{PATH}/{FILE NAME}":::
 
 Placeholders:
 
-* `{PACKAGE ID/ASSEMBLY}`: The package ID or assembly name of the RCL.
+* `{PACKAGE ID/ASSEMBLY NAME}`: The package ID or assembly name of the RCL.
 * `{PATH}`: Optional path within the RCL's `wwwroot` folder.
-* `{FILENAME}`: The filename of the static asset.
+* `{FILE NAME}`: The file name of the static asset.
 
 The preceding path format is also used in the app for static assets supplied by a NuGet package added to the RCL.
 
@@ -97,7 +98,7 @@ For additional information on how to share static assets across projects, see th
 
 The root `index.html` file is usually specific to the app and should remain in the Blazor Hybrid app or the Blazor WebAssembly app. The `index.html` file typically isn't shared.
 
-The root Razor Component (`App.razor` or `Main.razor`) can be shared, but often might need to be specific to the hosting app. For example, `App.razor` is different in the Blazor Server and Blazor WebAssembly project templates when authentication is enabled. You can add the [`AdditionalAssemblies` parameter](xref:blazor/fundamentals/routing#route-to-components-from-multiple-assemblies) to specify the location of any shared routable components, and you can specify a [shared default layout component for the router](xref:blazor/fundamentals/routing#route-templates) by type name.
+The root Razor Component (`App.razor` or `Main.razor`) can be shared, but often might need to be specific to the hosting app. For example, `App.razor` is different in the server-side Blazor and Blazor WebAssembly project templates when authentication is enabled. You can add the [`AdditionalAssemblies` parameter](xref:blazor/fundamentals/routing#route-to-components-from-multiple-assemblies) to specify the location of any shared routable components, and you can specify a [shared default layout component for the router](xref:blazor/fundamentals/routing#route-templates) by type name.
 
 ## Provide code and services independent of hosting model
 
@@ -106,7 +107,7 @@ When code must differ across hosting models or target platforms, abstract the co
 The following weather data example abstracts different weather forecast service implementations:
 
 * Using an HTTP request for Blazor Hybrid and Blazor WebAssembly.
-* Requesting data directly for Blazor Server.
+* Requesting data directly for a server-side Blazor app.
 
 The example uses the following specifications and conventions:
 
@@ -119,15 +120,14 @@ The example uses the following specifications and conventions:
 `Data/WeatherForecast.cs` in the RCL:
 
 ```csharp
-namespace SharedLibrary.Data
+namespace SharedLibrary.Data;
+
+public class WeatherForecast
 {
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
-        public int TemperatureC { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-        public string? Summary { get; set; }
-    }
+    public DateTime Date { get; set; }
+    public int TemperatureC { get; set; }
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public string? Summary { get; set; }
 }
 ```
 
@@ -136,12 +136,11 @@ namespace SharedLibrary.Data
 ```csharp
 using SharedLibrary.Data;
 
-namespace SharedLibrary.Interfaces
+namespace SharedLibrary.Interfaces;
+
+public interface IWeatherForecastService
 {
-    public interface IWeatherForecastService
-    {
-        Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate);
-    }
+    Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate);
 }
 ```
 
@@ -159,57 +158,55 @@ using System.Net.Http.Json;
 using SharedLibrary.Data;
 using SharedLibrary.Interfaces;
 
-namespace {APP NAMESPACE}.Services
+namespace {APP NAMESPACE}.Services;
+
+public class WeatherForecastService : IWeatherForecastService
 {
-    public class WeatherForecastService : IWeatherForecastService
+    private readonly HttpClient http;
+
+    public WeatherForecastService(HttpClient http)
     {
-        private readonly HttpClient http;
-
-        public WeatherForecastService(HttpClient http)
-        {
-            this.http = http;
-        }
-
-        public async Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate) =>
-            await http.GetFromJsonAsync<WeatherForecast[]?>("WeatherForecast");
+        this.http = http;
     }
+
+    public async Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate) =>
+        await http.GetFromJsonAsync<WeatherForecast[]?>("WeatherForecast");
 }
 ```
 
 In the preceding example, the `{APP NAMESPACE}` placeholder is the app's namespace.
 
-`Services/WeatherForecastService.cs` in the Blazor Server app:
+`Services/WeatherForecastService.cs` in the server-side Blazor app:
 
 ```csharp
 using SharedLibrary.Data;
 using SharedLibrary.Interfaces;
 
-namespace {APP NAMESPACE}.Services
-{
-    public class WeatherForecastService : IWeatherForecastService
-    {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot"
-        };
+namespace {APP NAMESPACE}.Services;
 
-        public async Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate) =>
-            await Task.FromResult(Enumerable.Range(1, 5)
-                .Select(index => new WeatherForecast
-                {
-                    Date = startDate.AddDays(index),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-                }).ToArray());
-    }
+public class WeatherForecastService : IWeatherForecastService
+{
+    private static readonly string[] Summaries = 
+    [
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot"
+    ];
+
+    public async Task<WeatherForecast[]?> GetForecastAsync(DateTime startDate) =>
+        await Task.FromResult(Enumerable.Range(1, 5)
+            .Select(index => new WeatherForecast
+            {
+                Date = startDate.AddDays(index),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            }).ToArray());
 }
 ```
 
 In the preceding example, the `{APP NAMESPACE}` placeholder is the app's namespace.
 
-The Blazor Hybrid, Blazor WebAssembly, and Blazor Server apps register their weather forecast service implementations (`Services.WeatherForecastService`) for `IWeatherForecastService`.
+The Blazor Hybrid, Blazor WebAssembly, and server-side Blazor apps register their weather forecast service implementations (`Services.WeatherForecastService`) for `IWeatherForecastService`.
 
-The Blazor WebAssembly project also registers an <xref:System.Net.Http.HttpClient>. The <xref:System.Net.Http.HttpClient> registered by default in an app created from the Blazor WebAssembly project template is sufficient for this purpose. For more information, see <xref:blazor/call-web-api>.
+The Blazor WebAssembly project also registers an <xref:System.Net.Http.HttpClient>. The <xref:System.Net.Http.HttpClient> registered in an app created from the Blazor WebAssembly project template is sufficient for this purpose. For more information, see <xref:blazor/call-web-api>.
 
 `Pages/FetchData.razor` in the RCL:
 
@@ -268,18 +265,17 @@ HELD PER https://github.com/dotnet/AspNetCore.Docs/pull/26331#discussion_r927174
 
 The following example:
 
-* Assumes that a `CustomService` class must be implemented for each hosting model, including the platforms of a .NET MAUI Blazor app, because the code for the service differs for each platform (Android, macOS, Windows, iOS) and a Blazor Server/Blazor WebAssembly app.
+* Assumes that a `CustomService` class must be implemented for each hosting model, including the platforms of a .NET MAUI Blazor Hybrid app, because the code for the service differs for each platform (Android, macOS, Windows, iOS) and a server-side Blazor/Blazor WebAssembly app.
 * Places an interface for the service in the Razor class library (RCL). The RCL is named `SharedLibrary`. The interface defines a method that returns a message.
 
 `Interfaces/ICustomService.cs` in the RCL:
 
 ```csharp
-namespace SharedLibrary.Interfaces
+namespace SharedLibrary.Interfaces;
+
+public interface ICustomService
 {
-    public interface ICustomService
-    {
-        string GetMessage();
-    }
+    string GetMessage();
 }
 ```
 
@@ -290,14 +286,13 @@ In the following examples, the RCL implements the `ICustomService` interface for
 ```csharp
 using SharedLibrary.Interfaces;
 
-namespace SharedLibrary.Platforms.Android
+namespace SharedLibrary.Platforms.Android;
+
+public class CustomService : ICustomService
 {
-    public class CustomService : ICustomService
+    public string GetMessage()
     {
-        public string GetMessage()
-        {
-            return "Android implementation of ICustomService.";
-        }
+        return "Android implementation of ICustomService.";
     }
 }
 ```
@@ -307,14 +302,13 @@ namespace SharedLibrary.Platforms.Android
 ```csharp
 using SharedLibrary.Interfaces;
 
-namespace SharedLibrary.Platforms.MacCatalyst
+namespace SharedLibrary.Platforms.MacCatalyst;
+
+public class CustomService : ICustomService
 {
-    public class CustomService : ICustomService
+    public string GetMessage()
     {
-        public string GetMessage()
-        {
-            return "Mac Catalyst implementation of ICustomService.";
-        }
+        return "Mac Catalyst implementation of ICustomService.";
     }
 }
 ```
@@ -324,14 +318,13 @@ namespace SharedLibrary.Platforms.MacCatalyst
 ```csharp
 using SharedLibrary.Interfaces;
 
-namespace SharedLibrary.Platforms.Windows
+namespace SharedLibrary.Platforms.Windows;
+
+public class CustomService : ICustomService
 {
-    public class CustomService : ICustomService
+    public string GetMessage()
     {
-        public string GetMessage()
-        {
-            return "Windows implementation of ICustomService.";
-        }
+        return "Windows implementation of ICustomService.";
     }
 }
 ```
@@ -341,33 +334,31 @@ namespace SharedLibrary.Platforms.Windows
 ```csharp
 using SharedLibrary.Interfaces;
 
-namespace SharedLibrary.Platforms.iOS
+namespace SharedLibrary.Platforms.iOS;
+
+public class CustomService : ICustomService
 {
-    public class CustomService : ICustomService
+    public string GetMessage()
     {
-        public string GetMessage()
-        {
-            return "iOS implementation of ICustomService.";
-        }
+        return "iOS implementation of ICustomService.";
     }
 }
 ```
 
-In the following example, the RCL implements the `ICustomService` interface for the web (Blazor Server or Blazor WebAssembly) in a `Web` folder at the root of the RCL:
+In the following example, the RCL implements the `ICustomService` interface for the web (server-side Blazor or Blazor WebAssembly) in a `Web` folder at the root of the RCL:
 
 `Web/CustomService.cs`:
 
 ```csharp
 using SharedLibrary.Interfaces;
 
-namespace SharedLibrary.Web
+namespace SharedLibrary.Web;
+
+public class CustomService : ICustomService
 {
-    public class CustomService : ICustomService
+    public string GetMessage()
     {
-        public string GetMessage()
-        {
-            return "Web implementation of ICustomService.";
-        }
+        return "Web implementation of ICustomService.";
     }
 }
 ```
@@ -402,7 +393,7 @@ using SharedLibrary.Interfaces;
 > [!NOTE]
 > Windows Forms Blazor projects register services in `Form1`'s constructor (`Form1.cs`). WPF Blazor projects register services in `MainWindow`'s constructor (`MainWindow.xaml`).
 
-The following example for a Blazor Server or Blazor WebAssembly project:
+The following example for a server-side Blazor or Blazor WebAssembly project:
 
 * Has a project reference for the `SharedLibrary` project.
 * Registers the appropriate `CustomService` implementation for web-based clients.

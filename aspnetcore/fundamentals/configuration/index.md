@@ -1,18 +1,21 @@
 ---
 title: Configuration in ASP.NET Core
-author: rick-anderson
+author: tdykstra
 description: Learn how to use the Configuration API to configure AppSettings in an ASP.NET Core app.
 monikerRange: '>= aspnetcore-3.1'
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
-ms.date: 11/11/2022
+ms.date: 06/28/2025
 uid: fundamentals/configuration/index
 ---
+<!-- ms.sfi.ropc: t -->
 # Configuration in ASP.NET Core
 
 By [Rick Anderson](https://twitter.com/RickAndMSFT) and [Kirk Larkin](https://twitter.com/serpent5)
 
-:::moniker range=">= aspnetcore-7.0" 
+[!INCLUDE[](~/includes/not-latest-version.md)]
+
+:::moniker range=">= aspnetcore-8.0" 
 
 Application configuration in ASP.NET Core is performed using one or more [configuration providers](#cp). Configuration providers read configuration data from key-value pairs using a variety of configuration sources:
 
@@ -25,7 +28,9 @@ Application configuration in ASP.NET Core is performed using one or more [config
 * Directory files
 * In-memory .NET objects
 
-This article provides information on configuration in ASP.NET Core. For information on using configuration in console apps, see [.NET Configuration](/dotnet/core/extensions/configuration).
+This article provides information on configuration in ASP.NET Core. For information on using configuration in non-ASP.NET Core apps, see [.NET Configuration](/dotnet/core/extensions/configuration).
+
+For Blazor configuration guidance, which adds to or supersedes the guidance in this node, see <xref:blazor/fundamentals/configuration>.
 
 ## Application and Host Configuration
 
@@ -50,9 +55,11 @@ var builder = WebApplication.CreateBuilder(args);
 1. Command-line arguments using the [Command-line configuration provider](#command-line).
 1. Non-prefixed environment variables using the [Non-prefixed environment variables configuration provider](#evcp).
 1. [User secrets](xref:security/app-secrets) when the app runs in the `Development` environment.
-1. `appsettings.{Environment}.json` using the [JSON configuration provider](#file-configuration-provider). For example, `appsettings.Production.json` and `appsettings.Development.json`.
-1. [appsettings.json](#appsettingsjson) using the [JSON configuration provider](#file-configuration-provider).
+1. `appsettings.{Environment}.json` using the [JSON configuration provider](#jcp). For example, `appsettings.Production.json` and `appsettings.Development.json`.
+1. [appsettings.json](#appsettingsjson) using the [JSON configuration provider](#jcp).
 1. A fallback to the host configuration described in the [next section](#host).
+
+Note: `WebApplication.CreateBuilder(args)` should only be called once in apps relying on IIS in-process hosting.<!--Delete this note in the .NET 10 version of the article. See <https://github.com/dotnet/aspnetcore/pull/59910>. -->
 
 <a name="host"></a>
 
@@ -64,7 +71,7 @@ The following list contains the default host configuration sources from highest 
 1. `DOTNET_`-prefixed environment variables using the [Environment variables configuration provider](xref:Microsoft.Extensions.Configuration.EnvironmentVariables.EnvironmentVariablesConfigurationProvider).
 1. `ASPNETCORE_`-prefixed environment variables using the [Environment variables configuration provider](xref:Microsoft.Extensions.Configuration.EnvironmentVariables.EnvironmentVariablesConfigurationProvider).
 
-For the [.NET Generic Host](xref:fundamentals/host/generic-host) and [Web Host](xref:fundamentals/host/web-host), the the default host configuration sources from highest to lowest priority is:
+For the [.NET Generic Host](xref:fundamentals/host/generic-host) and [Web Host](xref:fundamentals/host/web-host), the default host configuration sources from highest to lowest priority is:
 
 1. `ASPNETCORE_`-prefixed environment variables using the [Environment variables configuration provider](xref:Microsoft.Extensions.Configuration.EnvironmentVariables.EnvironmentVariablesConfigurationProvider).
 1.  Command-line arguments using the [Command-line configuration provider](#command-line)
@@ -97,7 +104,7 @@ The following code displays the enabled configuration providers in the order the
 
 [!code-csharp[](~/fundamentals/configuration/index/samples/6.x/ConfigSample/Pages/Index2.cshtml.cs?name=snippet)]
 
-The preceding [list of highest to lowest priority default configuration sources](#hi2low) shows the providers in the opposite order they are added to template generated application. For example, the [JSON configuration provider](#file-configuration-provider) is added before the [Command-line configuration provider](#command-line).
+The preceding [list of highest to lowest priority default configuration sources](#hi2low) shows the providers in the opposite order they are added to template generated application. For example, the [JSON configuration provider](#jcp) is added before the [Command-line configuration provider](#command-line).
 
 Configuration providers that are added later have higher priority and override previous key settings. For example, if `MyKey` is set in both `appsettings.json` and the environment, the environment value is used. Using the default configuration providers, the  [Command-line configuration provider](#clcp) overrides all other providers.
 
@@ -127,6 +134,20 @@ If a configuration value must be guaranteed, see [GetValue](#getvalue). The prec
 
 Using the [default](#default) configuration, the `appsettings.json` and `appsettings.{Environment}.json` files are enabled with [reloadOnChange: true](https://github.com/dotnet/extensions/blob/release/3.1/src/Hosting/Hosting/src/Host.cs#L74-L75). Changes made to the `appsettings.json` and `appsettings.{Environment}.json` file ***after*** the app starts are read by the [JSON configuration provider](#jcp).
 
+### Comments in appsettings.json
+
+Comments in `appsettings.json` and `appsettings.{Environment}.json` files are supported using JavaScript or [C# style comments](/dotnet/csharp/language-reference/tokens/comments).
+
+Some integrated development environments (IDE) display errors when editing a JSON file that contains comments. You can generally ignore comment errors and warnings, but you can also usually disable them with a setting in the IDE. In Visual Studio Code, for example, add the following to the `settings.json` file to disable the errors:
+
+```json
+"files.associations": {
+  "appsettings*.json": "jsonc"
+}
+```
+
+For other IDEs, check the tool's documentation and other product support channels to determine how to silence the errors.
+
 <a name="optpat"></a>
 
 ### Bind hierarchical configuration data using the options pattern
@@ -150,6 +171,7 @@ Configuration data guidelines:
 * Never store passwords or other sensitive data in configuration provider code or in plain text configuration files. The [Secret Manager](xref:security/app-secrets) tool can be used to store secrets in development.
 * Don't use production secrets in development or test environments.
 * Specify secrets outside of the project so that they can't be accidentally committed to a source code repository.
+* Production apps should use the most secure authentication flow available. For more information, see [Secure authentication flows](xref:security/index#secure-authentication-flows).
 
 By [default](#default), the user secrets configuration source is registered after the JSON configuration sources. Therefore, user secrets keys take precedence over keys in `appsettings.json` and `appsettings.{Environment}.json`.
 
@@ -157,8 +179,7 @@ For more information on storing passwords or other sensitive data:
 
 * <xref:fundamentals/environments>
 * <xref:security/app-secrets>: Includes advice on using environment variables to store sensitive data. The Secret Manager tool uses the [File configuration provider](#fcp) to store user secrets in a JSON file on the local system.
-
-[Azure Key Vault](https://azure.microsoft.com/services/key-vault/) safely stores app secrets for ASP.NET Core apps. For more information, see <xref:security/key-vault-configuration>.
+* [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) safely stores app secrets for ASP.NET Core apps. For more information, see <xref:security/key-vault-configuration>.
 
 <a name="evcp"></a>
 
@@ -173,7 +194,7 @@ Using the [default](#default) configuration, the <xref:Microsoft.Extensions.Conf
 
 [!INCLUDE[](~/includes/environmentVarableColon.md)]
 
-The following `set` commands:
+The following commands:
 
 * Set the environment keys and values of the [preceding example](#appsettingsjson) on Windows.
 * Test the settings when using the [sample download](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/configuration/index/samples/3.x/ConfigSample). The `dotnet run` command must be run in the project directory.
@@ -400,10 +421,12 @@ The preferred way to read hierarchical configuration data is using the options p
 
 ## Configuration keys and values
 
+[!INCLUDE [managed-identities](~/includes/managed-identities-conn-strings.md)]
+
 Configuration keys:
 
 * Are case-insensitive. For example, `ConnectionString` and `connectionstring` are treated as equivalent keys.
-* If a key and value is set in more than one configuration providers, the value from the last provider added is used. For more information, see [Default configuration](#default).
+* If a key and value is set in more than one configuration provider, the value from the last provider added is used. For more information, see [Default configuration](#default).
 * Hierarchical keys
   * Within the Configuration API, a colon separator (`:`) works on all platforms.
   * In environment variables, a colon separator may not work on all platforms. A double underscore, `__`, is supported by all platforms and is automatically converted into a colon `:`.
@@ -451,6 +474,8 @@ The preceding sequence of providers is used in the [default configuration](#defa
 
 ### Connection string prefixes
 
+[!INCLUDE [managed-identities](~/includes/managed-identities-conn-strings.md)]
+
 The Configuration API has special processing rules for four connection string environment variables. These connection strings are involved in configuring Azure connection strings for the app environment. Environment variables with the prefixes shown in the table are loaded into the app with the [default configuration](#default) or when no prefix is supplied to `AddEnvironmentVariables`.
 
 | Connection string prefix | Provider |
@@ -486,7 +511,7 @@ When an environment variable is discovered and loaded into configuration with an
 
 The <xref:Microsoft.Extensions.Configuration.Ini.IniConfigurationProvider> loads configuration from INI file key-value pairs at runtime.
 
-The following code clears all the configuration providers and adds several configuration providers:
+The following code adds several configuration providers:
 [!code-csharp[](~/fundamentals/configuration/index/samples/6.x/ConfigSample/Program.cs?name=snippet_ini)]
 
 In the preceding code, settings in the `MyIniConfig.ini` and  `MyIniConfig.{Environment}.ini` files are overridden by settings in the:
@@ -549,7 +574,7 @@ The following code from the [sample download](https://github.com/dotnet/AspNetCo
 
 The <xref:Microsoft.Extensions.Configuration.Xml.XmlConfigurationProvider> loads configuration from XML file key-value pairs at runtime.
 
-The following code clears all the configuration providers and adds several configuration providers:
+The following code adds several configuration providers:
 
 [!code-csharp[](~/fundamentals/configuration/index/samples/6.x/ConfigSample/Program.cs?name=snippet_xml)]
 
@@ -857,17 +882,32 @@ The following code accesses configuration in the  `Program.cs` file.
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
+
+var key1 = builder.Configuration.GetValue<string>("KeyOne");
+
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-var key1 = app.Configuration.GetValue<int>("KeyOne");
-var key2 = app.Configuration.GetValue<bool>("KeyTwo");
+var key2 = app.Configuration.GetValue<int>("KeyTwo");
+var key3 = app.Configuration.GetValue<bool>("KeyThree");
 
-app.Logger.LogInformation($"KeyOne = {key1}");
-app.Logger.LogInformation($"KeyTwo = {key2}");
+app.Logger.LogInformation("KeyOne: {KeyOne}", key1);
+app.Logger.LogInformation("KeyTwo: {KeyTwo}", key2);
+app.Logger.LogInformation("KeyThree: {KeyThree}", key3);
 
 app.Run();
+```
+
+In `appsettings.json` for the preceding example:
+
+```json
+{
+  ...
+  "KeyOne": "Key One Value",
+  "KeyTwo": 1999,
+  "KeyThree": true
+}
 ```
 
 ## Configure options with a delegate
@@ -880,7 +920,7 @@ In the following code, an <xref:Microsoft.Extensions.Options.IConfigureOptions%6
 
 The following code displays the options values:
 
-[!code-csharp[~/fundamentals/configuration/optionssamples/6.x/OptionsSample/Pages/Test2.cshtml.cs?name=snippet)]
+[!code-csharp[](~/fundamentals/configuration/options/samples/6.x/OptionsSample/Pages/Test2.cshtml.cs?name=snippet)]
 
 In the preceding example, the values of `Option1` and `Option2` are specified in `appsettings.json` and then overridden by the configured delegate.
 
@@ -918,22 +958,25 @@ This topic only pertains to *app configuration*. Other aspects of running and ho
 
 Environment variables set in `launchSettings.json` override those set in the system environment.
 
-For more information on migrating app configuration from earlier versions of ASP.NET, see <xref:migration/proper-to-2x/index#store-configurations>.
+For more information on migrating app configuration from earlier versions of ASP.NET, see <xref:migration/fx-to-core/examples/configuration>.
 
 ## Add configuration from an external assembly
 
 An <xref:Microsoft.AspNetCore.Hosting.IHostingStartup> implementation allows adding enhancements to an app at startup from an external assembly outside of the app's `Startup` class. For more information, see <xref:fundamentals/configuration/platform-specific-configuration>.
 
+## Configuration-binding source generator
+
+The [Configuration-binding source generator](/dotnet/core/whats-new/dotnet-8/runtime#configuration-binding-source-generator) provides AOT and trim-friendly configuration. For more information, see [Configuration-binding source generator](/dotnet/core/whats-new/dotnet-8/runtime#configuration-binding-source-generator).
+
 ## Additional resources
 
 * [Configuration source code](https://github.com/dotnet/runtime/tree/main/src/libraries/Microsoft.Extensions.Configuration)
-* [WebApplicationBuilder source code](https://github.com/dotnet/aspnetcore/blob/v6.0.1/src/DefaultBuilder/src/WebApplicationBuilder.cs)
-* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/configuration/index/samples) ([how to download](xref:index#how-to-download-a-sample))
+* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/configuration/index/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 * <xref:fundamentals/configuration/options>
 * <xref:blazor/fundamentals/configuration>
 
 :::moniker-end
 
+[!INCLUDE[](~/fundamentals/configuration/index/includes/index7.md)]
 [!INCLUDE[](~/fundamentals/configuration/index/includes/index6.md)]
-
 [!INCLUDE[](~/fundamentals/configuration/index/includes/index3-5.md)]

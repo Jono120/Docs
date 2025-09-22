@@ -3,18 +3,20 @@ title: Logging and diagnostics in Kestrel
 author: shirhatti
 description: Learn how to gather diagnostics from Kestrel.
 monikerRange: '>= aspnetcore-6.0'
-ms.author: riande
-ms.date: 07/01/2021
+ms.author: tdykstra
+ms.date: 01/26/2023
 uid: fundamentals/servers/kestrel/diagnostics
 ---
 
 # Diagnostics in Kestrel
 
+[!INCLUDE[](~/includes/not-latest-version.md)]
+
 By [Sourabh Shirhatti](https://twitter.com/sshirhatti)
 
 This article provides guidance for gathering diagnostics from Kestrel to help troubleshoot issues. Topics covered include:
 
-* **Logging**: Structured logs written to [.NET Core logging](xref:fundamentals/logging/index). <xref:Microsoft.Extensions.Logging.ILogger> is used by app frameworks to write logs, and by users for their own logging in an app.
+* **Logging**: Structured logs written to [.NET logging](xref:fundamentals/logging/index). <xref:Microsoft.Extensions.Logging.ILogger> is used by app frameworks to write logs, and by users for their own logging in an app.
 * **Metrics**: Representation of data measures over intervals of time, for example, requests per second. Metrics are emitted using `EventCounter` and can be observed using the [dotnet-counters](/dotnet/core/diagnostics/dotnet-counters) command line tool or with [Application Insights](/azure/azure-monitor/app/eventcounters).
 * **DiagnosticSource**: `DiagnosticSource` is a mechanism for production-time logging with rich data payloads for consumption within the process. Unlike logging, which assumes data will leave the process and expects serializable data, `DiagnosticSource` works well with complex data.
 
@@ -113,3 +115,7 @@ using var badRequestListener = new BadRequestEventListener(diagnosticSource, (ba
 app.MapGet("/", () => "Hello world");
 app.Run();
 ```
+
+## Behavior with debugger attached
+
+Certain timeouts and rate limits aren't enforced when a debugger is attached to a Kestrel process. For more information, see [Behavior with debugger attached](xref:fundamentals/servers/kestrel/options#behavior-with-debugger-attached).

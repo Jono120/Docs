@@ -1,14 +1,16 @@
 ---
 title: Use hosting startup assemblies in ASP.NET Core
-author: rick-anderson
+author: tdykstra
 description: Discover how to enhance an ASP.NET Core app from an external assembly using an IHostingStartup implementation.
 monikerRange: '>= aspnetcore-2.1'
-ms.author: riande
-ms.custom: "mvc, seodec18"
+ms.author: tdykstra
+ms.custom: mvc
 ms.date: 09/26/2019
 uid: fundamentals/configuration/platform-specific-configuration
 ---
 # Use hosting startup assemblies in ASP.NET Core
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 By [Pavel Krymets](https://github.com/pakrym)
 
@@ -16,7 +18,7 @@ By [Pavel Krymets](https://github.com/pakrym)
 
 An <xref:Microsoft.AspNetCore.Hosting.IHostingStartup> (hosting startup) implementation adds enhancements to an app at startup from an external assembly. For example, an external library can use a hosting startup implementation to provide additional configuration providers or services to an app.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## HostingStartup attribute
 
@@ -124,7 +126,7 @@ The app's Index page reads and renders the configuration values for the two keys
 
 ### Console app without an entry point
 
-*This approach is only available for .NET Core apps, not .NET Framework.*
+*This approach is only available for .NET apps, not .NET Framework.*
 
 A dynamic hosting startup enhancement that doesn't require a compile-time reference for activation can be provided in a console app without an entry point that contains a `HostingStartup` attribute. Publishing the console app produces a hosting startup assembly that can be consumed from the runtime store.
 
@@ -373,7 +375,7 @@ A hosting startup enhancement can be provided by a *bin*-deployed assembly in th
 
 ## Sample code
 
-The [sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:index#how-to-download-a-sample)) demonstrates hosting startup implementation scenarios:
+The [sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:fundamentals/index#how-to-download-a-sample)) demonstrates hosting startup implementation scenarios:
 
 * Two hosting startup assemblies (class libraries) set a pair of in-memory configuration key-value pairs each:
   * NuGet package (*HostingStartupPackage*)
@@ -446,7 +448,7 @@ dotnet nuget locals all --clear
 
 An <xref:Microsoft.AspNetCore.Hosting.IHostingStartup> (hosting startup) implementation adds enhancements to an app at startup from an external assembly. For example, an external library can use a hosting startup implementation to provide additional configuration providers or services to an app.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## HostingStartup attribute
 
@@ -524,7 +526,7 @@ The app's Index page reads and renders the configuration values for the two keys
 
 ### Console app without an entry point
 
-*This approach is only available for .NET Core apps, not .NET Framework.*
+*This approach is only available for .NET apps, not .NET Framework.*
 
 A dynamic hosting startup enhancement that doesn't require a compile-time reference for activation can be provided in a console app without an entry point that contains a `HostingStartup` attribute. Publishing the console app produces a hosting startup assembly that can be consumed from the runtime store.
 
@@ -759,7 +761,7 @@ A hosting startup enhancement can be provided by a *bin*-deployed assembly in th
 
 ## Sample code
 
-The [sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:index#how-to-download-a-sample)) demonstrates hosting startup implementation scenarios:
+The [sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/fundamentals/host/platform-specific-configuration/samples/) ([how to download](xref:fundamentals/index#how-to-download-a-sample)) demonstrates hosting startup implementation scenarios:
 
 * Two hosting startup assemblies (class libraries) set a pair of in-memory configuration key-value pairs each:
   * NuGet package (*HostingStartupPackage*)

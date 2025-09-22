@@ -1,14 +1,16 @@
 ---
 title: Host ASP.NET Core on Windows with IIS
-author: rick-anderson
+author: tdykstra
 description: Learn how to host ASP.NET Core apps on Windows Server Internet Information Services (IIS).
 monikerRange: '>= aspnetcore-2.1'
-ms.author: riande
-ms.custom: mvc
-ms.date: 5/7/2020
+ms.author: tdykstra
+ms.custom: mvc, sfi-ropc-nochange
+ms.date: 04/26/2024
 uid: host-and-deploy/iis/index
 ---
 # Host ASP.NET Core on Windows with IIS
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 :::moniker range=">= aspnetcore-5.0"
 
@@ -21,7 +23,7 @@ The following operating systems are supported:
 * Windows 7 or later
 * Windows Server 2012 R2 or later
 
-Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET Core SDK unless the app:
+Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET SDK unless the app:
 
 * Requires the larger virtual memory address space available to a 64-bit app.
 * Requires the larger IIS stack size.
@@ -29,11 +31,13 @@ Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy
 
 ## Install the ASP.NET Core Module/Hosting Bundle
 
-Download the installer using the following link:
+Download the latest installer using the following link:
 
-[Current .NET Core Hosting Bundle installer (direct download)](https://dotnet.microsoft.com/permalink/dotnetcore-current-windows-runtime-bundle-installer)
+[Current .NET Hosting Bundle installer (direct download)](https://dotnet.microsoft.com/permalink/dotnetcore-current-windows-runtime-bundle-installer)
 
-For more details instructions on how to install the ASP.NET Core Module, or installing different versions, see [Install the .NET Core Hosting Bundle](xref:host-and-deploy/iis/hosting-bundle).
+For more details instructions on how to install the ASP.NET Core Module, or installing different versions, see [Install the .NET Hosting Bundle](xref:host-and-deploy/iis/hosting-bundle).
+
+To download previous versions of the hosting bundle, see [this GitHub issue](https://github.com/dotnet/AspNetCore.Docs/issues/28642).
 
 ## Get started
 
@@ -49,7 +53,7 @@ For configuration guidance, see <xref:host-and-deploy/iis/advanced>.
 
 * [IIS documentation](/iis)
 * [Getting Started with the IIS Manager in IIS](/iis/get-started/getting-started-with-iis/getting-started-with-the-iis-manager-in-iis-7-and-iis-8)
-* [.NET Core application deployment](/dotnet/core/deploying/)
+* [.NET application deployment](/dotnet/core/deploying/)
 * <xref:host-and-deploy/aspnet-core-module>
 * <xref:host-and-deploy/directory-structure>
 * <xref:host-and-deploy/iis/modules>
@@ -79,7 +83,7 @@ For information on apps that must protect a subset of the app with a certificate
 
 For a tutorial experience on publishing an ASP.NET Core app to an IIS server, see <xref:tutorials/publish-to-iis>.
 
-[Install the .NET Core Hosting Bundle](#install-the-net-core-hosting-bundle)
+[Install the .NET Hosting Bundle](#install-the-net-hosting-bundle)
 
 ## Supported operating systems
 
@@ -96,7 +100,7 @@ For troubleshooting guidance, see <xref:test/troubleshoot>.
 
 ## Supported platforms
 
-Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET Core SDK unless the app:
+Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET SDK unless the app:
 
 * Requires the larger virtual memory address space available to a 64-bit app.
 * Requires the larger IIS stack size.
@@ -104,7 +108,7 @@ Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy
 
 Apps published for 32-bit (x86) must have 32-bit enabled for their IIS Application Pools. For more information, see the [Create the IIS site](#create-the-iis-site) section.
 
-Use a 64-bit (x64) .NET Core SDK to publish a 64-bit app. A 64-bit runtime must be present on the host system.
+Use a 64-bit (x64) .NET SDK to publish a 64-bit app. A 64-bit runtime must be present on the host system.
 
 ## Hosting models
 
@@ -136,7 +140,7 @@ After the IIS HTTP Server processes the request:
 
 In-process hosting is opt-in for existing apps. The ASP.NET Core web templates use the in-process hosting model.
 
-`CreateDefaultBuilder` adds an <xref:Microsoft.AspNetCore.Hosting.Server.IServer> instance by calling the <xref:Microsoft.AspNetCore.Hosting.WebHostBuilderIISExtensions.UseIIS%2A> method to boot the [CoreCLR](/dotnet/standard/glossary#coreclr) and host the app inside of the IIS worker process (`w3wp.exe` or `iisexpress.exe`). Performance tests indicate that hosting a .NET Core app in-process delivers significantly higher request throughput compared to hosting the app out-of-process and proxying requests to [Kestrel](xref:fundamentals/servers/kestrel).
+`CreateDefaultBuilder` adds an <xref:Microsoft.AspNetCore.Hosting.Server.IServer> instance by calling the <xref:Microsoft.AspNetCore.Hosting.WebHostBuilderIISExtensions.UseIIS%2A> method to boot the [CoreCLR](/dotnet/standard/glossary#coreclr) and host the app inside of the IIS worker process (`w3wp.exe` or `iisexpress.exe`). Performance tests indicate that hosting a .NET app in-process delivers significantly higher request throughput compared to hosting the app out-of-process and proxying requests to [Kestrel](xref:fundamentals/servers/kestrel).
 
 Apps published as a single file executable can't be loaded by the in-process hosting model.
 
@@ -305,28 +309,28 @@ Enable the **IIS Management Console** and **World Wide Web Services**.
 
 ![IIS Management Console and World Wide Web Services are selected in Windows Features.](index/_static/windows-features-win10.png)
 
-## Install the .NET Core Hosting Bundle
+## Install the .NET Hosting Bundle
 
-Install the *.NET Core Hosting Bundle* on the hosting system. The bundle installs the .NET Core Runtime, .NET Core Library, and the [ASP.NET Core Module](xref:host-and-deploy/aspnet-core-module). The module allows ASP.NET Core apps to run behind IIS.
+Install the *.NET Hosting Bundle* on the hosting system. The bundle installs the .NET Runtime, .NET Library, and the [ASP.NET Core Module](xref:host-and-deploy/aspnet-core-module). The module allows ASP.NET Core apps to run behind IIS.
 
 > [!IMPORTANT]
 > If the Hosting Bundle is installed before IIS, the bundle installation must be repaired. Run the Hosting Bundle installer again after installing IIS.
 >
-> If the Hosting Bundle is installed after installing the 64-bit (x64) version of .NET Core, SDKs might appear to be missing ([No .NET Core SDKs were detected](xref:test/troubleshoot#no-net-core-sdks-were-detected)). To resolve the problem, see <xref:test/troubleshoot#missing-sdk-after-installing-the-net-core-hosting-bundle>.
+> If the Hosting Bundle is installed after installing the 64-bit (x64) version of .NET, SDKs might appear to be missing ([No .NET SDKs were detected](xref:test/troubleshoot#no-net-sdks-were-detected)). To resolve the problem, see <xref:test/troubleshoot#missing-sdk-after-installing-the-net-hosting-bundle>.
 
 ### Direct download (current version)
 
 Download the installer using the following link:
 
-[Current .NET Core Hosting Bundle installer (direct download)](https://dotnet.microsoft.com/permalink/dotnetcore-current-windows-runtime-bundle-installer)
+[Current .NET Hosting Bundle installer (direct download)](https://dotnet.microsoft.com/permalink/dotnetcore-current-windows-runtime-bundle-installer)
 
 ### Earlier versions of the installer
 
 To obtain an earlier version of the installer:
 
-1. Navigate to the [Download .NET Core](https://dotnet.microsoft.com/download/dotnet-core) page.
-1. Select the desired .NET Core version.
-1. In the **Run apps - Runtime** column, find the row of the .NET Core runtime version desired.
+1. Navigate to the [Download .NET](https://dotnet.microsoft.com/download/dotnet-core) page.
+1. Select the desired .NET version.
+1. In the **Run apps - Runtime** column, find the row of the .NET runtime version desired.
 1. Download the installer using the **Hosting Bundle** link.
 
 > [!WARNING]
@@ -337,7 +341,7 @@ To obtain an earlier version of the installer:
 1. Run the installer on the server. The following parameters are available when running the installer from an administrator command shell:
 
    * `OPT_NO_ANCM=1`: Skip installing the ASP.NET Core Module.
-   * `OPT_NO_RUNTIME=1`: Skip installing the .NET Core runtime. Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
+   * `OPT_NO_RUNTIME=1`: Skip installing the .NET runtime. Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
    * `OPT_NO_SHAREDFX=1`: Skip installing the ASP.NET Shared Framework (ASP.NET runtime). Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
    * `OPT_NO_X86=1`: Skip installing x86 runtimes. Use this parameter when you know that you won't be hosting 32-bit apps. If there's any chance that you will host both 32-bit and 64-bit apps in the future, don't use this parameter and install both runtimes.
    * `OPT_NO_SHARED_CONFIG_CHECK=1`: Disable the check for using an IIS Shared Configuration when the shared configuration (`applicationHost.config`) is on the same machine as the IIS installation. *Only available for ASP.NET Core 2.2 or later Hosting Bundler installers.* For more information, see <xref:host-and-deploy/aspnet-core-module#aspnet-core-module-with-an-iis-shared-configuration>.
@@ -360,7 +364,7 @@ net start w3svc
 
 ## Install Web Deploy when publishing with Visual Studio
 
-When deploying apps to servers with [Web Deploy](/iis/install/installing-publishing-technologies/installing-and-configuring-web-deploy-on-iis-80-or-later), install the latest version of Web Deploy on the server. To install Web Deploy, use the [Web Platform Installer (WebPI)](https://www.microsoft.com/web/downloads/platform.aspx) or obtain an installer directly from the [Microsoft Download Center](https://www.microsoft.com/download/details.aspx?id=43717). The preferred method is to use WebPI. WebPI offers a standalone setup and a configuration for hosting providers.
+When deploying apps to servers with [Web Deploy](/iis/install/installing-publishing-technologies/installing-and-configuring-web-deploy-on-iis-80-or-later), install the latest version of Web Deploy on the server. To install Web Deploy, use the [Web Platform Installer (WebPI)](https://www.microsoft.com/web/downloads/platform.aspx) or see [IIS Downloads: Web Deploy](https://www.iis.net/downloads/microsoft/web-deploy). The preferred method is to use WebPI. WebPI offers a standalone setup and a configuration for hosting providers.
 
 ## Create the IIS site
 
@@ -373,7 +377,7 @@ When deploying apps to servers with [Web Deploy](/iis/install/installing-publish
    ![Supply the Site name, physical path, and Host name in the Add Website step.](index/_static/add-website-ws2016.png)
 
    > [!WARNING]
-   > Top-level wildcard bindings (`http://*:80/` and `http://+:80`) should **not** be used. Top-level wildcard bindings can open up your app to security vulnerabilities. This applies to both strong and weak wildcards. Use explicit host names rather than wildcards. Subdomain wildcard binding (for example, `*.mysub.com`) doesn't have this security risk if you control the entire parent domain (as opposed to `*.com`, which is vulnerable). See [rfc7230 section-5.4](https://tools.ietf.org/html/rfc7230#section-5.4) for more information.
+   > Top-level wildcard bindings (`http://*:80/` and `http://+:80`) should **not** be used. Top-level wildcard bindings can open up your app to security vulnerabilities. This applies to both strong and weak wildcards. Use explicit host names rather than wildcards. Subdomain wildcard binding (for example, `*.mysub.com`) doesn't have this security risk if you control the entire parent domain (as opposed to `*.com`, which is vulnerable). See [RFC 9110: HTTP Semantics (Section 7.2: Host and :authority)](https://www.rfc-editor.org/rfc/rfc9110#field.host) for more information.
 
 1. Under the server's node, select **Application Pools**.
 
@@ -383,7 +387,7 @@ When deploying apps to servers with [Web Deploy](/iis/install/installing-publish
 
    ![Set No Managed Code for the .NET CLR version.](index/_static/edit-apppool-ws2016.png)
 
-    ASP.NET Core runs in a separate process and manages the runtime. ASP.NET Core doesn't rely on loading the desktop CLR (.NET CLR). The Core Common Language Runtime (CoreCLR) for .NET Core is booted to host the app in the worker process. Setting the **.NET CLR version** to **No Managed Code** is optional but recommended.
+    ASP.NET Core runs in a separate process and manages the runtime. ASP.NET Core doesn't rely on loading the desktop CLR (.NET CLR). The Core Common Language Runtime (CoreCLR) for .NET is booted to host the app in the worker process. Setting the **.NET CLR version** to **No Managed Code** is optional but recommended.
 
 1. *ASP.NET Core 2.2 or later*:
 
@@ -504,7 +508,7 @@ If a static asset's `src` attribute is set to an absolute path (for example, `sr
 
 To host an ASP.NET Core app as a sub-app under another ASP.NET Core app:
 
-1. Establish an app pool for the sub-app. Set the **.NET CLR Version** to **No Managed Code** because the Core Common Language Runtime (CoreCLR) for .NET Core is booted to host the app in the worker process, not the desktop CLR (.NET CLR).
+1. Establish an app pool for the sub-app. Set the **.NET CLR Version** to **No Managed Code** because the Core Common Language Runtime (CoreCLR) for .NET is booted to host the app in the worker process, not the desktop CLR (.NET CLR).
 
 1. Add the root site in IIS Manager with the sub-app in a folder under the root site.
 
@@ -537,7 +541,7 @@ Configuration sections of ASP.NET apps in *web.config* aren't used by ASP.NET Co
 * `<connectionStrings>`
 * `<location>`
 
-ASP.NET Core apps are configured using other configuration providers. For more information, see [Configuration](xref:fundamentals/configuration/index) and [.NET Core run-time configuration settings](/dotnet/core/run-time-config/)
+ASP.NET Core apps are configured using other configuration providers. For more information, see [Configuration](xref:fundamentals/configuration/index) and [.NET run-time configuration settings](/dotnet/core/run-time-config/)
 
 ## Application Pools
 
@@ -685,7 +689,7 @@ To prevent apps hosted [out-of-process](#out-of-process-hosting-model) from timi
 
 * [IIS documentation](/iis)
 * [Getting Started with the IIS Manager in IIS](/iis/get-started/getting-started-with-iis/getting-started-with-the-iis-manager-in-iis-7-and-iis-8)
-* [.NET Core application deployment](/dotnet/core/deploying/)
+* [.NET application deployment](/dotnet/core/deploying/)
 * <xref:host-and-deploy/aspnet-core-module>
 * <xref:host-and-deploy/directory-structure>
 * <xref:host-and-deploy/iis/modules>
@@ -707,7 +711,7 @@ To prevent apps hosted [out-of-process](#out-of-process-hosting-model) from timi
 
 For a tutorial experience on publishing an ASP.NET Core app to an IIS server, see <xref:tutorials/publish-to-iis>.
 
-[Install the .NET Core Hosting Bundle](#install-the-net-core-hosting-bundle)
+[Install the .NET Hosting Bundle](#install-the-net-hosting-bundle)
 
 ## Supported operating systems
 
@@ -724,13 +728,13 @@ For troubleshooting guidance, see <xref:test/troubleshoot>.
 
 ## Supported platforms
 
-Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET Core SDK unless the app:
+Apps published for 32-bit (x86) or 64-bit (x64) deployment are supported. Deploy a 32-bit app with a 32-bit (x86) .NET SDK unless the app:
 
 * Requires the larger virtual memory address space available to a 64-bit app.
 * Requires the larger IIS stack size.
 * Has 64-bit native dependencies.
 
-Use a 64-bit (x64) .NET Core SDK to publish a 64-bit app. A 64-bit runtime must be present on the host system.
+Use a 64-bit (x64) .NET SDK to publish a 64-bit app. A 64-bit runtime must be present on the host system.
 
 ASP.NET Core ships with [Kestrel server](xref:fundamentals/servers/kestrel), a default, cross-platform HTTP server.
 
@@ -884,20 +888,20 @@ Enable the **IIS Management Console** and **World Wide Web Services**.
 
 ![IIS Management Console and World Wide Web Services are selected in Windows Features.](index/_static/windows-features-win10.png)
 
-## Install the .NET Core Hosting Bundle
+## Install the .NET Hosting Bundle
 
-Install the *.NET Core Hosting Bundle* on the hosting system. The bundle installs the .NET Core Runtime, .NET Core Library, and the [ASP.NET Core Module](xref:host-and-deploy/aspnet-core-module). The module allows ASP.NET Core apps to run behind IIS.
+Install the *.NET Hosting Bundle* on the hosting system. The bundle installs the .NET Runtime, .NET Library, and the [ASP.NET Core Module](xref:host-and-deploy/aspnet-core-module). The module allows ASP.NET Core apps to run behind IIS.
 
 > [!IMPORTANT]
 > If the Hosting Bundle is installed before IIS, the bundle installation must be repaired. Run the Hosting Bundle installer again after installing IIS.
 >
-> If the Hosting Bundle is installed after installing the 64-bit (x64) version of .NET Core, SDKs might appear to be missing ([No .NET Core SDKs were detected](xref:test/troubleshoot#no-net-core-sdks-were-detected)). To resolve the problem, see <xref:test/troubleshoot#missing-sdk-after-installing-the-net-core-hosting-bundle>.
+> If the Hosting Bundle is installed after installing the 64-bit (x64) version of .NET, SDKs might appear to be missing ([No .NET SDKs were detected](xref:test/troubleshoot#no-net-sdks-were-detected)). To resolve the problem, see <xref:test/troubleshoot#missing-sdk-after-installing-the-net-hosting-bundle>.
 
 ### Download
 
-1. Navigate to the [Download .NET Core](https://dotnet.microsoft.com/download/dotnet-core) page.
-1. Select the desired .NET Core version.
-1. In the **Run apps - Runtime** column, find the row of the .NET Core runtime version desired.
+1. Navigate to the [Download .NET](https://dotnet.microsoft.com/download/dotnet-core) page.
+1. Select the desired .NET version.
+1. In the **Run apps - Runtime** column, find the row of the .NET runtime version desired.
 1. Download the installer using the **Hosting Bundle** link.
 
 > [!WARNING]
@@ -908,7 +912,7 @@ Install the *.NET Core Hosting Bundle* on the hosting system. The bundle install
 1. Run the installer on the server. The following parameters are available when running the installer from an administrator command shell:
 
    * `OPT_NO_ANCM=1`: Skip installing the ASP.NET Core Module.
-   * `OPT_NO_RUNTIME=1`: Skip installing the .NET Core runtime. Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
+   * `OPT_NO_RUNTIME=1`: Skip installing the .NET runtime. Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
    * `OPT_NO_SHAREDFX=1`: Skip installing the ASP.NET Shared Framework (ASP.NET runtime). Used when the server only hosts [self-contained deployments (SCD)](/dotnet/core/deploying/#self-contained-deployments-scd).
    * `OPT_NO_X86=1`: Skip installing x86 runtimes. Use this parameter when you know that you won't be hosting 32-bit apps. If there's any chance that you will host both 32-bit and 64-bit apps in the future, don't use this parameter and install both runtimes.
    * `OPT_NO_SHARED_CONFIG_CHECK=1`: Disable the check for using an IIS Shared Configuration when the shared configuration (*applicationHost.config*) is on the same machine as the IIS installation. *Only available for ASP.NET Core 2.2 or later Hosting Bundler installers.* For more information, see <xref:host-and-deploy/aspnet-core-module#aspnet-core-module-with-an-iis-shared-configuration>.
@@ -929,7 +933,7 @@ ASP.NET Core adopts roll-forward behavior for patch releases of shared framework
 
 ## Install Web Deploy when publishing with Visual Studio
 
-When deploying apps to servers with [Web Deploy](/iis/install/installing-publishing-technologies/installing-and-configuring-web-deploy-on-iis-80-or-later), install the latest version of Web Deploy on the server. To install Web Deploy, use the [Web Platform Installer (WebPI)](https://www.microsoft.com/web/downloads/platform.aspx) or obtain an installer directly from the [Microsoft Download Center](https://www.microsoft.com/download/details.aspx?id=43717). The preferred method is to use WebPI. WebPI offers a standalone setup and a configuration for hosting providers.
+When deploying apps to servers with [Web Deploy](/iis/install/installing-publishing-technologies/installing-and-configuring-web-deploy-on-iis-80-or-later), install the latest version of Web Deploy on the server. To install Web Deploy, use the [Web Platform Installer (WebPI)](https://www.microsoft.com/web/downloads/platform.aspx) or [IIS Downloads: Web Deploy](https://www.iis.net/downloads/microsoft/web-deploy). The preferred method is to use WebPI. WebPI offers a standalone setup and a configuration for hosting providers.
 
 ## Create the IIS site
 
@@ -942,7 +946,7 @@ When deploying apps to servers with [Web Deploy](/iis/install/installing-publish
    ![Supply the Site name, physical path, and Host name in the Add Website step.](index/_static/add-website-ws2016.png)
 
    > [!WARNING]
-   > Top-level wildcard bindings (`http://*:80/` and `http://+:80`) should **not** be used. Top-level wildcard bindings can open up your app to security vulnerabilities. This applies to both strong and weak wildcards. Use explicit host names rather than wildcards. Subdomain wildcard binding (for example, `*.mysub.com`) doesn't have this security risk if you control the entire parent domain (as opposed to `*.com`, which is vulnerable). See [rfc7230 section-5.4](https://tools.ietf.org/html/rfc7230#section-5.4) for more information.
+   > Top-level wildcard bindings (`http://*:80/` and `http://+:80`) should **not** be used. Top-level wildcard bindings can open up your app to security vulnerabilities. This applies to both strong and weak wildcards. Use explicit host names rather than wildcards. Subdomain wildcard binding (for example, `*.mysub.com`) doesn't have this security risk if you control the entire parent domain (as opposed to `*.com`, which is vulnerable). See [RFC 9110: HTTP Semantics (Section 7.2: Host and :authority)](https://www.rfc-editor.org/rfc/rfc9110#field.host) for more information.
 
 1. Under the server's node, select **Application Pools**.
 
@@ -952,7 +956,7 @@ When deploying apps to servers with [Web Deploy](/iis/install/installing-publish
 
    ![Set No Managed Code for the .NET CLR version.](index/_static/edit-apppool-ws2016.png)
 
-    ASP.NET Core runs in a separate process and manages the runtime. ASP.NET Core doesn't rely on loading the desktop CLR (.NET CLR)&mdash;the Core Common Language Runtime (CoreCLR) for .NET Core is booted to host the app in the worker process. Setting the **.NET CLR version** to **No Managed Code** is optional but recommended.
+    ASP.NET Core runs in a separate process and manages the runtime. ASP.NET Core doesn't rely on loading the desktop CLR (.NET CLR)&mdash;the Core Common Language Runtime (CoreCLR) for .NET is booted to host the app in the worker process. Setting the **.NET CLR version** to **No Managed Code** is optional but recommended.
 
 1. *ASP.NET Core 2.2 or later*: For a 64-bit (x64) [self-contained deployment](/dotnet/core/deploying/#self-contained-deployments-scd) that uses the [in-process hosting model](#in-process-hosting-model), disable the app pool for 32-bit (x86) processes.
 
@@ -1105,7 +1109,7 @@ If a static asset's `src` attribute is set to an absolute path (for example, `sr
 
 To host an ASP.NET Core app as a sub-app under another ASP.NET Core app:
 
-1. Establish an app pool for the sub-app. Set the **.NET CLR Version** to **No Managed Code** because the Core Common Language Runtime (CoreCLR) for .NET Core is booted to host the app in the worker process, not the desktop CLR (.NET CLR).
+1. Establish an app pool for the sub-app. Set the **.NET CLR Version** to **No Managed Code** because the Core Common Language Runtime (CoreCLR) for .NET is booted to host the app in the worker process, not the desktop CLR (.NET CLR).
 
 1. Add the root site in IIS Manager with the sub-app in a folder under the root site.
 
@@ -1203,7 +1207,7 @@ For an ASP.NET Core app that targets the .NET Framework, OPTIONS requests aren't
 
 * [IIS documentation](/iis)
 * [Getting Started with the IIS Manager in IIS](/iis/get-started/getting-started-with-iis/getting-started-with-the-iis-manager-in-iis-7-and-iis-8)
-* [.NET Core application deployment](/dotnet/core/deploying/)
+* [.NET application deployment](/dotnet/core/deploying/)
 * <xref:host-and-deploy/aspnet-core-module>
 * <xref:host-and-deploy/directory-structure>
 * <xref:host-and-deploy/iis/modules>
@@ -1212,6 +1216,7 @@ For an ASP.NET Core app that targets the .NET Framework, OPTIONS requests aren't
 
 ## Additional resources
 
+* <xref:tutorials/publish-to-iis>
 * <xref:test/troubleshoot>
 * <xref:index>
 * [The Official Microsoft IIS Site](https://www.iis.net/)

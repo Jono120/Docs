@@ -3,14 +3,14 @@ title: Client IP safelist for ASP.NET Core
 author: damienbod
 description: Learn how to write middleware or action filters to validate remote IP addresses against a list of approved IP addresses.
 monikerRange: '>= aspnetcore-2.1'
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 03/12/2020
 uid: security/ip-safelist
 ---
 # Client IP safelist for ASP.NET Core
 
-By [Damien Bowden](https://twitter.com/damien_bod) and [Tom Dykstra](https://github.com/tdykstra)
+By [Damien Bowden](https://github.com/damienbod) and [Tom Dykstra](https://github.com/tdykstra)
  
 This article shows three ways to implement an IP address safelist (also known as an allow list) in an ASP.NET Core app. An accompanying sample app demonstrates all three approaches. You can use:
 
@@ -25,7 +25,7 @@ In each case, a string containing approved client IP addresses is stored in an a
 
 Access is allowed if the array contains the IP address. Otherwise, an HTTP 403 Forbidden status code is returned.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/ip-safelist/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/ip-safelist/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## IP address safelist
 
@@ -40,7 +40,7 @@ In the preceding example, the IPv4 addresses of `127.0.0.1` and `192.168.1.5` an
 
 ## Middleware
 
-The `Startup.Configure` method adds the custom `AdminSafeListMiddleware` middleware type to the app's request pipeline. The safelist is retrieved with the .NET Core configuration provider and is passed as a constructor parameter.
+The `Startup.Configure` method adds the custom `AdminSafeListMiddleware` middleware type to the app's request pipeline. The safelist is retrieved with the .NET configuration provider and is passed as a constructor parameter.
 
 [!code-csharp[](ip-safelist/samples/3.x/ClientIpAspNetCore/Startup.cs?name=snippet_ConfigureAddMiddleware)]
 

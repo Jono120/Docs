@@ -2,7 +2,7 @@
 title: Overview of ASP.NET Core Authentication
 author: mjrousos
 description: Learn about authentication in ASP.NET Core.
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 10/18/2022
 uid: security/authentication/index
@@ -96,7 +96,7 @@ Based on the authentication scheme's configuration and the incoming request cont
 
 ### `RemoteAuthenticationHandler<TOptions>` vs `AuthenticationHandler<TOptions>`
 
-<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/connect/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
+<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/developers/how-connect-works/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
 
 * Is the authentication provider.
 * Examples include [Facebook](xref:security/authentication/facebook-logins), [Twitter](xref:security/authentication/twitter-logins), [Google](xref:security/authentication/google-logins), [Microsoft](xref:security/authentication/microsoft-logins), and any other OIDC provider that handles authenticating users using the handlers mechanism.
@@ -137,7 +137,7 @@ See the following links for differences between challenge and forbid:
 
 ## Authentication providers per tenant
 
-ASP.NET Core doesn't have a built-in solution for multi-tenant authentication. While it's possible for customers to write one using the built-in features, we recommend customers to consider [Orchard Core](https://www.orchardcore.net/) or [ABP Framework](https://abp.io/) for multi-tenant authentication.
+ASP.NET Core doesn't have a built-in solution for multi-tenant authentication. While it's possible for customers to write one using the built-in features, we recommend customers consider [Orchard Core](https://www.orchardcore.net/), [ABP Framework](https://abp.io/), or [Finbuckle.MultiTenant](https://www.finbuckle.com/multitenant)  for multi-tenant authentication.
 
 Orchard Core is:
 
@@ -147,6 +147,15 @@ Orchard Core is:
 See the [Orchard Core](https://github.com/OrchardCMS/OrchardCore) source for an example of authentication providers per tenant.
 
 [ABP Framework](https://abp.io/) supports various architectural patterns including modularity, microservices, domain driven design, and multi-tenancy. See [ABP Framework source on GitHub](https://github.com/abpframework/abp).
+
+Finbuckle.MultiTenant:
+
+* Open source
+* Provides tenant resolution
+* Lightweight
+* Provides data isolation
+* Configure app behavior uniquely for each tenant
+
 
 ## Additional resources
 
@@ -236,7 +245,7 @@ Based on the authentication scheme's configuration and the incoming request cont
 
 ### `RemoteAuthenticationHandler<TOptions>` vs `AuthenticationHandler<TOptions>`
 
-<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/connect/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
+<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/developers/how-connect-works/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
 
 * Is the authentication provider.
 * Examples include [Facebook](xref:security/authentication/facebook-logins), [Twitter](xref:security/authentication/twitter-logins), [Google](xref:security/authentication/google-logins), [Microsoft](xref:security/authentication/microsoft-logins), and any other OIDC provider that handles authenticating users using the handlers mechanism.
@@ -379,7 +388,7 @@ Based on the authentication scheme's configuration and the incoming request cont
 
 ### `RemoteAuthenticationHandler<TOptions>` vs `AuthenticationHandler<TOptions>`
 
-<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/connect/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
+<xref:Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler%601> is the class for authentication that requires a remote authentication step. When the remote authentication step is finished, the handler calls back to the `CallbackPath` set by the handler. The handler finishes the authentication step using the information passed to the <xref:Microsoft.AspNetCore.Authentication.Twitter.TwitterHandler.HandleRemoteAuthenticateAsync%2A> callback path. [OAuth 2.0](https://oauth.net/2/) and [OIDC](https://openid.net/developers/how-connect-works/) both use this pattern. JWT and cookies don't since they can directly use the bearer header and cookie to authenticate. The remotely hosted provider in this case:
 
 * Is the authentication provider.
 * Examples include [Facebook](xref:security/authentication/facebook-logins), [Twitter](xref:security/authentication/twitter-logins), [Google](xref:security/authentication/google-logins), [Microsoft](xref:security/authentication/microsoft-logins), and any other OIDC provider that handles authenticating users using the handlers mechanism.

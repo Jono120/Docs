@@ -1,8 +1,8 @@
 ---
 title: Request Features in ASP.NET Core
-author: ardalis
+author: wadepickett
 description: Learn about web server implementation details related to HTTP requests and responses that are defined in interfaces for ASP.NET Core.
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 10/11/2021
 uid: fundamentals/request-features
@@ -95,9 +95,9 @@ The following feature interfaces are from <xref:Microsoft.AspNetCore.Http.Featur
 
 :::moniker-end
 
-<xref:Microsoft.AspNetCore.Http.Features.IHttpUpgradeFeature>: Defines support for [HTTP Upgrades](https://tools.ietf.org/html/rfc2616.html#section-14.42), which allow the client to specify which additional protocols it would like to use if the server wishes to switch protocols.
+<xref:Microsoft.AspNetCore.Http.Features.IHttpUpgradeFeature>: Defines support for [HTTP Upgrades](https://www.rfc-editor.org/rfc/rfc9110#field.upgrade), which allow the client to specify which additional protocols it would like to use if the server wishes to switch protocols.
 
-<xref:Microsoft.AspNetCore.Http.Features.IHttpWebSocketFeature>: Defines an API for supporting web sockets.
+<xref:Microsoft.AspNetCore.Http.Features.IHttpWebSocketFeature>: Defines an API for supporting WebSockets.
 
 :::moniker range=">= aspnetcore-3.0"
 

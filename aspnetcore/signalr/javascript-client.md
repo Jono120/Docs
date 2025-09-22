@@ -1,9 +1,9 @@
 ---
 title: ASP.NET Core SignalR JavaScript client
-author: bradygaster
+author: wadepickett
 description: Overview of ASP.NET Core SignalR JavaScript client.
 monikerRange: '>= aspnetcore-3.1'
-ms.author: bradyg
+ms.author: wpickett
 ms.custom: mvc, devx-track-js
 ms.date: 1/22/2022
 uid: signalr/javascript-client
@@ -11,8 +11,6 @@ uid: signalr/javascript-client
 # ASP.NET Core SignalR JavaScript client
 
 :::moniker range=">= aspnetcore-6.0"
-
-By [Rachel Appel](https://twitter.com/rachelappel)
 
 The ASP.NET Core SignalR JavaScript client library enables developers to call server-side SignalR hub code.
 
@@ -23,11 +21,12 @@ The SignalR JavaScript client library is delivered as an [npm](https://www.npmjs
 ### Install with npm
 
 # [Visual Studio](#tab/visual-studio)
+
 Run the following commands from **Package Manager Console**:
+
 # [Visual Studio Code](#tab/visual-studio-code)
+
 Run the following commands from the **Integrated Terminal**:
-# [Visual Studio for Mac](#tab/visual-studio-mac)
-Run the following commands from a command window:
 
 ---
 
@@ -50,11 +49,11 @@ To use the client library without the npm prerequisite, reference a CDN-hosted c
 
 [!code-html[](javascript-client/samples/6.x/SignalRChat/Pages/Index.cshtml?name=snippet_CDN)]
 
-The client library is available on the following CDNs:
+In the preceding markup, version 6.0.1 is specified. Choose from one of the following CDNs to get the latest client library version:
 
 * [cdnjs](https://cdnjs.com/libraries/microsoft-signalr)
 * [jsDelivr](https://www.jsdelivr.com/package/npm/@microsoft/signalr)
-* [unpkg](https://unpkg.com/@microsoft/signalr@next/dist/browser/signalr.js)
+* [unpkg](https://unpkg.com/@microsoft/signalr/dist/browser/signalr.js)
 
 ### Install with LibMan
 
@@ -318,7 +317,7 @@ For the preceding code example:
 
 ## Additional resources
 
-* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/javascript-client/samples) ([how to download](xref:index#how-to-download-a-sample))
+* [View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/javascript-client/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 * [JavaScript API reference](/javascript/api/@microsoft/signalr)
 * [JavaScript tutorial](xref:tutorials/signalr)
 * [WebPack and TypeScript tutorial](xref:tutorials/signalr-typescript-webpack)
@@ -337,7 +336,7 @@ By [Rachel Appel](https://twitter.com/rachelappel)
 
 The ASP.NET Core SignalR JavaScript client library enables developers to call server-side hub code.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/javascript-client/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/javascript-client/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## Install the SignalR client package
 
@@ -370,7 +369,7 @@ The client library is available on the following CDNs:
 
 * [cdnjs](https://cdnjs.com/libraries/microsoft-signalr)
 * [jsDelivr](https://www.jsdelivr.com/package/npm/@microsoft/signalr)
-* [unpkg](https://unpkg.com/@microsoft/signalr@next/dist/browser/signalr.js)
+* [unpkg](https://unpkg.com/@microsoft/signalr/dist/browser/signalr.js)
 
 ### Install with LibMan
 

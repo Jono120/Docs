@@ -1,8 +1,8 @@
 ---
 title: Partial views in ASP.NET Core
-author: ardalis
+author: tdykstra
 description: Discover how to use partial views to break up large markup files and reduce the duplication of common markup across web pages in ASP.NET Core apps.
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 06/12/2019
 uid: mvc/views/partial
@@ -11,7 +11,7 @@ uid: mvc/views/partial
 
 By [Steve Smith](https://ardalis.com/), [Maher JENDOUBI](https://twitter.com/maherjend), [Rick Anderson](https://twitter.com/RickAndMSFT), and [Scott Sauber](https://twitter.com/scottsauber)
 
-A partial view is a [Razor](xref:mvc/views/razor) markup file (`.cshtml`) without an [`@page`](xref:mvc/views/razor#page) directive that renders HTML output *within* another markup file's rendered output.
+A partial view is a [Razor](xref:mvc/views/razor) markup file (`.cshtml`) without a [`@page`](xref:mvc/views/razor#page) directive that renders HTML output *within* another markup file's rendered output.
 
 :::moniker range=">= aspnetcore-2.1"
 
@@ -19,7 +19,7 @@ The term *partial view* is used when developing either an MVC app, where markup 
 
 :::moniker-end
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/partial/sample) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/mvc/views/partial/sample) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 ## When to use partial views
 

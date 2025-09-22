@@ -1,8 +1,8 @@
 ---
 title: Unprotect payloads whose keys have been revoked in ASP.NET Core
-author: rick-anderson
+author: wadepickett
 description: Learn how to unprotect data, protected with keys that have since been revoked, in an ASP.NET Core app.
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 10/24/2018
 uid: security/data-protection/consumer-apis/dangerous-unprotect
@@ -32,11 +32,11 @@ DangerousUnprotect(byte[] protectedData, bool ignoreRevocationErrors,
 
 This API takes the protected payload (as a byte array) and returns the unprotected payload. There's no string-based overload. The two out parameters are as follows.
 
-* `requiresMigration`: will be set to true if the key used to protect this payload is no longer the active default key, e.g., the key used to protect this payload is old and a key rolling operation has since taken place. The caller may wish to consider reprotecting the payload depending on their business needs.
+* `requiresMigration`: Is set to `true` if the key used to protect this payload is no longer the active default key. For example, the key used to protect this payload is old and a key rolling operation has since taken place. The caller may wish to consider reprotecting the payload depending on their business needs.
 
-* `wasRevoked`: will be set to true if the key used to protect this payload was revoked.
+* `wasRevoked`: Is set to `true` if the key used to protect this payload was revoked.
 
 >[!WARNING]
-> Exercise extreme caution when passing `ignoreRevocationErrors: true` to the `DangerousUnprotect` method. If after calling this method the `wasRevoked` value is true, then the key used to protect this payload was revoked, and the payload's authenticity should be treated as suspect. In this case, only continue operating on the unprotected payload if you have some separate assurance that it's authentic, e.g. that it's coming from a secure database rather than being sent by an untrusted web client.
+> Exercise extreme caution when passing `ignoreRevocationErrors: true` to the `DangerousUnprotect` method. If after calling this method the `wasRevoked` value is true, then the key used to protect this payload was revoked, and the payload's authenticity should be treated as suspect. In this case, only continue operating on the unprotected payload if you have some separate assurance that it's authentic, for example that it's coming from a secure database rather than being sent by an untrusted web client.
 
 [!code-csharp[](dangerous-unprotect/samples/dangerous-unprotect.cs)]

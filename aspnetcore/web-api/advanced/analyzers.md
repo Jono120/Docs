@@ -1,9 +1,9 @@
 ---
 title: Use web API analyzers
-author: rick-anderson
+author: tdykstra
 description: Learn about the ASP.NET Core MVC web API analyzers package.
 monikerRange: '>= aspnetcore-3.1'
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 09/05/2019
 uid: web-api/advanced/analyzers
@@ -21,7 +21,7 @@ The analyzers package notifies you of any controller action that:
 
 ## Reference the analyzer package
 
-The analyzers are included in the .NET Core SDK. To enable the analyzer in your project, include the `IncludeOpenAPIAnalyzers` property in the project file:
+The analyzers are included in the .NET SDK. To enable the analyzer in your project, include the `IncludeOpenAPIAnalyzers` property in the project file:
 
 ```xml
 <PropertyGroup>

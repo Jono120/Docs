@@ -3,12 +3,14 @@ title: Build a Windows Presentation Foundation (WPF) Blazor app
 author: guardrex
 description: Build a Windows Presentation Foundation (WPF) app step-by-step.
 monikerRange: '>= aspnetcore-6.0'
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
-ms.date: 11/15/2022
+ms.date: 11/12/2024
 uid: blazor/hybrid/tutorials/wpf
 ---
 # Build a Windows Presentation Foundation (WPF) Blazor app
+
+[!INCLUDE[](~/includes/not-latest-version.md)]
 
 This tutorial shows you how to build and run a WPF Blazor app. You learn how to:
 
@@ -111,7 +113,7 @@ Add an `index.html` file to the `wwwroot` folder with the following markup.
 <body>
     <div id="app">Loading...</div>
 
-    <div id="blazor-error-ui">
+    <div id="blazor-error-ui" data-nosnippet>
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
@@ -179,6 +181,8 @@ a, .btn-link {
     }
 ```
 
+Inside the `wwwroot/css` folder, create a `bootstrap` folder. Inside the `bootstrap` folder, place a copy of `bootstrap.min.css`. You can obtain the latest version of `bootstrap.min.css` from the [Bootstrap website](https://getbootstrap.com/). Follow navigation bar links to **Docs** > **Download**. A direct link can't be provided here because all of the content at the site is versioned in the URL.
+
 Add the following `Counter` component to the root of the project, which is the default `Counter` component found in Blazor project templates.
 
 `Counter.razor`:
@@ -234,7 +238,7 @@ Add the namespace <xref:Microsoft.Extensions.DependencyInjection?displayProperty
 using Microsoft.Extensions.DependencyInjection;
 ```
 
-Inside the `MainWindow` constructor, after the `InitializeComponent()` method call, add the following code:
+Inside the `MainWindow` constructor, after the `InitializeComponent` method call, add the following code:
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -242,7 +246,10 @@ serviceCollection.AddWpfBlazorWebView();
 Resources.Add("services", serviceCollection.BuildServiceProvider());
 ```
 
-The final, complete C# code of `MainWindow.xaml.cs`:
+> [!NOTE]
+> The `InitializeComponent` method is automatically generated at app build time and added to the compilation object for the calling class.
+
+The final, complete C# code of `MainWindow.xaml.cs` with a [file-scoped namespace](/dotnet/csharp/language-reference/keywords/namespace) and comments removed:
 
 ```csharp
 using System;
@@ -261,21 +268,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WpfBlazor
-{
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
+namespace WpfBlazor;
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddWpfBlazorWebView();
-            Resources.Add("services", serviceCollection.BuildServiceProvider());
-        }
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddWpfBlazorWebView();
+        Resources.Add("services", serviceCollection.BuildServiceProvider());
     }
 }
 ```

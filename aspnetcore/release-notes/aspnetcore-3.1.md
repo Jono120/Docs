@@ -1,8 +1,8 @@
 ---
 title: What's new in ASP.NET Core 3.1
-author: rick-anderson
+author: tdykstra
 description: Learn about the new features in ASP.NET Core 3.1.
-ms.author: riande
+ms.author: tdykstra
 ms.custom: mvc
 ms.date: 02/12/2020
 uid: aspnetcore-3.1
@@ -34,7 +34,7 @@ For example, prerender a `Counter` component with an increment amount (`Incremen
     param-IncrementAmount="10" />
 ```
 
-For more information, see [Integrate components into Razor Pages and MVC apps](xref:blazor/components/prerendering-and-integration).
+For more information, see [Integrate components into Razor Pages and MVC apps](xref:blazor/components/integration?view=aspnetcore-3.1&preserve-view=true).
 
 ## Support for shared queues in HTTP.sys
 
@@ -84,3 +84,7 @@ When a Blazor app isn't functioning properly during development, receiving detai
 * In production, the gold bar notifies the user that an error has occurred and recommends refreshing the browser.
 
 For more information, see <xref:blazor/fundamentals/handle-errors>.
+
+## Breaking changes
+
+Use the articles in [Breaking changes in .NET](/dotnet/core/compatibility/breaking-changes) to find breaking changes that might apply when upgrading an app to a newer version of .NET.

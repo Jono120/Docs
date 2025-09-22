@@ -1,9 +1,9 @@
 ---
 title: Host ASP.NET Core SignalR in background services
-author: bradygaster
-description: Learn how to send messages to SignalR clients from .NET Core BackgroundService classes.
+author: wadepickett
+description: Learn how to send messages to SignalR clients from .NET BackgroundService classes.
 monikerRange: '>= aspnetcore-2.2'
-ms.author: bradyg
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 11/12/2019
 uid: signalr/background-services
@@ -15,11 +15,11 @@ By [Dave Pringle](https://github.com/UncleDave) and [Brady Gaster](https://twitt
 This article provides guidance for:
 
 * Hosting SignalR Hubs using a background worker process hosted with ASP.NET Core.
-* Sending messages to connected clients from within a .NET Core [BackgroundService](xref:Microsoft.Extensions.Hosting.BackgroundService).
+* Sending messages to connected clients from within a .NET <xref:Microsoft.Extensions.Hosting.BackgroundService>.
 
 :::moniker range=">= aspnetcore-6.0"
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/6.0) [(how to download)](xref:index#how-to-download-a-sample)
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/6.0) [(how to download)](xref:fundamentals/index#how-to-download-a-sample)
 
 ## Enable SignalR at app startup
 
@@ -83,7 +83,7 @@ During the `IHostedService.StopAsync` method, the `HubConnection` is disposed of
 
 :::moniker range=">= aspnetcore-3.0 < aspnetcore-6.0"
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/3.x) [(how to download)](xref:index#how-to-download-a-sample)
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/3.x) [(how to download)](xref:fundamentals/index#how-to-download-a-sample)
 
 ## Enable SignalR in startup
 
@@ -146,7 +146,7 @@ During the `IHostedService.StopAsync` method, the `HubConnection` is disposed of
 
 :::moniker range="<= aspnetcore-2.2"
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/2.2) [(how to download)](xref:index#how-to-download-a-sample)
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/signalr/background-service/samples/2.2) [(how to download)](xref:fundamentals/index#how-to-download-a-sample)
 
 ## Enable SignalR in startup
 

@@ -1,9 +1,9 @@
 ---
 title: Razor Pages authorization conventions in ASP.NET Core
-author: rick-anderson
+author: wadepickett
 description: Learn how to control access to pages with conventions that authorize users and allow anonymous users to access pages or folders of pages.
 monikerRange: '>= aspnetcore-2.1'
-ms.author: riande
+ms.author: wpickett
 ms.custom: mvc
 ms.date: 08/12/2019
 uid: security/authorization/razor-pages-authorization
@@ -14,7 +14,7 @@ uid: security/authorization/razor-pages-authorization
 
 One way to control access in your Razor Pages app is to use authorization conventions at startup. These conventions allow you to authorize users and allow anonymous users to access individual pages or folders of pages. The conventions described in this topic automatically apply [authorization filters](xref:mvc/controllers/filters#authorization-filters) to control access.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/authorization/razor-pages-authorization/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/authorization/razor-pages-authorization/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 The sample app uses [cookie authentication without ASP.NET Core Identity](xref:security/authentication/cookie). The concepts and examples shown in this topic apply equally to apps that use ASP.NET Core Identity. To use ASP.NET Core Identity, follow the guidance in <xref:security/authentication/identity>.
 
@@ -126,7 +126,7 @@ Requiring authorization on the Private page fails. When both the <xref:Microsoft
 
 One way to control access in your Razor Pages app is to use authorization conventions at startup. These conventions allow you to authorize users and allow anonymous users to access individual pages or folders of pages. The conventions described in this topic automatically apply [authorization filters](xref:mvc/controllers/filters#authorization-filters) to control access.
 
-[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/authorization/razor-pages-authorization/samples) ([how to download](xref:index#how-to-download-a-sample))
+[View or download sample code](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/security/authorization/razor-pages-authorization/samples) ([how to download](xref:fundamentals/index#how-to-download-a-sample))
 
 The sample app uses [cookie authentication without ASP.NET Core Identity](xref:security/authentication/cookie). The concepts and examples shown in this topic apply equally to apps that use ASP.NET Core Identity. To use ASP.NET Core Identity, follow the guidance in <xref:security/authentication/identity>.
 
