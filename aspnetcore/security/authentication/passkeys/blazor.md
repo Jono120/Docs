@@ -5,11 +5,15 @@ description: Learn how to implement passkeys authentication in ASP.NET Core Blaz
 ms.author: wpickett
 monikerRange: '>= aspnetcore-10.0'
 ms.custom: mvc
-ms.date: 09/10/2025
+ms.date: 10/30/2025
 uid: security/authentication/passkeys/blazor
 zone_pivot_groups: implementation
 ---
 # Implement passkeys in ASP.NET Core Blazor Web Apps
+
+<!-- UPDATE 11.0 - Confirm that the 'BlazorWebCSharp.1' folder 
+                   locations for links in this article are
+                   still correct for release -->
 
 This guide explains how to implement [passkey support](xref:security/authentication/passkeys/index) for a new or existing Blazor Web App with ASP.NET Core Identity.
 
@@ -19,13 +23,7 @@ For an overview of passkeys and general configuration guidance, see <xref:securi
 
 ## Prerequisites
 
-<!-- UPDATE 10.0 - Remove preview link in favor of the download link ...
-
 [.NET SDK](https://dotnet.microsoft.com/download) (.NET 10 or later)
-
--->
-
-[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Create a Blazor Web App
 
@@ -121,14 +119,8 @@ The following guidance relies upon an app that was created with **Individual Acc
 
 ## Prerequisites
 
-<!-- UPDATE 10.0 - Remove preview link in favor of the download link ...
-
-* [.NET SDK](https://dotnet.microsoft.com/download) (.NET 10 or later)
-
--->
-
 * An existing Blazor Web App (.NET 10 or later) with ASP.NET Core Identity
-* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+* [.NET SDK](https://dotnet.microsoft.com/download) (.NET 10 or later)
 
 For migration guidance, see <xref:migration/index>.
 
@@ -223,6 +215,18 @@ Update the `IdentityComponentsEndpointRouteBuilderExtensions.cs` file (or create
 Replace the existing `Login` component with the following component and update the `BlazorWebCSharp._1.Data` namespace to match the app (for example: `Contoso.Components.Account.Data`):
 
 [`Components/Account/Pages/Login.razor`](https://github.com/dotnet/aspnetcore/blob/main/src/ProjectTemplates/Web.ProjectTemplates/content/BlazorWeb-CSharp/BlazorWebCSharp.1/Components/Account/Pages/Login.razor)
+
+## Add a redirect method to the `IdentityRedirectManager` class
+
+Add the following method to the `IdentityRedirectManager` class in `Components/Account/IdentityRedirectManager.cs`:
+
+```csharp
+public void RedirectToInvalidUser(
+    UserManager<ApplicationUser> userManager, HttpContext context) =>
+        RedirectToWithStatus("Account/InvalidUser",
+            $"Error: Unable to load user with ID '{userManager.GetUserId(context.User)}'.",
+            context);
+```
 
 ## Create passkey management pages for adding and renaming passkeys
 

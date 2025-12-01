@@ -5,13 +5,13 @@ description: Learn how to secure a Blazor Web App with Microsoft Entra ID.
 monikerRange: '>= aspnetcore-9.0'
 ms.author: wpickett
 ms.custom: mvc, sfi-ropc-nochange
-ms.date: 07/29/2025
+ms.date: 11/11/2025
 uid: blazor/security/blazor-web-app-entra
 zone_pivot_groups: blazor-web-app-entra-specification
 ---
 # Secure an ASP.NET Core Blazor Web App with Microsoft Entra ID
 
-<!-- UPDATE 10.0 Activate after release and INCLUDE is updated
+<!-- UPDATE 11.0 - Activate ...
 
 [!INCLUDE[](~/includes/not-latest-version.md)]
 -->
@@ -52,7 +52,7 @@ We recommend using separate registrations for apps and web APIs, even when the a
 
 Register the web API (`MinimalApiJwt`) first so that you can then grant access to the web API when registering the app. The web API's tenant ID and client ID are used to configure the web API in its `Program` file. After registering the web API, expose the web API in **App registrations** > **Expose an API** with a scope name of `Weather.Get`. Record the App ID URI for use in the app's configuration.
 
-Next, register the app (`BlazorWebAppEntra`) with a **Web** platform configuration and a **Redirect URI** of `https://localhost/signin-oidc` (a port isn't required). The app's tenant ID, tenant domain, and client ID, along with the web API's base address, App ID URI, and weather scope name, are used to configure the app in its `appsettings.json` file. Grant API permission to access the web API in **App registrations** > **API permissions**. If the app's security specification calls for it, you can grant admin consent for the organization to access the web API. Authorized users and groups are assigned to the app's registration in **App registrations** > **Enterprise applications**.
+Next, register the app (`BlazorWebAppEntra`) with a **Web** platform configuration with two entries under **Redirect URI**: `https://localhost/signin-oidc` and `https://localhost/signout-callback-oidc` (ports aren't required on these URIs). Set the **Front-channel logout URL** to `https://localhost/signout-callback-oidc` (a port isn't required). The app's tenant ID, tenant domain, and client ID, along with the web API's base address, App ID URI, and weather scope name, are used to configure the app in its `appsettings.json` file. Grant API permission to access the web API in **App registrations** > **API permissions**. If the app's security specification calls for it, you can grant admin consent for the organization to access the web API. Authorized users and groups are assigned to the app's registration in **App registrations** > **Enterprise applications**.
 
 In the Entra or Azure portal's **Implicit grant and hybrid flows** app registration configuration, don't select either checkbox for the authorization endpoint to return **Access tokens** or **ID tokens**. The OpenID Connect handler automatically requests the appropriate tokens using the code returned from the authorization endpoint.
 
@@ -205,6 +205,12 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddDistributedTokenCaches();
 ```
 
+The callback path (`CallbackPath`) must match the redirect URI (login callback path) configured when registering the application in the Entra or Azure portal. Paths are configured in the **Authentication** blade of the app's registration. The default value of `CallbackPath` is `/signin-oidc` for a registered redirect URI of `https://localhost/signin-oidc` (a port isn't required).
+
+The <xref:Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions.SignedOutCallbackPath%2A> is the request path within the app's base path intercepted by the OpenID Connect handler where the user agent is first returned after signing out from Entra. The sample app doesn't set a value for the path because the default value of "`/signout-callback-oidc`" is used. After intercepting the request, the OpenID Connect handler redirects to the <xref:Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions.SignedOutRedirectUri%2A> or <xref:Microsoft.AspNetCore.Authentication.AuthenticationProperties.RedirectUri%2A>, if specified.
+
+[!INCLUDE[](~/blazor/security/includes/secure-authentication-flows.md)]
+
 :::zone-end
 
 :::zone pivot="bff-pattern"
@@ -217,7 +223,7 @@ The following specification is covered:
 * The server project calls <xref:Microsoft.Extensions.DependencyInjection.WebAssemblyRazorComponentsBuilderExtensions.AddAuthenticationStateSerialization%2A> to add a server-side authentication state provider that uses <xref:Microsoft.AspNetCore.Components.PersistentComponentState> to flow the authentication state to the client. The client calls <xref:Microsoft.Extensions.DependencyInjection.WebAssemblyAuthenticationServiceCollectionExtensions.AddAuthenticationStateDeserialization%2A> to deserialize and use the authentication state passed by the server. The authentication state is fixed for the lifetime of the WebAssembly application.
 * The app uses [Microsoft Entra ID](https://www.microsoft.com/security/business/microsoft-entra), based on [Microsoft Identity Web](/entra/msal/dotnet/microsoft-identity-web/) packages.
 * Automatic non-interactive token refresh is managed by the framework.
-* The [Backend for Frontend (BFF) pattern](/azure/architecture/patterns/backends-for-frontends) is adopted using [.NET Aspire](/dotnet/aspire/get-started/aspire-overview) for service discovery and [YARP](https://dotnet.github.io/yarp/) for proxying requests to a weather forecast endpoint on the backend app.
+* The [Backend for Frontend (BFF) pattern](/azure/architecture/patterns/backends-for-frontends) is adopted using [Aspire](/dotnet/aspire/get-started/aspire-overview) for service discovery and [YARP](https://dotnet.github.io/yarp/) for proxying requests to a weather forecast endpoint on the backend app.
   * A backend web API uses JWT-bearer authentication to validate JWT tokens saved by the Blazor Web App in the sign-in cookie.
   * Aspire improves the experience of building .NET cloud-native apps. It provides a consistent, opinionated set of tools and patterns for building and running distributed apps.
   * YARP (Yet Another Reverse Proxy) is a library used to create a reverse proxy server.
@@ -225,23 +231,19 @@ The following specification is covered:
   * When rendering the `Weather` component on the server to display weather data, the component uses the `ServerWeatherForecaster`. Microsoft Identity Web packages provide API to create a named downstream web service for making web API calls. <xref:Microsoft.Identity.Abstractions.IDownstreamApi> is injected into the `ServerWeatherForecaster`, which is used to call <xref:Microsoft.Identity.Abstractions.IDownstreamApi.CallApiForUserAsync%2A> to obtain weather data from an external web API (`MinimalApiJwt` project).
   * When the `Weather` component is rendered on the client, the component uses the `ClientWeatherForecaster` service implementation, which uses a preconfigured <xref:System.Net.Http.HttpClient> (in the client project's `Program` file) to make a web API call to the server project's Minimal API (`/weather-forecast`) for weather data. The Minimal API endpoint obtains an access token for the user by calling <xref:Microsoft.Identity.Web.ITokenAcquisition.GetAccessTokenForUserAsync%2A>. Along with the correct scopes, a reverse proxy call is made to the external web API (`MinimalApiJwt` project) to obtain and return weather data to the client for rendering by the component.
 
-<!-- UPDATE 10.0 Remove at 10.0 -->
-
-For more information on .NET Aspire, see [General Availability of .NET Aspire: Simplifying .NET Cloud-Native Development (May, 2024)](https://devblogs.microsoft.com/dotnet/dotnet-aspire-general-availability/).
-
 ## Prerequisites
 
-[.NET Aspire](/dotnet/aspire/get-started/aspire-overview) requires [Visual Studio](https://visualstudio.microsoft.com/) version 17.10 or later.
+[Aspire](/dotnet/aspire/get-started/aspire-overview) requires [Visual Studio](https://visualstudio.microsoft.com/) version 17.10 or later.
 
-Also, see the *Prerequisites* section of [Quickstart: Build your first .NET Aspire app](/dotnet/aspire/get-started/build-your-first-aspire-app?tabs=visual-studio#prerequisites).
+Also, see the *Prerequisites* section of [Quickstart: Build your first Aspire solution](/dotnet/aspire/get-started/build-your-first-aspire-app?tabs=visual-studio#prerequisites).
 
 ## Sample solution
 
 The sample solution consists of the following projects:
 
-* .NET Aspire:
+* Aspire:
   * `Aspire.AppHost`: Used to manage the high-level orchestration concerns of the app.
-  * `Aspire.ServiceDefaults`: Contains default .NET Aspire app configurations that can be extended and customized as needed.
+  * `Aspire.ServiceDefaults`: Contains default Aspire app configurations that can be extended and customized as needed.
 * `MinimalApiJwt`: Backend web API, containing an example [Minimal API](xref:fundamentals/minimal-apis) endpoint for weather data.
 * `BlazorWebAppEntra`: Server-side project of the Blazor Web App.
 * `BlazorWebAppEntra.Client`: Client-side project of the Blazor Web App.
@@ -256,7 +258,7 @@ We recommend using separate registrations for apps and web APIs, even when the a
 
 Register the web API (`MinimalApiJwt`) first so that you can then grant access to the web API when registering the app. The web API's tenant ID and client ID are used to configure the web API in its `Program` file. After registering the web API, expose the web API in **App registrations** > **Expose an API** with a scope name of `Weather.Get`. Record the App ID URI for use in the app's configuration.
 
-Next, register the app (`BlazorWebAppEntra`) with a **Web** platform configuration and a **Redirect URI** of `https://localhost/signin-oidc` (a port isn't required). The app's tenant ID, tenant domain, and client ID, along with the web API's base address, App ID URI, and weather scope name, are used to configure the app in its `appsettings.json` file. Grant API permission to access the web API in **App registrations** > **API permissions**. If the app's security specification calls for it, you can grant admin consent for the organization to access the web API. Authorized users and groups are assigned to the app's registration in **App registrations** > **Enterprise applications**.
+Next, register the app (`BlazorWebAppEntra`) with a **Web** platform configuration with two entries under **Redirect URI**: `https://localhost/signin-oidc` and `https://localhost/signout-callback-oidc` (ports aren't required on these URIs). The app's tenant ID, tenant domain, and client ID, along with the web API's base address, App ID URI, and weather scope name, are used to configure the app in its `appsettings.json` file. Grant API permission to access the web API in **App registrations** > **API permissions**. If the app's security specification calls for it, you can grant admin consent for the organization to access the web API. Authorized users and groups are assigned to the app's registration in **App registrations** > **Enterprise applications**.
 
 In the Entra or Azure portal's **Implicit grant and hybrid flows** app registration configuration, don't select either checkbox for the authorization endpoint to return **Access tokens** or **ID tokens**. The OpenID Connect handler automatically requests the appropriate tokens using the code returned from the authorization endpoint.
 
@@ -264,13 +266,13 @@ Create a client secret in the app's registration in the Entra or Azure portal (*
 
 Additional Entra configuration guidance for specific settings is provided later in this article.
 
-## .NET Aspire projects
+## Aspire projects
 
-For more information on using .NET Aspire and details on the `.AppHost` and `.ServiceDefaults` projects of the sample app, see the [.NET Aspire documentation](/dotnet/aspire/).
+For more information on using Aspire and details on the `.AppHost` and `.ServiceDefaults` projects of the sample app, see the [Aspire documentation](/dotnet/aspire/).
 
-Confirm that you've met the prerequisites for .NET Aspire. For more information, see the *Prerequisites* section of [Quickstart: Build your first .NET Aspire app](/dotnet/aspire/get-started/build-your-first-aspire-app?tabs=visual-studio#prerequisites).
+Confirm that you've met the prerequisites for Aspire. For more information, see the *Prerequisites* section of [Quickstart: Build your first Aspire solution](/dotnet/aspire/get-started/build-your-first-aspire-app?tabs=visual-studio#prerequisites).
 
-The sample app only configures an insecure HTTP launch profile (`http`) for use during development testing. For more information, including an example of insecure and secure launch settings profiles, see [Allow unsecure transport in .NET Aspire (.NET Aspire documentation)](/dotnet/aspire/troubleshooting/allow-unsecure-transport).
+The sample app only configures an insecure HTTP launch profile (`http`) for use during development testing. For more information, including an example of insecure and secure launch settings profiles, see [Allow unsecure transport in Aspire (Aspire documentation)](/dotnet/aspire/troubleshooting/allow-unsecure-transport).
 
 ## Server-side Blazor Web App project (`BlazorWebAppEntra`)
 
@@ -385,6 +387,12 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddDistributedTokenCaches();
 ```
 
+Provide the same downstream API scope to the request transformer:
+
+```csharp
+List<string> scopes = [ "{APP ID URI}/Weather.Get" ];
+```
+
 Placeholders in the preceding configuration:
 
 * `{CLIENT ID (BLAZOR APP)}`: The application (client) ID.
@@ -412,9 +420,16 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddDownstreamApi("DownstreamApi", configOptions =>
     {
         configOptions.BaseUrl = "https://localhost:7277";
-        configOptions.Scopes = [ "api://11112222-bbbb-3333-cccc-4444dddd5555/Weather.Get" ];
+        configOptions.Scopes = 
+            [ "api://11112222-bbbb-3333-cccc-4444dddd5555/Weather.Get" ];
     })
     .AddDistributedTokenCaches();
+```
+
+Example:
+
+```csharp
+List<string> scopes = [ "api://11112222-bbbb-3333-cccc-4444dddd5555/Weather.Get" ];
 ```
 
 :::zone-end
@@ -425,22 +440,6 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 The callback path (`CallbackPath`) must match the redirect URI (login callback path) configured when registering the application in the Entra or Azure portal. Paths are configured in the **Authentication** blade of the app's registration. The default value of `CallbackPath` is `/signin-oidc` for a registered redirect URI of `https://localhost/signin-oidc` (a port isn't required).
 
 The <xref:Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions.SignedOutCallbackPath%2A> is the request path within the app's base path intercepted by the OpenID Connect handler where the user agent is first returned after signing out from Entra. The sample app doesn't set a value for the path because the default value of "`/signout-callback-oidc`" is used. After intercepting the request, the OpenID Connect handler redirects to the <xref:Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectOptions.SignedOutRedirectUri%2A> or <xref:Microsoft.AspNetCore.Authentication.AuthenticationProperties.RedirectUri%2A>, if specified.
-
-Configure the signed-out callback path in the app's Entra registration. In the Entra or Azure portal, set the path in the **Web** platform configuration's **Redirect URI** entries:
-
-> :::no-loc text="https://localhost/signout-callback-oidc":::
-
-> [!NOTE]
-> A port isn't required for `localhost` addresses when using Entra.
-
-If you don't add the signed-out callback path URI to the app's registration in Entra, Entra refuses to redirect the user back to the app and merely asks them to close their browser window.
-
-<!-- UPDATE 10.0 Keep an eye on this NOTE for removal or updates.
-                 The remark on this subject is in the Program file of the
-                 Entra sample app (Blazor samples repo). -->
-
-> [!NOTE]
-> Entra doesn't redirect a primary admin user (root account) or external user back to the Blazor application. Instead, Entra logs the user out of the app and recommends that they close all of their browser windows. For more information, see [postLogoutRedirectUri not working when authority url contains a tenant ID (`AzureAD/microsoft-authentication-library-for-js` #5783)](https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/5783#issuecomment-1465217522).
 
 [!INCLUDE[](~/blazor/security/includes/secure-authentication-flows.md)]
                 
@@ -640,6 +639,15 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 -   })
 +   .AddDownstreamApi("DownstreamApi", builder.Configuration.GetSection("DownstreamApi"))
     .AddDistributedTokenCaches();
+```
+
+```diff
+- List<string> scopes = ["{APP ID URI}/Weather.Get"];
+- var accessToken = await tokenAcquisition.GetAccessTokenForUserAsync(scopes);
++ var configuration = transformContext.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
++ var scopes = configuration.GetSection("DownstreamApi:Scopes").Get<IEnumerable<string>>();
++ var accessToken = await tokenAcquisition.GetAccessTokenForUserAsync(scopes ??
++     throw new InvalidOperationException("No downstream API scopes!"));
 ```
 
 > [!NOTE]

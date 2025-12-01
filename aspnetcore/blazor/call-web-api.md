@@ -5,7 +5,7 @@ description: Learn how to call a web API from Blazor apps.
 monikerRange: '>= aspnetcore-3.1'
 ms.author: wpickett
 ms.custom: mvc
-ms.date: 07/29/2025
+ms.date: 11/11/2025
 uid: blazor/call-web-api
 ---
 # Call a web API from ASP.NET Core Blazor
@@ -57,7 +57,7 @@ Example:
 
 In the app's `Program` file, call:
 
-<!-- UPDATE 10.0 - Missing API doc for 'AddDownstreamApi' -->
+<!-- UPDATE 10.0 - Missing API doc for 'Microsoft.Identity.Web.DownstreamApiExtensions.AddDownstreamApi' -->
 
 * <xref:Microsoft.Identity.Web.MicrosoftIdentityWebApiAuthenticationBuilder.EnableTokenAcquisitionToCallDownstreamApi%2A>: Enables token acquisition to call web APIs.
 * `AddDownstreamApi`: Microsoft Identity Web packages provide API to create a named downstream web service for making web API calls. <xref:Microsoft.Identity.Abstractions.IDownstreamApi> is injected into a server-side class, which is used to call <xref:Microsoft.Identity.Abstractions.IDownstreamApi.CallApiForUserAsync%2A> to obtain weather data from an external web API (`MinimalApiJwt` project).
@@ -358,7 +358,24 @@ The solution includes a demonstration of obtaining weather data securely via an 
 
 ## Disposal of `HttpRequestMessage`, `HttpResponseMessage`, and `HttpClient`
 
-An <xref:System.Net.Http.HttpRequestMessage> without a body doesn't require explicit disposal with a [`using` declaration (C# 8 or later)](/dotnet/csharp/language-reference/proposals/csharp-8.0/using) or a [`using` block (all C# releases)](/dotnet/csharp/language-reference/keywords/using), but we recommend disposing with every use for the following reasons:
+An <xref:System.Net.Http.HttpRequestMessage> without a body doesn't require explicit disposal. However, you can dispose of it with either of the following patterns:
+
+* `using` declaration (C# 8 or later):
+
+  ```csharp
+  using var request = new HttpRequestMessage(...);
+  ```
+  
+* [`using` block (all C# releases)](/dotnet/csharp/language-reference/keywords/using):
+
+  ```csharp
+  using (var request = new HttpRequestMessage(...))
+  {
+      ...
+  }
+  ```
+
+We recommend disposing of every <xref:System.Net.Http.HttpRequestMessage> with every use for the following reasons:
 
 * To gain a performance improvement by avoiding finalizers.
 * It hardens the code for the future in case a request body is ever added to an <xref:System.Net.Http.HttpRequestMessage> that didn't initially have one.
@@ -834,9 +851,7 @@ To simplify the creation of PATCH documents in the app issuing PATCH requests, a
 
 :::moniker range=">= aspnetcore-10.0"
 
-<!-- UPDATE 10.0 - API doc cross-link -->
-
-Install the [`Microsoft.AspNetCore.JsonPatch.SystemTextJson`](https://www.nuget.org/packages/Microsoft.AspNetCore.JsonPatch.SystemTextJson) NuGet package and use the API features of the package to compose a `JsonPatchDocument` for a PATCH request.
+Install the [`Microsoft.AspNetCore.JsonPatch.SystemTextJson`](https://www.nuget.org/packages/Microsoft.AspNetCore.JsonPatch.SystemTextJson) NuGet package and use the API features of the package to compose a <xref:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument> for a PATCH request.
 
 [!INCLUDE[](~/includes/package-reference.md)]
 
@@ -907,11 +922,9 @@ Follow the guidance in the <xref:web-api/jsonpatch> article to add a PATCH contr
 
 :::moniker range=">= aspnetcore-10.0"
 
-<!-- UPDATE 10.0 - API doc cross-link -->
+Add a package reference for the [`Microsoft.AspNetCore.JsonPatch.SystemTextJson`](https://www.nuget.org/packages/Microsoft.AspNetCore.JsonPatch.SystemTextJson) NuGet package to the web API app.
 
-Add a package reference for the [`Microsoft.AspNetCore.JsonPatch.SystemTextJson`](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.NewtonsoftJson) NuGet package to the web API app.
-
-In the `Program` file add an `@using` directive for the `Microsoft.AspNetCore.JsonPatch.SystemTextJson` <!-- <xref:Microsoft.AspNetCore.JsonPatch.SystemTextJson?displayProperty=fullName> --> namespace:
+In the `Program` file add an `@using` directive for the <xref:Microsoft.AspNetCore.JsonPatch.SystemTextJson?displayProperty=fullName> namespace:
 
 ```csharp
 using Microsoft.AspNetCore.JsonPatch.SystemTextJson;
@@ -951,7 +964,7 @@ app.MapPatch("/todoitems/{id}", async (long id, TodoContext db) =>
         return TypedResults.Ok(todo);
     }
 
-    return TypedResults.NoContent();
+    return TypedResults.NotFound();
 });
 ```
 

@@ -5,7 +5,7 @@ description: Learn about ASP.NET Core Blazor app project structure.
 monikerRange: '>= aspnetcore-3.1'
 ms.author: wpickett
 ms.custom: mvc
-ms.date: 11/12/2024
+ms.date: 11/11/2025
 uid: blazor/project-structure
 ---
 # ASP.NET Core Blazor project structure
@@ -32,16 +32,51 @@ More information on components and render modes is found in the <xref:blazor/com
 
 Based on the interactive render mode selected at app creation, the `Layout` folder is either in the server project in the `Components` folder or at the root of the `.Client` project. The folder contains the following layout components and stylesheets:
 
+:::moniker-end
+
+:::moniker range=">= aspnetcore-10.0"
+
 * The `MainLayout` component (`MainLayout.razor`) is the app's [layout component](xref:blazor/components/layouts).
-* The `MainLayout.razor.css` is the stylesheet for the app's main layout.
+* The `MainLayout.razor.css` is the collocated (next to the component) stylesheet for the app's main layout.
 * The `NavMenu` component (`NavMenu.razor`) implements sidebar navigation. The component includes [`NavLink` components](xref:blazor/fundamentals/routing#navlink-component) (<xref:Microsoft.AspNetCore.Components.Routing.NavLink>), which render navigation links to other Razor components. The <xref:Microsoft.AspNetCore.Components.Routing.NavLink> component indicates to the user which component is currently displayed.
-* The `NavMenu.razor.css` is the stylesheet for the app's navigation menu.
+* The `NavMenu.razor.css` is the collocated stylesheet for the app's navigation menu.
+* The `ReconnectModal` component reflects the server-side connection state in the UI and is included when the app's interactive render mode is either Interactive Server or Interactive Auto. For more information, see <xref:blazor/fundamentals/signalr#reflect-the-server-side-connection-state-in-the-ui>.
+* The `ReconnectModal.razor.css` is the collocated stylesheet for the `ReconnectModal` component.
+* The `ReconnectModal.razor.js` is the collocated JavaScript file for the `ReconnectModal` component.
+
+:::moniker-end
+
+:::moniker range=">= aspnetcore-8.0 < aspnetcore-10.0"
+
+* The `MainLayout` component (`MainLayout.razor`) is the app's [layout component](xref:blazor/components/layouts).
+* The `MainLayout.razor.css` is the collocated (next to the component) stylesheet for the app's main layout.
+* The `NavMenu` component (`NavMenu.razor`) implements sidebar navigation. The component includes [`NavLink` components](xref:blazor/fundamentals/routing#navlink-component) (<xref:Microsoft.AspNetCore.Components.Routing.NavLink>), which render navigation links to other Razor components. The <xref:Microsoft.AspNetCore.Components.Routing.NavLink> component indicates to the user which component is currently displayed.
+* The `NavMenu.razor.css` is the collocated stylesheet for the app's navigation menu.
+
+:::moniker-end
+
+:::moniker range=">= aspnetcore-8.0"
 
 The `Routes` component (`Routes.razor`) is either in the server project or the `.Client` project and sets up routing using the <xref:Microsoft.AspNetCore.Components.Routing.Router> component. For client-side interactive components, the <xref:Microsoft.AspNetCore.Components.Routing.Router> component intercepts browser navigation and renders the page that matches the requested address.
 
 The `Components` folder of the server project holds the app's server-side Razor components. Shared components are often placed at the root of the `Components` folder, while layout and page components are usually placed in folders within the `Components` folder.
 
 The `Components/Pages` folder of the server project contains the app's routable server-side Razor components. The route for each page is specified using the [`@page`](xref:mvc/views/razor#page) directive.
+
+<!-- UPDATE 10.0 - HOLD until after 
+                   https://github.com/dotnet/AspNetCore.Docs/pull/36145
+                   is merged.
+
+                   Add the angle brackets around the cross-link when
+                   activating.
+
+:::moniker range=">= aspnetcore-10.0"
+
+The `NotFound` component (`NotFound.razor`) implements a Not Found page to display when content isn't found for a request path. For more information, see xref:blazor/fundamentals/navigation#not-found-responses.
+
+:::moniker-end
+
+-->
 
 The `App` component (`App.razor`) is the root component of the app with HTML `<head>` markup, the `Routes` component, and the Blazor `<script>` tag. The root component is the first component that the app loads.
 
@@ -290,10 +325,43 @@ Project structure:
   * `NavMenu` component (`NavMenu.razor`): Implements sidebar navigation. Includes the [`NavLink` component](xref:blazor/fundamentals/routing#navlink-component) (<xref:Microsoft.AspNetCore.Components.Routing.NavLink>), which renders navigation links to other Razor components. The <xref:Microsoft.AspNetCore.Components.Routing.NavLink> component automatically indicates a selected state when its component is loaded, which helps the user understand which component is currently displayed.
   * `NavMenu.razor.css`: Stylesheet for the app's navigation menu.
 
+<!-- UPDATE 10.0 - HOLD until after 
+                   https://github.com/dotnet/AspNetCore.Docs/pull/36145
+                   is merged.
+
+                   Add the angle brackets around the cross-link when
+                   activating.
+
+:::moniker-end
+
+:::moniker range=">= aspnetcore-10.0"
+
 * `Pages` folder: Contains the Blazor app's routable Razor components (`.razor`). The route for each page is specified using the [`@page`](xref:mvc/views/razor#page) directive. The template includes the following components:
   * `Counter` component (`Counter.razor`): Implements the Counter page.
   * `Index` component (`Index.razor`): Implements the Home page.
   * `Weather` component (`Weather.razor`): Implements the Weather page.
+  * `NotFound` component (`NotFound.razor`) Implements a Not Found page to display when content isn't found for a request path. For more information, see xref:blazor/fundamentals/navigation#not-found-responses.
+
+:::moniker-end
+
+:::moniker range=">= aspnetcore-8.0 < aspnetcore-10.0"
+
+-->
+
+* `Pages` folder: Contains the Blazor app's routable Razor components (`.razor`). The route for each page is specified using the [`@page`](xref:mvc/views/razor#page) directive. The template includes the following components:
+  * `Counter` component (`Counter.razor`): Implements the Counter page.
+  * `Index` component (`Index.razor`): Implements the Home page.
+  * `Weather` component (`Weather.razor`): Implements the Weather page.
+
+<!-- UPDATE 10.0 - HOLD until after 
+                   https://github.com/dotnet/AspNetCore.Docs/pull/36145
+                   is merged.
+
+:::moniker-end
+
+:::moniker range=">= aspnetcore-8.0"
+
+-->
 
 * `_Imports.razor`: Includes common Razor directives to include in the app's components (`.razor`), such as [`@using`](xref:mvc/views/razor#using) directives for namespaces.
 
@@ -540,19 +608,27 @@ The project structure of the client-side app in a hosted Blazor Webassembly solu
 
 The Blazor script is served as a static web asset with automatic compression and fingerprinting. For more information, see <xref:blazor/fundamentals/static-files>.
 
+In a Blazor Web App, the Blazor script is located in the `Components/App.razor` file:
+
+```razor
+<script src="@Assets["_framework/blazor.web.js"]"></script>
+```
+
+In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml` file:
+
+```html
+<script src="_framework/blazor.server.js"></script>
+```
+
 :::moniker-end
 
-:::moniker range="< aspnetcore-10.0"
+:::moniker range=">= aspnetcore-8.0 < aspnetcore-10.0"
 
 The Blazor script is served from an embedded resource in the ASP.NET Core shared framework.
 
-:::moniker-end
-
-:::moniker range=">= aspnetcore-8.0"
-
 In a Blazor Web App, the Blazor script is located in the `Components/App.razor` file:
 
-```html
+```razor
 <script src="_framework/blazor.web.js"></script>
 ```
 
@@ -566,6 +642,8 @@ In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml`
 
 :::moniker range=">= aspnetcore-7.0 < aspnetcore-8.0"
 
+The Blazor script is served from an embedded resource in the ASP.NET Core shared framework.
+
 In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml` file:
 
 ```html
@@ -575,6 +653,8 @@ In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml`
 :::moniker-end
 
 :::moniker range=">= aspnetcore-6.0 < aspnetcore-7.0"
+
+The Blazor script is served from an embedded resource in the ASP.NET Core shared framework.
 
 In a Blazor Server app, the Blazor script is located in the `Pages/_Layout.cshtml` file:
 
@@ -586,6 +666,8 @@ In a Blazor Server app, the Blazor script is located in the `Pages/_Layout.cshtm
 
 :::moniker range="< aspnetcore-6.0"
 
+The Blazor script is served from an embedded resource in the ASP.NET Core shared framework.
+
 In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml` file:
 
 ```html
@@ -594,17 +676,31 @@ In a Blazor Server app, the Blazor script is located in the `Pages/_Host.cshtml`
 
 :::moniker-end
 
+For a Blazor Web App or a Blazor Server app, the project must contain at least one Razor component file (`.razor`) in order to automatically include the Blazor script when the app is published. If the project doesn't contain at least one Razor component, set the `RequiresAspNetWebAssets` MSBuild property to `true` in the app's project file to include the Blazor script:
+
+```xml
+<RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+```
+
 In a Blazor WebAssembly app, the Blazor script content is located in the `wwwroot/index.html` file:
+
+:::moniker range=">= aspnetcore-10.0"
+
+```html
+<script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+```
+
+When the app is published, the `{fingerprint}` placeholder is automatically replaced with a unique hash for cache busting.
+
+:::moniker-end
+
+:::moniker range="< aspnetcore-10.0"
 
 ```html
 <script src="_framework/blazor.webassembly.js"></script>
 ```
 
-For a Blazor Web App or a Blazor Server app, the project must contain at least one Razor component file (`.razor`) in order to automatically include the Blazor script when the app is published. If the project doesn't contain at least one Razor component, set the `RequiresAspNetWebAssets` MSBuild property `true` in the app's project file to include the Blazor script:
-
-```xml
-<RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
-```
+:::moniker-end
 
 ## Location of `<head>` and `<body>` content
 
