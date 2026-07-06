@@ -11,6 +11,40 @@ items:
         items:
           - name: What's new in 11
             uid: aspnetcore-11
+          - name: Breaking changes
+            items:
+              - name: Overview
+                href: breaking-changes/11/overview.md
+              - name: Blazor custom event registration throws when name matches a browser event
+                href: breaking-changes/11/blazor-custom-event-name-collision.md
+              - name: Blazor enhanced navigation no longer preloads resources
+                href: breaking-changes/11/blazor-enhanced-nav-preloading-disabled.md
+              - name: Blazor server-side rendering defers antiforgery validation to middleware
+                href: breaking-changes/11/blazor-server-side-rendering-deferred-cross-site-request-forgery-protection.md
+              - name: ConcurrencyLimiter middleware removed
+                href: breaking-changes/11/concurrencylimiter-removed.md
+              - name: Hosting emits OpenTelemetry HTTP semantic-convention tags by default
+                href: breaking-changes/11/http-activity-otel-semconv.md
+              - name: Kestrel tightens HTTP protocol compliance
+                href: breaking-changes/11/kestrel-strict-protocol-compliance.md
+              - name: Microsoft.OpenApi upgraded to 3.x
+                href: breaking-changes/11/microsoft-openapi-3x.md
+              - name: Obsolete Blazor APIs removed
+                href: breaking-changes/11/blazor-obsolete-apis-removed.md
+              - name: OpenAPI document includes all ProducesResponseType entries per status code
+                href: breaking-changes/11/openapi-multiple-produces-per-status.md
+              - name: OpenAPI server URL no longer has a trailing slash when PathBase is empty
+                href: breaking-changes/11/openapi-server-url-trailing-slash.md
+              - name: OpenApiVersion defaults to OpenApi3_2
+                href: breaking-changes/11/openapi-version-default-3-2.md
+              - name: Passkey sign-in enforces email/phone confirmation and lockout
+                href: breaking-changes/11/passkey-signin-enforces-confirmation-lockout.md
+              - name: Response compression always emits Vary, Accept-Encoding
+                href: breaking-changes/11/response-compression-always-vary.md
+              - name: SqlClient Active Directory authentication moved to a separate package
+                href: breaking-changes/11/sqlclient-azure-extensions-required.md
+              - name: WebAssemblyHostBuilder loads environment variables into IConfiguration
+                href: breaking-changes/11/wasm-env-vars-in-configuration.md
       - name: ASP.NET Core 10
         items:
           - name: What's new in 10
@@ -414,9 +448,6 @@ items:
           - name: Web apps >>
             displayName: tutorial, razor, razor pages, ui
             href: /training/modules/create-razor-pages-aspnet-core/
-          - name: Web APIs >>
-            displayName: tutorial
-            href: /training/modules/build-web-api-aspnet-core/
           - name: Cloud-native microservices
             items:
               - name: Create and deploy >>
@@ -508,6 +539,8 @@ items:
             uid: fundamentals/logging/index
           - name: HTTP logging
             uid: fundamentals/http-logging/index
+          - name: Enrich HTTP request logs in ASP.NET Core
+            uid: fundamentals/http-logging/http-log-enricher
           - name: W3C logger
             uid: fundamentals/w3c-logger/index
           - name: Health checks
@@ -569,6 +602,14 @@ items:
                 items:
                   - name: Simple authorization
                     uid: razor-pages/security/authorization/simple
+                  - name: Authorization conventions
+                    uid: razor-pages/security/authorization/conventions
+                  - name: Role-based authorization
+                    uid: razor-pages/security/authorization/roles
+                  - name: Claim-based authorization
+                    uid: razor-pages/security/authorization/claims
+                  - name: Resource-based authorization
+                    uid: razor-pages/security/authorization/resource-based
       - name: MVC
         items:
           - name: Overview
@@ -615,6 +656,14 @@ items:
                 items:
                   - name: Simple authorization
                     uid: mvc/security/authorization/simple
+                  - name: Custom authorization with IAuthorizationRequirementData
+                    uid: mvc/security/authorization/iard
+                  - name: Role-based authorization
+                    uid: mvc/security/authorization/roles
+                  - name: Claim-based authorization
+                    uid: mvc/security/authorization/claims
+                  - name: Resource-based authorization
+                    uid: mvc/security/authorization/resource-based
       - name: Blazor
         items:
           - name: Overview
@@ -1123,6 +1172,8 @@ items:
         uid: fundamentals/minimal-apis/test-min-api
       - name: Middleware
         uid: fundamentals/minimal-apis/middleware
+      - name: Handle JSON Patch requests
+        uid: web-api/jsonpatch
       - name: Handle errors
         uid: fundamentals/error-handling-api
       - name: Authentication and authorization
@@ -1163,8 +1214,6 @@ items:
               uid: tutorials/first-mongo-app
         - name: Action return types
           uid: web-api/action-return-types
-        - name: Handle JSON Patch requests
-          uid: web-api/jsonpatch
         - name: Format response data
           uid: web-api/advanced/formatting
         - name: Custom formatters
@@ -2070,15 +2119,13 @@ items:
             uid: security/authorization/introduction
           - name: Create a web app with authorization
             uid: security/authorization/secure-data
-          - name: Razor Pages authorization conventions
-            uid: security/authorization/razor-pages-authorization
           - name: Simple authorization
             uid: security/authorization/simple
           - name: Custom authorization with IAuthorizationRequirementData
             uid: security/authorization/iard
           - name: Role-based authorization
             uid: security/authorization/roles
-          - name: Claims-based authorization
+          - name: Claim-based authorization
             uid: security/authorization/claims
           - name: Policy-based authorization
             uid: security/authorization/policies
@@ -2089,7 +2136,7 @@ items:
           - name: Dependency injection in requirement handlers
             uid: security/authorization/dependencyinjection
           - name: Resource-based authorization
-            uid: security/authorization/resourcebased
+            uid: security/authorization/resource-based
           - name: View-based authorization
             uid: security/authorization/views
           - name: Limit identity by scheme
@@ -2186,6 +2233,8 @@ items:
         uid: security/gdpr
       - name: Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks
         uid: security/anti-request-forgery
+      - name: Automatic CSRF protection
+        uid: security/csrf-protection
       - name: Prevent open redirect attacks
         uid: security/preventing-open-redirects
       - name: Prevent Cross-Site Scripting (XSS)
@@ -2332,8 +2381,14 @@ items:
       - name: Overview
         displayName: migrate, migration
         uid: migration/index
+      - name: Adopt automatic CSRF protection in .NET 11
+        displayName: migrate, migration, csrf, antiforgery
+        uid: migration/antiforgery-to-csrf
       - name: Version updates
         items:
+          - name: 10 to 11
+            displayName: migrate, migration
+            uid: migration/100-to-110
           - name: 9 to 10
             displayName: migrate, migration
             uid: migration/90-to-100

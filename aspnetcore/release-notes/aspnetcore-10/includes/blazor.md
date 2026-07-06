@@ -233,7 +233,7 @@ For more information, see <xref:blazor/fundamentals/static-files?view=aspnetcore
 
 ### Set the environment in standalone Blazor WebAssembly apps
 
-The `Properties/launchSettings.json` file is no longer used to control the environment in standalone Blazor WebAssembly apps.
+The `Blazor-Environment` header and `Properties/launchSettings.json` file (`ASPNETCORE_ENVIRONMENT` environment variable) are no longer used to control the environment in standalone Blazor WebAssembly apps.
 
 Starting in .NET 10, set the environment with the `<WasmApplicationEnvironmentName>` property in the app's project file (`.csproj`).
 
@@ -261,7 +261,7 @@ Currently, there's no documented replacement strategy for the preceding approach
 
 ### Declarative model for persisting state from components and services
 
-You can now declaratively specify state to persist from components and services using the `[PersistentState]` attribute. Properties with this attribute are automatically persisted using the <xref:Microsoft.AspNetCore.Components.PersistentComponentState> service during prerendering. The state is retrieved when the component renders interactively or the service is instantiated.
+You can now declaratively specify state to persist from components and services using the `[PersistentState]` attribute. Public (`public`) properties with this attribute are automatically persisted using the <xref:Microsoft.AspNetCore.Components.PersistentComponentState> service during prerendering. The state is retrieved when the component renders interactively or the service is instantiated.
 
 In previous Blazor releases, persisting component state during prerendering using the <xref:Microsoft.AspNetCore.Components.PersistentComponentState> service involved a significant amount of code, as the following example demonstrates:
 
@@ -336,6 +336,8 @@ else
     }
 }
 ```
+
+Use `public` properties because reflection is used by the framework for tasks such as [trimming unused code](xref:blazor/performance/app-download-size#intermediate-language-il-trimming) and [source generation](/dotnet/csharp/roslyn-sdk/source-generators-overview).
 
 State can be serialized for multiple components of the same type, and you can establish declarative state in a service for use around the app by calling `RegisterPersistentService` on the Razor components builder (<xref:Microsoft.Extensions.DependencyInjection.RazorComponentsServiceCollectionExtensions.AddRazorComponents%2A>) with a custom service type and render mode. For more information, see <xref:blazor/state-management/prerendered-state-persistence?view=aspnetcore-10.0>.
 
@@ -686,7 +688,7 @@ During server-side rendering, Blazor Web Apps can now persist a user's session (
 * Proactive resource management (pausing inactive circuits)
 * [Enhanced navigation](xref:blazor/fundamentals/routing?view=aspnetcore-10.0#enhanced-navigation-and-form-handling)
 
-For more information, see <xref:blazor/state-management/server?view=aspnetcore-10.0#circuit-state-and-prerendering-state-preservation>.
+For more information, see <xref:blazor/state-management/server?view=aspnetcore-10.0>.
 
 ### Hot Reload for Blazor WebAssembly and .NET on WebAssembly
 

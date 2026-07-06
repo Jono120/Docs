@@ -80,6 +80,31 @@ For security implications, see <xref:blazor/security/interactive-server-side-ren
 
 :::moniker-end
 
+:::moniker range=">= aspnetcore-11.0"
+
+### SignalR `ConfigureConnection` for Interactive Server components
+
+<!-- UPDATE 11.0 - API Browser cross-links -->
+
+Blazor provides access to configure the underlying SignalR connection options when using Interactive Server components through the `ConfigureConnection` property on `ServerComponentsEndpointOptions`. This enables configuration of `HttpConnectionDispatcherOptions` properties.
+
+```csharp
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode(options =>
+    {
+        options.ConfigureConnection = dispatcherOptions =>
+        {
+            dispatcherOptions.CloseOnAuthenticationExpiration = true;
+            dispatcherOptions.AllowStatefulReconnects = true;
+            dispatcherOptions.ApplicationMaxBufferSize = 1024 * 1024;
+        };
+    });
+```
+
+This provides a clean, type-safe API for configuring SignalR connection settings without needing to inspect endpoint metadata.
+
+:::moniker-end
+
 :::moniker range=">= aspnetcore-6.0"
 
 ## Disable response compression for Hot Reload
@@ -139,7 +164,7 @@ hubConnection = new HubConnectionBuilder()
 
 The preceding example configures the hub connection URL to the absolute URI address at `/chathub`. The URI can also be set via a string, for example `https://signalr.example.com`, or via [configuration](xref:blazor/fundamentals/configuration). `Navigation` is an injected <xref:Microsoft.AspNetCore.Components.NavigationManager>.
 
-For more information, see <xref:signalr/configuration#configure-additional-options>.
+For more information, see <xref:signalr/configuration#configure-other-options>.
 
 ## Client-side rendering
 
@@ -316,8 +341,9 @@ app.MapBlazorHub(options =>
 });
 ```
 
-<!-- UPDATE 11.0 - The following is scheduled for a fix in .NET 11.
-                   Tracked by: https://github.com/dotnet/aspnetcore/issues/63520 -->
+:::moniker-end
+
+:::moniker range="< aspnetcore-11.0"
 
 Configuring the hub used by <xref:Microsoft.AspNetCore.Builder.ServerRazorComponentsEndpointConventionBuilderExtensions.AddInteractiveServerRenderMode%2A> with <xref:Microsoft.AspNetCore.Builder.ComponentEndpointRouteBuilderExtensions.MapBlazorHub%2A> fails with an <xref:System.Reflection.AmbiguousMatchException>:
 
